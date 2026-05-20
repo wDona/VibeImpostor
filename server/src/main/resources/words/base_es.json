@@ -1,0 +1,138 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Animales",
+      "words": ["perro", "gato", "elefante", "jirafa", "león", "tigre", "oso", "panda", "cocodrilo", "serpiente", "águila", "búho", "loro", "pinguino", "delfín", "tiburón", "ballena", "caballo", "oveja", "cabra", "vaca", "cerdo", "pollo", "pato", "ganso", "pavó", "conejo", "ratón", "hormiga", "abeja", "mariposa", "libélula", "escarabajo", "rana", "sapo", "lagartija", "camaleón", "pulpo", "cangrejo", "langosta", "camarón"]
+    },
+    {
+      "name": "Comida y bebida",
+      "words": ["pizza", "manzana", "arroz", "pasta", "pollo", "carne", "pescado", "tomate", "cebolla", "ajo", "pan", "queso", "leche", "huevo", "chocolate", "café", "té", "agua", "vino", "cerveza", "zumo", "refresco", "hamburguesa", "sándwich", "taco", "enchilada", "sushi", "ramen", "paella", "tortilla", "patata", "zanahoria", "plátano", "naranja", "fresa", "piña", "melón", "sandía", "limón", "lima", "uva", "cereza", "melocotón", "pera", "kiwi", "mango"]
+    },
+    {
+      "name": "Deportes",
+      "words": ["fútbol", "tenis", "baloncesto", "béisbol", "voleibol", "bádminton", "natación", "atletismo", "gimnasia", "ciclismo", "esquí", "patinaje", "boxeo", "lucha libre", "golf", "billar", "ping pong", "críquet", "rugby", "hockey", "snowboard", "surf", "buceo", "escalada", "senderismo", "equitación"]
+    },
+    {
+      "name": "Profesiones",
+      "words": ["doctor", "enfermera", "profesor", "ingeniero", "abogado", "arquitecto", "cocinero", "electricista", "plomero", "carpintero", "pintor", "músico", "actor", "director de cine", "periodista", "policía", "soldado", "bombero", "agricultor", "ganadero", "mecánico", "piloto", "capitán", "marinero", "astronauta", "científico", "investigador", "secretaria", "contador", "vendedor"]
+    },
+    {
+      "name": "Países y ciudades",
+      "words": ["España", "Francia", "Alemania", "Italia", "Portugal", "Grecia", "Rusia", "China", "Japón", "India", "Brasil", "Argentina", "México", "Canadá", "Estados Unidos", "Australia", "Egipto", "Sudáfrica", "Tailandia", "Vietnam", "Madrid", "París", "Berlín", "Roma", "Londres", "Nueva York", "Tokio", "Sídney", "Dubai", "Bangkok", "Barcelona", "Ámsterdam", "Estambul", "Praga", "Viena", "Copenhague"]
+    },
+    {
+      "name": "Naturaleza",
+      "words": ["montaña", "río", "lago", "océano", "playa", "isla", "desierto", "bosque", "bosque tropical", "tundra", "pradera", "volcán", "glaciar", "cascada", "cueva", "árbol", "flor", "rosa", "tulipán", "girasol", "margarita", "lirio", "orquídea", "trébol", "musgo", "seta", "hierba", "arbusto", "roca", "piedra", "arena", "tierra"]
+    },
+    {
+      "name": "Colores",
+      "words": ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "marrón", "gris", "blanco", "negro", "dorado", "plateado", "turquesa", "índigo", "magenta", "cian", "beige", "crema", "coral", "escarlata", "carmesí", "púrpura", "oscuro", "claro", "brillante", "mate", "pastel", "fosforescente"]
+    },
+    {
+      "name": "Casa y hogar",
+      "words": ["casa", "apartamento", "mansión", "cabaña", "castillo", "puerta", "ventana", "tejado", "pared", "piso", "escalera", "ascensor", "sala de estar", "dormitorio", "cocina", "baño", "comedor", "biblioteca", "garaje", "sótano", "ático", "jardín", "balcón", "terraza", "chimenea", "lámpara", "sofá", "cama", "mesa", "silla", "armario", "espejo", "cuadro", "alfombra", "cortina"]
+    },
+    {
+      "name": "Ropa y accesorios",
+      "words": ["camiseta", "camisa", "pantalón", "falda", "vestido", "abrigo", "chaqueta", "suéter", "calcetín", "zapato", "bota", "sandalia", "sombrero", "gorro", "bufanda", "guante", "cinturón", "corbata", "pañuelo", "bolso", "mochila", "maleta", "cartera", "reloj", "anillo", "collar", "pulsera", "pendiente", "gafas", "lentes de contacto"]
+    },
+    {
+      "name": "Transportes",
+      "words": ["coche", "carro", "bicicleta", "motocicleta", "autobús", "camión", "tractor", "tren", "metro", "tranvía", "barco", "barco de vela", "yate", "crucero", "avión", "helicóptero", "globo aerostático", "paracaídas", "cohete", "nave espacial", "carreta", "trineo", "patinete", "monopatín", "patines"]
+    },
+    {
+      "name": "Tecnología",
+      "words": ["ordenador", "portátil", "tableta", "teléfono móvil", "televisor", "radio", "cámara", "video cámara", "reloj inteligente", "auriculares", "altavoz", "micrófono", "teclado", "ratón", "monitor", "impresora", "escáner", "router", "módem", "batería", "cargador", "cable", "enchufre", "tomacorriente", "pantalla táctil", "procesador", "memoria"]
+    },
+    {
+      "name": "Instrumento musical",
+      "words": ["guitarra", "piano", "violín", "flauta", "trompeta", "saxofón", "clarinete", "oboe", "trompa", "trombone", "tuba", "tambor", "timbal", "xilófono", "marimba", "pandereta", "campanas", "triángulo", "platillos", "castañuela", "lira", "arpa", "mandolina", "ukelele", "banjo", "violonchelo", "contrabajo", "acordeón", "órgano"]
+    },
+    {
+      "name": "Cuerpo humano",
+      "words": ["cabeza", "cara", "ojo", "nariz", "boca", "oído", "diente", "lengua", "mentón", "mejilla", "frente", "cabello", "cuello", "hombro", "brazo", "codo", "muñeca", "mano", "dedo", "pecho", "espalda", "cintura", "cadera", "pierna", "rodilla", "tobillo", "pie", "talón", "corazón", "pulmón", "estómago", "hígado", "riñón", "cerebro"]
+    },
+    {
+      "name": "Familia",
+      "words": ["padre", "madre", "hijo", "hija", "hermano", "hermana", "abuelo", "abuela", "tío", "tía", "primo", "prima", "sobrino", "sobrina", "esposo", "esposa", "marido", "novio", "novia", "amigo", "amiga", "vecino", "vecina", "colega", "jefe", "empleado", "bebé", "niño", "adolescente", "adulto", "anciano"]
+    },
+    {
+      "name": "Emociones",
+      "words": ["alegría", "tristeza", "enojo", "miedo", "sorpresa", "asco", "amor", "odio", "confianza", "desconfianza", "esperanza", "desesperación", "orgullo", "vergüenza", "curiosidad", "aburrimiento", "entusiasmo", "apatía", "nostalgia", "euforia", "melancolía", "ansiedad", "tranquilidad", "paz", "caos", "confusión", "claridad", "satisfacción", "insatisfacción"]
+    },
+    {
+      "name": "Tiempo y clima",
+      "words": ["sol", "lluvia", "nieve", "nube", "viento", "tormenta", "relámpago", "trueno", "granizo", "rocío", "escarcha", "hielo", "arco iris", "primavera", "verano", "otoño", "invierno", "mañana", "tarde", "noche", "medianoche", "amanecer", "atardecer", "alba", "crepúsculo", "día", "semana", "mes", "año", "siglo"]
+    },
+    {
+      "name": "Educación",
+      "words": ["escuela", "instituto", "universidad", "clase", "aula", "pizarra", "escritorio", "puptre", "libreta", "lápiz", "pluma", "bolígrafo", "goma", "borrador", "compás", "transportador", "regla", "calculadora", "libro", "novela", "diccionario", "enciclopedia", "biblioteca", "examen", "prueba", "tarea", "deber", "calificación", "diplom"]
+    },
+    {
+      "name": "Objetos cotidianos",
+      "words": ["teléfono", "reloj", "cartera", "bolso", "moneda", "billete", "tarjeta", "llave", "candado", "cadena", "cuerda", "cinta", "hilo", "botón", "cremallera", "aguja", "alfiler", "clip", "goma elástica", "caja", "bolsa", "recipiente", "vaso", "taza", "plato", "cucharilla", "tenedor", "cuchillo", "cuchara", "sartén", "olla", "cacerola"]
+    },
+    {
+      "name": "Películas y entretenimiento",
+      "words": ["comedia", "drama", "acción", "terror", "ciencia ficción", "fantasía", "aventura", "romance", "thriller", "animación", "documental", "western", "superhéroe", "zombies", "vampiros", "hombres lobo", "fantasmas", "piratas", "dinosaurios", "extraterrestres", "robot", "cyborg", "magía", "brujería", "hechicería", "poder sobrenatural"]
+    },
+    {
+      "name": "Juegos",
+      "words": ["ajedrez", "damas", "dominó", "póker", "blackjack", "dados", "cartas", "lotería", "bingo", "videojuego", "consola", "joystick", "control", "pantalla", "nivel", "puntos", "vidas", "monedas", "poder especial", "enemigo", "jefe final", "multijugador", "en línea", "offline", "modo aventura", "modo supervivencia"]
+    },
+    {
+      "name": "Bebidas",
+      "words": ["agua", "agua mineral", "jugo de naranja", "jugo de manzana", "limonada", "bebida de cola", "refresco", "cerveza", "vino tinto", "vino blanco", "espumante", "champaña", "whisky", "ron", "vodka", "tequila", "ginebra", "coñac", "brandy", "licor", "café", "café con leche", "café americano", "espresso", "té negro", "té verde", "té de hierbas", "chocolate caliente", "leche caliente"]
+    },
+    {
+      "name": "Postres y dulces",
+      "words": ["pastel", "torta", "bizcocho", "galleta", "donut", "rosquilla", "magdalena", "muffin", "brownie", "tarta", "cheesecake", "tiramisú", "flan", "mousse", "pudín", "helado", "sorbete", "polo", "caramelo", "chicle", "goma de mascar", "chocolate", "bombón", "turrón", "mazapán", "almendra", "mendeleta", "merengue"]
+    },
+    {
+      "name": "Formas y figuras",
+      "words": ["círculo", "cuadrado", "rectángulo", "triángulo", "óvalo", "rombo", "pentágono", "hexágono", "heptágono", "octágono", "esfera", "cubo", "cilindro", "cono", "pirámide", "prisma", "tetraedro", "octaedro", "icosaedro", "dosel", "domine", "espiral", "zigzag", "línea", "punto", "rayo", "ángulo", "línea recta", "línea curva", "arco"]
+    },
+    {
+      "name": "Literatura y escritura",
+      "words": ["novela", "cuento", "poema", "poesía", "verso", "prosa", "drama", "tragedia", "comedia", "epopeya", "fábula", "leyenda", "mito", "ensayo", "biografía", "autobiografía", "diario", "crónica", "artículo", "editorial", "reseña", "crítica", "prólogo", "epílogo", "capítulo", "acto", "escena", "diálogo", "monólogo", "acento", "métrica"]
+    },
+    {
+      "name": "Medicina y salud",
+      "words": ["hospital", "clínica", "farmacia", "consultorio", "ambulancia", "cura", "gasa", "vendaje", "esparadrapo", "inyección", "vacuna", "medicina", "píldora", "pastilla", "cápsula", "jarabe", "ungüento", "crema", "pomada", "termómetro", "tensiómetro", "estetoscopio", "radiografía", "análisis de sangre", "operación", "cirugía", "anestesia", "cicatriz", "alianza", "dolencia", "enfermedad", "virus", "bacteria"]
+    },
+    {
+      "name": "Arte y pintura",
+      "words": ["pintura", "lienzo", "pincel", "paleta", "caballete", "escultura", "estatua", "busto", "relieve", "bajorrelieve", "grabado", "litografía", "serigrafía", "fotografía", "retrato", "paisaje", "naturaleza muerta", "bodegón", "caricatura", "cómic", "mural", "fresco", "mosaico", "vitral", "cerámica", "porcelana", "esmalte", "vidrio", "barro"]
+    },
+    {
+      "name": "Elementos químicos",
+      "words": ["hidrógeno", "oxígeno", "nitrógeno", "carbono", "hierro", "cobre", "oro", "plata", "aluminio", "zinc", "estaño", "plomo", "mercurio", "sodio", "potasio", "calcio", "magnesio", "fósforo", "azufre", "cloro", "bromo", "flúor", "radón", "uranio", "plutonio"]
+    },
+    {
+      "name": "Plantas y flores",
+      "words": ["rosa", "tulipán", "girasol", "margarita", "lirio", "orquídea", "violeta", "amapola", "lirio de los valles", "dalia", "clemátide", "gardenia", "azalea", "rododendro", "jacinto", "narciso", "gladiolo", "freesia", "camellia", "peonía", "clavel", "loto", "flor de cerezo", "flor de almendro", "buganvilla", "lavanda", "riego de fuego", "hibisco", "magnolia", "zinnia"]
+    },
+    {
+      "name": "Objetos escolares",
+      "words": ["libro", "cuaderno", "libreta", "agenda", "estuche", "lápiz", "lápiz de color", "marcador", "rotulador", "bolígrafo", "pluma", "goma de borrar", "borrador", "pegamento", "pegamento líquido", "cinta adhesiva", "tijeras", "regla", "escuadra", "cartabón", "compás", "transportador", "calculadora", "pizarra", "tiza", "pizarrón electrónico"]
+    },
+    {
+      "name": "Acciones y verbos",
+      "words": ["correr", "saltar", "caminar", "nadar", "volar", "bailar", "cantar", "reír", "llorar", "gritar", "hablar", "escuchar", "comer", "beber", "dormir", "despedertarse", "soñar", "pensar", "creer", "saber", "aprender", "enseñar", "entender", "olvidar", "recordar", "ver", "mirar", "observar", "tocar", "probar", "oler", "oír"]
+    },
+    {
+      "name": "Números y matemática",
+      "words": ["uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "cien", "mil", "millón", "cero", "suma", "resta", "multiplicación", "división", "fracción", "decimal", "porcentaje", "ángulo", "línea", "punto", "geometría", "álgebra", "trigonometría", "cálculo"]
+    },
+    {
+      "name": "Mitología y fantasía",
+      "words": ["dios", "diosa", "titán", "gigante", "enano", "elfo", "hada", "mago", "brujo", "bruja", "dragón", "fénix", "unicornio", "pegaso", "grifo", "minotauro", "sirena", "tritón", "centauro", "sátiro", "banshee", "ghoul", "esqueleto", "momia", "zombi", "vampiro", "hombre lobo", "demonio", "ángel", "arcángel"]
+    },
+    {
+      "name": "Dinero y finanzas",
+      "words": ["moneda", "billete", "banco", "cuenta bancaria", "tarjeta de crédito", "tarjeta de débito", "préstamo", "hipoteca", "interés", "dividendo", "inversión", "bolsa de valores", "acciones", "bonos", "moneda extranjera", "tipo de cambio", "inflación", "deflación", "ahorros", "gasto", "ingreso", "salario", "sueldo", "comisión", "prima", "propina", "donación"]
+    }
+  ]
+}

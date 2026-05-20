@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /home/wdona/Projects/Impostor status)",
+      "Bash(./gradlew build *)",
+      "Bash(./gradlew :server:compileKotlin -x test --no-daemon)",
+      "Bash(./gradlew :server:build -x test --no-daemon)",
+      "Bash(./gradlew clean *)",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('server/src/main/resources/words/base_es.json'\\)\\); print\\('total palabras:', sum\\(len\\(c['words']\\) for c in d['categories']\\)\\); print\\('categorias:', len\\(d['categories']\\)\\)\")",
+      "Bash(pkill -f 'server.*ApplicationKt')",
+      "Bash(pkill -f 'GradleWrapperMain.*server:run')",
+      "Bash(pkill -f 'ApplicationKt')",
+      "Bash(pkill -f 'server:run')",
+      "Bash(pkill -f 'GradleDaemon')",
+      "Bash(jps)",
+      "Bash(./gradlew :app:shared:compileKotlinCommonMainMetadata -x test --no-daemon)",
+      "Bash(./gradlew :app:shared:compileKotlinJvm -x test --no-daemon)",
+      "Bash(./gradlew :server:build :app:shared:compileKotlinJvm -x test --no-daemon)",
+      "Bash(./gradlew :app:shared:compileDebugKotlinAndroid -x test)",
+      "Bash(./gradlew :server:buildFatJar)"
+    ]
+  }
+}
