@@ -50,6 +50,7 @@ object Strings {
             "settings_system" to "Sistema",
             "settings_back" to "Volver",
             "home_connecting" to "Conectando...",
+            "home_code_hint" to "El código tiene 6 caracteres (letras y números)",
             "lobby_copy_code" to "Copiar código",
             "lobby_need_players" to "Se necesitan al menos 3 jugadores",
             "role_innocent" to "Inocente",
@@ -106,7 +107,11 @@ object Strings {
             "packs_ok" to "Guardado correctamente",
             "packs_fail" to "No se pudo guardar",
             "lobby_categories" to "Temas de palabras",
-            "lobby_categories_all" to "Si no eliges ninguno, se usan todos los temas base"
+            "lobby_categories_all" to "Si no eliges ninguno, se usan todos los temas base",
+            "lobby_leave_confirm_title" to "¿Salir de la sala?",
+            "lobby_leave_confirm_text" to "Perderás tu sitio en esta sala.",
+            "lobby_categories_none" to "todos",
+            "common_done" to "Listo"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -152,6 +157,7 @@ object Strings {
             "settings_system" to "System",
             "settings_back" to "Back",
             "home_connecting" to "Connecting...",
+            "home_code_hint" to "The code has 6 characters (letters and numbers)",
             "lobby_copy_code" to "Copy code",
             "lobby_need_players" to "At least 3 players needed",
             "role_innocent" to "Innocent",
@@ -208,7 +214,11 @@ object Strings {
             "packs_ok" to "Saved successfully",
             "packs_fail" to "Could not save",
             "lobby_categories" to "Word topics",
-            "lobby_categories_all" to "If you pick none, all base topics are used"
+            "lobby_categories_all" to "If you pick none, all base topics are used",
+            "lobby_leave_confirm_title" to "Leave the room?",
+            "lobby_leave_confirm_text" to "You will lose your spot in this room.",
+            "lobby_categories_none" to "all",
+            "common_done" to "Done"
         )
     )
 }

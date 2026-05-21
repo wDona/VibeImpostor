@@ -56,8 +56,9 @@ fun HomeScreen(viewModel: GameViewModel) {
 
         TextField(
             value = playerName.value,
-            onValueChange = { playerName.value = it },
+            onValueChange = { input -> playerName.value = input.take(20) },
             label = { Text(Strings.get("home_player_name", language)) },
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -65,7 +66,7 @@ fun HomeScreen(viewModel: GameViewModel) {
 
         Button(
             onClick = {
-                viewModel.setPlayerName(playerName.value)
+                viewModel.setPlayerName(playerName.value.trim())
                 viewModel.createRoom()
             },
             enabled = playerName.value.isNotBlank() && !state.value.connecting,
@@ -81,8 +82,13 @@ fun HomeScreen(viewModel: GameViewModel) {
 
         TextField(
             value = roomCode.value,
-            onValueChange = { roomCode.value = it },
+            onValueChange = { input ->
+                roomCode.value = input.uppercase().filter { it.isLetterOrDigit() }.take(6)
+            },
             label = { Text(Strings.get("home_room_code", language)) },
+            singleLine = true,
+            isError = roomCode.value.isNotEmpty() && roomCode.value.length < 6,
+            supportingText = { Text(Strings.get("home_code_hint", language)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -90,11 +96,11 @@ fun HomeScreen(viewModel: GameViewModel) {
 
         Button(
             onClick = {
-                viewModel.setPlayerName(playerName.value)
-                viewModel.joinRoom(roomCode.value.trim().uppercase())
+                viewModel.setPlayerName(playerName.value.trim())
+                viewModel.joinRoom(roomCode.value)
             },
             enabled = playerName.value.isNotBlank() &&
-                roomCode.value.isNotBlank() &&
+                roomCode.value.length == 6 &&
                 !state.value.connecting,
             modifier = Modifier
                 .fillMaxWidth()

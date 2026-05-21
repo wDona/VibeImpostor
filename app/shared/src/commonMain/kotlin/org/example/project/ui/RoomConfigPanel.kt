@@ -4,7 +4,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -12,6 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -102,27 +110,62 @@ fun RoomConfigPanel(
         )
     }
 
-    Text(Strings.get("lobby_categories", language))
-    Text(Strings.get("lobby_categories_all", language), fontWeight = FontWeight.Bold)
-    viewModel.state.value.availableCategories.forEach { category ->
-        val selected = category.id in config.selectedCategoryIds
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = selected,
-                onCheckedChange = { checked ->
-                    val newIds = if (checked) {
-                        config.selectedCategoryIds + category.id
-                    } else {
-                        config.selectedCategoryIds - category.id
+    var showCategoryDialog by remember { mutableStateOf(false) }
+    val categories = viewModel.state.value.availableCategories
+    val selectedCount = config.selectedCategoryIds.size
+
+    OutlinedButton(
+        onClick = { showCategoryDialog = true },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        val resumen = if (selectedCount == 0)
+            Strings.get("lobby_categories_none", language)
+        else
+            selectedCount.toString()
+        Text("${Strings.get("lobby_categories", language)}: $resumen")
+    }
+
+    if (showCategoryDialog) {
+        AlertDialog(
+            onDismissRequest = { showCategoryDialog = false },
+            title = { Text(Strings.get("lobby_categories", language)) },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 360.dp)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(Strings.get("lobby_categories_all", language))
+                    categories.forEach { category ->
+                        val selected = category.id in config.selectedCategoryIds
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = selected,
+                                onCheckedChange = { checked ->
+                                    val newIds = if (checked) {
+                                        config.selectedCategoryIds + category.id
+                                    } else {
+                                        config.selectedCategoryIds - category.id
+                                    }
+                                    apply(config.copy(selectedCategoryIds = newIds))
+                                }
+                            )
+                            Text(category.name)
+                        }
                     }
-                    apply(config.copy(selectedCategoryIds = newIds))
                 }
-            )
-            Text(category.name)
-        }
+            },
+            confirmButton = {
+                Button(onClick = { showCategoryDialog = false }) {
+                    Text(Strings.get("common_done", language))
+                }
+            }
+        )
     }
 }
 
