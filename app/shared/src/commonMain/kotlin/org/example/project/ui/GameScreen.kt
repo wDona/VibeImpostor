@@ -28,6 +28,8 @@ import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.model.GameMode
 import org.example.project.model.Role
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
@@ -41,9 +43,10 @@ fun GameScreen(viewModel: GameViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.SpaceAround,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Header
         Text("${Strings.get("game_round", language)} ${room.roundNumber}")
 
         if (amSpectator) {
@@ -54,54 +57,70 @@ fun GameScreen(viewModel: GameViewModel) {
             )
         }
 
-        CircularPlayers(
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Players list (horizontal with wrap)
+        PlayersList(
             players = room.players,
+            turnOrder = room.turnOrder,
             currentTurnId = room.currentTurnPlayerId,
-            lastWordsPlayed = state.value.lastWordsPlayed,
-            center = {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = when (state.value.yourRole) {
-                            Role.IMPOSTOR -> Strings.get("role_impostor", language)
-                            Role.INNOCENT -> Strings.get("role_innocent", language)
-                            null -> Strings.get("game_waiting", language)
-                        },
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = state.value.yourContent ?: "",
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    Text(
-                        text = if (state.value.contentIsWord)
-                            Strings.get("game_word", language)
-                        else
-                            Strings.get("game_category", language),
-                        fontSize = 12.sp
-                    )
-                }
-            }
+            lastWordsPlayed = state.value.lastWordsPlayed
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Center content (role + word/category)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = when (state.value.yourRole) {
+                        Role.IMPOSTOR -> Strings.get("role_impostor", language)
+                        Role.INNOCENT -> Strings.get("role_innocent", language)
+                        null -> Strings.get("game_waiting", language)
+                    },
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = state.value.yourContent ?: "",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Text(
+                    text = if (state.value.contentIsWord)
+                        Strings.get("game_word", language)
+                    else
+                        Strings.get("game_category", language),
+                    fontSize = 12.sp
+                )
+            }
+        }
+
+        // Middle content - scrollable if needed
         if (room.config.gameMode == GameMode.TEXT) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(Strings.get("game_players", language), fontWeight = FontWeight.Bold)
-                room.players.forEach { player ->
+                val activePlayers = room.players.filter { !it.isSpectator }
+                activePlayers.forEach { player ->
                     val isCurrentTurn = player.id == room.currentTurnPlayerId
                     val lastWord = state.value.lastWordsPlayed[player.id]
 
@@ -118,10 +137,7 @@ fun GameScreen(viewModel: GameViewModel) {
                             Text(
                                 text = player.name,
                                 fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal,
-                                color = if (player.isSpectator)
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                                else
-                                    MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             if (lastWord != null) {
                                 Text(
@@ -136,6 +152,9 @@ fun GameScreen(viewModel: GameViewModel) {
             }
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Turn action (input/button)
         if (state.value.room?.currentTurnPlayerId == state.value.yourPlayerId) {
             if (room.config.gameMode == GameMode.TEXT) {
                 TextField(
@@ -172,6 +191,7 @@ fun GameScreen(viewModel: GameViewModel) {
             Text("${Strings.get("game_waiting", language)} ${room.players.find { it.id == room.currentTurnPlayerId }?.name}...")
         }
 
+        // Bottom buttons
         LeaveGameButton(viewModel, language)
 
         if (!amSpectator) {
