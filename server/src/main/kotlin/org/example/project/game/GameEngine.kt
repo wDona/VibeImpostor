@@ -148,41 +148,44 @@ object GameEngine {
             val maxCount = voteCountByTarget.maxOf { it.value }
             val tied = voteCountByTarget.filter { it.value == maxCount }.keys
 
-            val ejected = if (tied.size == 1) tied.first() else tied.random()
-            val wasImpostor = ejected in room.impostorIds
+            val ejected = if (tied.size == 1) tied.first() else null
 
             room.lastRoundVotes = room.votes.toMap()
 
-            val ejectedPlayer = room.players.find { it.id == ejected }
-            if (ejectedPlayer != null) ejectedPlayer.isSpectator = true
+            if (ejected != null) {
+                val wasImpostor = ejected in room.impostorIds
 
-            if (wasImpostor) {
-                val remainingImpostors = room.activePlayers().count { it.id in room.impostorIds }
-                if (remainingImpostors == 0) {
-                    val winners = room.players.filterNot { it.id in room.impostorIds }
-                    winners.forEach { it.score++ }
+                val ejectedPlayer = room.players.find { it.id == ejected }
+                if (ejectedPlayer != null) ejectedPlayer.isSpectator = true
+
+                if (wasImpostor) {
+                    val remainingImpostors = room.activePlayers().count { it.id in room.impostorIds }
+                    if (remainingImpostors == 0) {
+                        val winners = room.players.filterNot { it.id in room.impostorIds }
+                        winners.forEach { it.score++ }
+                        room.state = RoomState.FINISHED
+                        room.players.forEach { it.isSpectator = false }
+                        room.roundNumber = 1
+                        return Pair(ejected, true)
+                    }
+                } else {
+                    room.impostorIds.forEach { id ->
+                        val player = room.players.find { it.id == id }
+                        if (player != null) player.score++
+                    }
+                }
+
+                val activeNow = room.activePlayers()
+                val activeImpostors = activeNow.count { it.id in room.impostorIds }
+                val activeInnocents = activeNow.size - activeImpostors
+                val impostorsWin = activeImpostors >= 1 && (activeNow.size <= 2 || activeInnocents == 0)
+                if (impostorsWin) {
+                    activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
                     room.state = RoomState.FINISHED
                     room.players.forEach { it.isSpectator = false }
                     room.roundNumber = 1
-                    return Pair(ejected, true)
+                    return Pair(ejected, false)
                 }
-            } else {
-                room.impostorIds.forEach { id ->
-                    val player = room.players.find { it.id == id }
-                    if (player != null) player.score++
-                }
-            }
-
-            val activeNow = room.activePlayers()
-            val activeImpostors = activeNow.count { it.id in room.impostorIds }
-            val activeInnocents = activeNow.size - activeImpostors
-            val impostorsWin = activeImpostors >= 1 && (activeNow.size <= 2 || activeInnocents == 0)
-            if (impostorsWin) {
-                activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
-                room.state = RoomState.FINISHED
-                room.players.forEach { it.isSpectator = false }
-                room.roundNumber = 1
-                return Pair(ejected, false)
             }
 
             room.resetForNewRound()
