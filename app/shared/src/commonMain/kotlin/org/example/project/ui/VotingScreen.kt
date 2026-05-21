@@ -71,5 +71,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                     }
             }
         }
+
+        LeaveGameButton(viewModel, language)
     }
 }

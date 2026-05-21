@@ -31,7 +31,7 @@ fun AppRoot() {
         Theme.SYSTEM -> isSystemInDarkTheme()
     }
 
-    val colorScheme = if (isDarkTheme) darkColorScheme() else lightColorScheme()
+    val colorScheme = if (isDarkTheme) AppDarkColors else AppLightColors
     val error = state.value.error
     val snackbarHostState = remember { SnackbarHostState() }
 

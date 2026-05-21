@@ -2,6 +2,9 @@ package org.example.project.model
 
 import kotlinx.serialization.Serializable
 
+const val MIN_PLAYERS = 3
+const val MAX_PLAYERS = 16
+
 @Serializable
 enum class RoomState {
     LOBBY,

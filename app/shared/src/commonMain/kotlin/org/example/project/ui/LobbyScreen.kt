@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -24,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.model.RoomState
+import org.example.project.model.MAX_PLAYERS
+import org.example.project.model.MIN_PLAYERS
 
 @Composable
 fun LobbyScreen(viewModel: GameViewModel) {
@@ -59,9 +62,12 @@ fun LobbyScreen(viewModel: GameViewModel) {
 
         HorizontalDivider()
 
-        Text("${Strings.get("lobby_players", language)} (${room.players.size}/${10})")
+        Text("${Strings.get("lobby_players", language)} (${room.players.size}/$MAX_PLAYERS)")
         room.players.forEach { player ->
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp)
+            ) {
                 Row(
                     modifier = Modifier.padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -88,7 +94,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
         Text("${Strings.get("lobby_vote_time", language)}: ${room.config.voteTimeLimitSeconds}s")
 
         if (state.value.room?.hostId == state.value.yourPlayerId) {
-            val enoughPlayers = room.players.size >= 3
+            val enoughPlayers = room.players.size >= MIN_PLAYERS
             if (!enoughPlayers) {
                 Text(Strings.get("lobby_need_players", language))
             }

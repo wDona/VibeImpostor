@@ -3,11 +3,12 @@ package org.example.project.game
 import org.example.project.db.WordRepository
 import org.example.project.model.Role
 import org.example.project.model.RoomState
+import org.example.project.model.MIN_PLAYERS
 import kotlin.random.Random
 
 object GameEngine {
     suspend fun startGame(room: Room): String? {
-        if (!room.isLobby() || room.activePlayers().size < 3) return "Se necesitan al menos 3 jugadores"
+        if (!room.isLobby() || room.activePlayers().size < MIN_PLAYERS) return "Se necesitan al menos $MIN_PLAYERS jugadores"
 
         room.mutex.lock()
         try {
@@ -58,8 +59,7 @@ object GameEngine {
 
             room.playedThisRound = room.playedThisRound + playerId
 
-            val allActive = room.activePlayers().map { it.id }.toSet()
-            if (room.playedThisRound == allActive) {
+            if (room.roundIsComplete()) {
                 room.state = RoomState.ASK_VOTE
                 room.wantVoteResponses = emptyMap()
                 return RoomState.ASK_VOTE
@@ -185,11 +185,26 @@ object GameEngine {
         return endTurn(room, playerId)
     }
 
+    suspend fun recheckRound(room: Room): RoomState {
+        room.mutex.lock()
+        try {
+            if (room.state != RoomState.IN_GAME) return room.state
+            if (room.roundIsComplete() || room.currentTurnPlayer() == null) {
+                room.state = RoomState.ASK_VOTE
+                room.wantVoteResponses = emptyMap()
+                return RoomState.ASK_VOTE
+            }
+            return RoomState.IN_GAME
+        } finally {
+            room.mutex.unlock()
+        }
+    }
+
     suspend fun checkRoomValid(room: Room): Boolean {
         room.mutex.lock()
         try {
             val active = room.activePlayers().size
-            if (active < 3) {
+            if (active < MIN_PLAYERS) {
                 if (room.isGameRunning()) room.state = RoomState.FINISHED
                 if (room.isLobby()) return false
             }

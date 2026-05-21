@@ -72,7 +72,11 @@ object Strings {
             "spectator_banner" to "Eres espectador. Observa hasta que termine la partida.",
             "round_result_title" to "Resultado de la ronda",
             "round_result_continues" to "La partida continúa en",
-            "voting_spectator" to "Eres espectador, no puedes votar."
+            "voting_spectator" to "Eres espectador, no puedes votar.",
+            "game_leave" to "Salir de la partida",
+            "game_leave_confirm_title" to "¿Salir de la partida?",
+            "game_leave_confirm_text" to "Si sales, perderás tu sitio en esta partida.",
+            "common_cancel" to "Cancelar"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -140,7 +144,11 @@ object Strings {
             "spectator_banner" to "You are a spectator. Watch until the game ends.",
             "round_result_title" to "Round result",
             "round_result_continues" to "The game continues in",
-            "voting_spectator" to "You are a spectator, you cannot vote."
+            "voting_spectator" to "You are a spectator, you cannot vote.",
+            "game_leave" to "Leave game",
+            "game_leave_confirm_title" to "Leave the game?",
+            "game_leave_confirm_text" to "If you leave, you will lose your spot in this game.",
+            "common_cancel" to "Cancel"
         )
     )
 }

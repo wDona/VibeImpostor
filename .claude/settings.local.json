@@ -19,7 +19,14 @@
       "Bash(./gradlew :app:shared:compileDebugKotlinAndroid -x test)",
       "Bash(./gradlew :server:buildFatJar)",
       "Bash(./gradlew *)",
-      "Bash(xargs ls)"
+      "Bash(xargs ls)",
+      "Bash(curl -s -i --max-time 10 https://server-impostor.wdona.dev/health)",
+      "Bash(curl -s -i --max-time 10 -H \"Connection: Upgrade\" -H \"Upgrade: websocket\" -H \"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\" -H \"Sec-WebSocket-Version: 13\" https://server-impostor.wdona.dev/ws/game)",
+      "Bash(curl -s -i --http1.1 --max-time 10 -H \"Connection: Upgrade\" -H \"Upgrade: websocket\" -H \"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\" -H \"Sec-WebSocket-Version: 13\" https://server-impostor.wdona.dev/ws/game)",
+      "Bash(curl -s --max-time 20 https://impostor.wdona.dev/webApp.js)",
+      "Bash(curl -s --max-time 30 https://impostor.wdona.dev/webApp.wasm -o /tmp/webApp.wasm)",
+      "Read(//tmp/**)",
+      "Bash(curl -s --max-time 40 https://impostor.wdona.dev/KotlinProject-app-webApp.wasm -o /tmp/app.wasm)"
     ]
   }
 }

@@ -54,6 +54,11 @@ class Room(
         return players.find { it.id == playerId }
     }
 
+    fun roundIsComplete(): Boolean {
+        val active = activePlayers()
+        return active.isNotEmpty() && active.all { it.id in playedThisRound }
+    }
+
     fun nextTurnIndex() {
         currentTurnIndex++
         while (currentTurnIndex < turnOrder.size) {

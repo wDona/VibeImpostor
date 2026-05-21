@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -44,11 +45,12 @@ fun HomeScreen(viewModel: GameViewModel) {
         ) {
             Text(
                 Strings.get("home_title", language),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
             Button(onClick = { viewModel.openSettings() }) {
-                Text("⚙", fontSize = 16.sp)
+                Text(Strings.get("settings_title", language), fontSize = 16.sp)
             }
         }
 

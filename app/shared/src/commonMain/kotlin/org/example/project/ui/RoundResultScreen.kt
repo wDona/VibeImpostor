@@ -67,5 +67,7 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             fontSize = 16.sp,
             modifier = Modifier.padding(top = 24.dp)
         )
+
+        LeaveGameButton(viewModel, language)
     }
 }

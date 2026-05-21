@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,9 +63,10 @@ fun SettingsScreen(viewModel: GameViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(Strings.get("settings_spanish", language))
-                    if (settings.language == "es") {
-                        Text("✓", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
-                    }
+                    RadioButton(
+                        selected = settings.language == "es",
+                        onClick = { viewModel.updateSettings(settings.copy(language = "es")) }
+                    )
                 }
 
                 Row(
@@ -78,9 +80,10 @@ fun SettingsScreen(viewModel: GameViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(Strings.get("settings_english", language))
-                    if (settings.language == "en") {
-                        Text("✓", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
-                    }
+                    RadioButton(
+                        selected = settings.language == "en",
+                        onClick = { viewModel.updateSettings(settings.copy(language = "en")) }
+                    )
                 }
             }
         }
@@ -157,8 +160,9 @@ private fun ThemeOption(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(label)
-        if (settings.theme == theme) {
-            Text("✓", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
-        }
+        RadioButton(
+            selected = settings.theme == theme,
+            onClick = { viewModel.updateSettings(settings.copy(theme = theme)) }
+        )
     }
 }

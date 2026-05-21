@@ -12,6 +12,8 @@ import org.example.project.model.Role
 import org.example.project.model.RoomConfig
 import org.example.project.model.RoomSnapshot
 import org.example.project.model.RoomState
+import org.example.project.model.MAX_PLAYERS
+import org.example.project.model.MIN_PLAYERS
 import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ProtocolJson
 import org.example.project.protocol.ServerMessage
@@ -52,15 +54,28 @@ fun Route.gameServer() {
                     is ClientMessage.JoinRoom -> {
                         val targetRoom = RoomManager.findRoom(message.roomCode)
                         if (targetRoom == null) {
-                            sendServerMessage(ServerMessage.ErrorMessage("Room not found"))
+                            sendServerMessage(ServerMessage.ErrorMessage("Sala no encontrada"))
+                            continue
+                        }
+
+                        targetRoom.mutex.lock()
+                        val isFull = targetRoom.players.size >= MAX_PLAYERS
+                        try {
+                            if (!isFull) {
+                                val waitingNextGame = !targetRoom.isLobby()
+                                player = Player(playerId, message.playerName, this, waitingNextGame = waitingNextGame)
+                                targetRoom.players.add(player)
+                            }
+                        } finally {
+                            targetRoom.mutex.unlock()
+                        }
+
+                        if (isFull) {
+                            sendServerMessage(ServerMessage.ErrorMessage("La sala está llena (máximo $MAX_PLAYERS jugadores)"))
                             continue
                         }
 
                         room = targetRoom
-                        val waitingNextGame = !targetRoom.isLobby()
-                        player = Player(playerId, message.playerName, this, waitingNextGame = waitingNextGame)
-                        room.players.add(player)
-
                         val snapshot = room.getRoomSnapshot()
                         sendServerMessage(ServerMessage.Joined(playerId, snapshot))
                         broadcastRoomUpdate(room)
@@ -227,7 +242,7 @@ private suspend fun leaveRoom(room: Room, player: Player) {
             room.nextTurnIndex()
         }
 
-        if (room.activePlayers().size < 3 && room.isGameRunning()) {
+        if (room.activePlayers().size < MIN_PLAYERS && room.isGameRunning()) {
             room.state = RoomState.FINISHED
             room.players.forEach { it.isSpectator = false }
             room.roundNumber = 1
@@ -254,8 +269,73 @@ private suspend fun leaveRoom(room: Room, player: Player) {
     if (shouldFinishRematch) {
         room.rematchJob?.cancel()
         finishRematch(room)
-    } else {
-        broadcastRoomUpdate(room)
+        return
+    }
+
+    handleGameProgressAfterLeave(room)
+    broadcastRoomUpdate(room)
+}
+
+private suspend fun handleGameProgressAfterLeave(room: Room) {
+    when (room.state) {
+        RoomState.IN_GAME -> {
+            val newState = GameEngine.recheckRound(room)
+            if (newState == RoomState.ASK_VOTE) {
+                val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
+                broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
+            } else {
+                val current = room.currentTurnPlayer()
+                if (current != null) {
+                    broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+                }
+            }
+        }
+
+        RoomState.ASK_VOTE -> {
+            val shouldVote = GameEngine.checkVotingStart(room)
+            when (room.state) {
+                RoomState.VOTING -> {
+                    val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
+                    val candidates = room.activePlayers().map { it.id }
+                    broadcastToActivePlayers(room, ServerMessage.VotingStarted(candidates, deadline))
+                }
+                RoomState.IN_GAME -> {
+                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+                    val current = room.currentTurnPlayer()
+                    if (current != null) {
+                        broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+                    }
+                }
+                else -> {}
+            }
+        }
+
+        RoomState.VOTING -> {
+            val result = GameEngine.checkVotingEnd(room)
+            if (result != null) {
+                val (ejectedId, wasImpostor) = result
+                broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot()))
+                if (room.state != RoomState.FINISHED) {
+                    delay(ROUND_RESULT_DELAY_MS)
+                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+                    val current = room.currentTurnPlayer()
+                    if (current != null) {
+                        broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+                    }
+                } else {
+                    broadcastServerMessage(room, ServerMessage.GameEnded(
+                        room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id },
+                        room.getRoomSnapshot()
+                    ))
+                }
+            }
+        }
+
+        RoomState.FINISHED -> {
+            broadcastServerMessage(room, ServerMessage.GameEnded(emptyList(), room.getRoomSnapshot()))
+        }
+
+        else -> {}
     }
 }
 
