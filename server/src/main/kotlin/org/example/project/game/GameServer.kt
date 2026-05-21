@@ -62,8 +62,8 @@ fun Route.gameServer() {
                         val isFull = targetRoom.players.size >= MAX_PLAYERS
                         try {
                             if (!isFull) {
-                                val waitingNextGame = !targetRoom.isLobby()
-                                player = Player(playerId, message.playerName, this, waitingNextGame = waitingNextGame)
+                                val isSpectator = targetRoom.isGameRunning()
+                                player = Player(playerId, message.playerName, this, isSpectator = isSpectator)
                                 targetRoom.players.add(player)
                             }
                         } finally {
