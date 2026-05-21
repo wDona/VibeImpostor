@@ -16,7 +16,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -96,6 +99,80 @@ fun SettingsScreen(viewModel: GameViewModel) {
         }
 
         Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = Strings.get("settings_account", language),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+
+                val authUser = state.value.authUsername
+                if (authUser != null) {
+                    Text("${Strings.get("auth_logged_as", language)}: $authUser")
+                    OutlinedButton(onClick = { viewModel.logout() }) {
+                        Text(Strings.get("auth_logout", language))
+                    }
+                    OutlinedButton(onClick = { viewModel.openPacks() }) {
+                        Text(Strings.get("settings_packs", language))
+                    }
+                } else {
+                    val username = remember { mutableStateOf("") }
+                    val password = remember { mutableStateOf("") }
+                    val showPassword = remember { mutableStateOf(false) }
+                    Text(Strings.get("auth_guest", language))
+                    TextField(
+                        value = username.value,
+                        onValueChange = { username.value = it },
+                        label = { Text(Strings.get("auth_username", language)) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    TextField(
+                        value = password.value,
+                        onValueChange = { password.value = it },
+                        label = { Text(Strings.get("auth_password", language)) },
+                        singleLine = true,
+                        visualTransformation = if (showPassword.value)
+                            VisualTransformation.None
+                        else
+                            PasswordVisualTransformation(),
+                        trailingIcon = {
+                            TextButton(onClick = { showPassword.value = !showPassword.value }) {
+                                Text(
+                                    if (showPassword.value)
+                                        Strings.get("auth_hide_password", language)
+                                    else
+                                        Strings.get("auth_show_password", language)
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    val authMessage = state.value.authMessage
+                    if (authMessage != null) {
+                        Text(authMessage, color = MaterialTheme.colorScheme.error)
+                    }
+                    if (state.value.authBusy) {
+                        Text(Strings.get("auth_loading", language))
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(
+                            onClick = { viewModel.login(username.value, password.value) },
+                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy
+                        ) {
+                            Text(Strings.get("auth_login", language))
+                        }
+                        OutlinedButton(
+                            onClick = { viewModel.register(username.value, password.value) },
+                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy
+                        ) {
+                            Text(Strings.get("auth_register", language))
+                        }
+                    }
+                }
+            }
+        }
+
+        Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
                     text = Strings.get("settings_theme", language),
@@ -128,57 +205,6 @@ fun SettingsScreen(viewModel: GameViewModel) {
                         viewModel.updateSettings(settings.copy(soundEnabled = enabled))
                     }
                 )
-            }
-        }
-
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(
-                    text = Strings.get("settings_account", language),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-
-                val authUser = state.value.authUsername
-                if (authUser != null) {
-                    Text("${Strings.get("auth_logged_as", language)}: $authUser")
-                    OutlinedButton(onClick = { viewModel.logout() }) {
-                        Text(Strings.get("auth_logout", language))
-                    }
-                    OutlinedButton(onClick = { viewModel.openPacks() }) {
-                        Text(Strings.get("settings_packs", language))
-                    }
-                } else {
-                    val username = remember { mutableStateOf("") }
-                    val password = remember { mutableStateOf("") }
-                    Text(Strings.get("auth_guest", language))
-                    TextField(
-                        value = username.value,
-                        onValueChange = { username.value = it },
-                        label = { Text(Strings.get("auth_username", language)) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    TextField(
-                        value = password.value,
-                        onValueChange = { password.value = it },
-                        label = { Text(Strings.get("auth_password", language)) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(
-                            onClick = { viewModel.login(username.value, password.value) },
-                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy
-                        ) {
-                            Text(Strings.get("auth_login", language))
-                        }
-                        OutlinedButton(
-                            onClick = { viewModel.register(username.value, password.value) },
-                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy
-                        ) {
-                            Text(Strings.get("auth_register", language))
-                        }
-                    }
-                }
             }
         }
 

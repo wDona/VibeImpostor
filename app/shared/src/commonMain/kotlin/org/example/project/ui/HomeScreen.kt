@@ -24,9 +24,9 @@ import org.example.project.i18n.Strings
 
 @Composable
 fun HomeScreen(viewModel: GameViewModel) {
-    val playerName = remember { mutableStateOf("") }
-    val roomCode = remember { mutableStateOf("") }
     val state = viewModel.state.collectAsState()
+    val playerName = remember { mutableStateOf(viewModel.state.value.settings.lastPlayerName) }
+    val roomCode = remember { mutableStateOf(viewModel.state.value.settings.lastRoomCode) }
     val language = state.value.settings.language
 
     Column(

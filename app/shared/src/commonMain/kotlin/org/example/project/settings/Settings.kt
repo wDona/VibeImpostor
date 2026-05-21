@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 data class UserSettings(
     val language: String = "es",
     val soundEnabled: Boolean = true,
-    val theme: Theme = Theme.SYSTEM
+    val theme: Theme = Theme.SYSTEM,
+    val lastPlayerName: String = "",
+    val lastRoomCode: String = ""
 )
 
 enum class Theme {

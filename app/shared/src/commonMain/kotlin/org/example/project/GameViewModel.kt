@@ -53,6 +53,8 @@ data class GameState(
     val authUsername: String? = null,
     val authBusy: Boolean = false
     ,
+    val authMessage: String? = null
+    ,
     val availableCategories: List<CategoryResponse> = emptyList()
 )
 
@@ -79,10 +81,14 @@ class GameViewModel : ViewModel() {
     }
 
     fun createRoom() {
+        updateSettings(_state.value.settings.copy(lastPlayerName = playerName))
         startConnection(ClientMessage.CreateRoom(playerName, null))
     }
 
     fun joinRoom(code: String) {
+        updateSettings(
+            _state.value.settings.copy(lastPlayerName = playerName, lastRoomCode = code)
+        )
         startConnection(ClientMessage.JoinRoom(code, playerName, null))
     }
 
@@ -261,26 +267,32 @@ class GameViewModel : ViewModel() {
 
     fun register(username: String, password: String) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(authBusy = true)
+            _state.value = _state.value.copy(authBusy = true, authMessage = null)
             val token = apiClient.register(username, password)
             _state.value = if (token != null) {
                 refreshCategories()
-                _state.value.copy(authUsername = username, authBusy = false)
+                _state.value.copy(authUsername = username, authBusy = false, authMessage = null)
             } else {
-                _state.value.copy(authBusy = false, error = "No se pudo registrar (¿usuario ya existe?)")
+                _state.value.copy(
+                    authBusy = false,
+                    authMessage = "No se pudo registrar (¿usuario ya existe?)"
+                )
             }
         }
     }
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(authBusy = true)
+            _state.value = _state.value.copy(authBusy = true, authMessage = null)
             val token = apiClient.login(username, password)
             _state.value = if (token != null) {
                 refreshCategories()
-                _state.value.copy(authUsername = username, authBusy = false)
+                _state.value.copy(authUsername = username, authBusy = false, authMessage = null)
             } else {
-                _state.value.copy(authBusy = false, error = "Usuario o contraseña incorrectos")
+                _state.value.copy(
+                    authBusy = false,
+                    authMessage = "Usuario o contraseña incorrectos"
+                )
             }
         }
     }

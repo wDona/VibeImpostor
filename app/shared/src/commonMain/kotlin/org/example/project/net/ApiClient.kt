@@ -37,7 +37,7 @@ data class NewPackCategory(val name: String, val words: List<String>)
 data class NewPack(val name: String, val language: String, val categories: List<NewPackCategory>)
 
 class ApiClient(private val baseUrl: String) {
-    private val client = HttpClient()
+    private val client = createHttpClient()
     var authToken: String? = null
 
     suspend fun register(username: String, password: String): String? = try {
