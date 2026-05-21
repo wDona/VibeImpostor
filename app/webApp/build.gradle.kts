@@ -11,7 +11,7 @@ kotlin {
     js {
         browser {
             commonWebpackConfig {
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).copy(port = 3000)
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).copy(port = 21067)
             }
         }
         binaries.executable()
@@ -21,7 +21,7 @@ kotlin {
     wasmJs {
         browser {
             commonWebpackConfig {
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).copy(port = 3001)
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).copy(port = 21067)
             }
         }
         binaries.executable()
