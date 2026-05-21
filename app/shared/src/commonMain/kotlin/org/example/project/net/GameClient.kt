@@ -41,10 +41,11 @@ class GameClient(private val baseUrl: String) {
 
     fun connect(firstMessage: ClientMessage): Flow<ServerMessage> = channelFlow {
         try {
-            val host = baseUrl.removePrefix("http://").removePrefix("https://").substringBefore(":")
-            val port = baseUrl.substringAfterLast(":").toIntOrNull() ?: 8080
-            println("GameClient.connect(): connecting to $host:$port (baseUrl=$baseUrl)")
-            client.webSocket(method = HttpMethod.Get, host = host, port = port, path = "/ws/game") {
+            // Reemplaza http por ws y https por wss automáticamente
+            val wsUrl = baseUrl.replace("https://", "wss://").replace("http://", "ws://") + "/ws/game"
+            println("GameClient.connect(): connecting to $wsUrl")
+            
+            client.webSocket(wsUrl) {
                 currentSession = this
                 send(Frame.Text(ProtocolJson.json.encodeToString(firstMessage)))
 
@@ -57,28 +58,22 @@ class GameClient(private val baseUrl: String) {
                         try {
                             send(msg)
                         } catch (e: Throwable) {
-                            // channel closed or cancelled
                             e.printStackTrace()
                         }
                     } catch (e: Throwable) {
                         e.printStackTrace()
-                        // inform the UI about decode errors so it can display useful info
                         try {
-                            send(ServerMessage.ErrorMessage("Decode error: ${e.message ?: "unknown"} raw=$text"))
-                        } catch (_: Throwable) {
-                        }
+                            send(ServerMessage.ErrorMessage("Decode error: ${e.message ?: "unknown"}"))
+                        } catch (_: Throwable) {}
                     }
                 }
                 currentSession = null
             }
         } catch (e: Throwable) {
             e.printStackTrace()
-            // propagate a user-visible error message so the UI can show a snackbar
             try {
                 send(ServerMessage.ErrorMessage("Connection failed: ${e.message ?: "unknown"}"))
-            } catch (_: Throwable) {
-            }
+            } catch (_: Throwable) {}
         }
-    }
-    .flowOn(Dispatchers.Default)
+    }.flowOn(Dispatchers.Default)
 }
