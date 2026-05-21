@@ -11,7 +11,6 @@ private fun detectServerPort(): Int? {
 	val candidates = listOf(
 		"server/build/server_port.txt",
 		"./server/build/server_port.txt",
-		"../server/build/server_port.txt",
 		"../server/build/server_port.txt"
 	)
 
@@ -28,6 +27,5 @@ private fun detectServerPort(): Int? {
 
 actual val serverBaseUrl: String = run {
 	val port = detectServerPort()
-	if (port != null) "http://localhost:$port" else "http://localhost:8080"
+	if (port != null) "http://localhost:$port" else "https://server-impostor.wdona.dev"
 }
-

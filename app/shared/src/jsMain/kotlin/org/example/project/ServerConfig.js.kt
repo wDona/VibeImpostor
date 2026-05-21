@@ -1,4 +1,3 @@
 package org.example.project
 
-actual val serverBaseUrl: String = "http://localhost:8080"
-
+actual val serverBaseUrl: String = "https://server-impostor.wdona.dev"
