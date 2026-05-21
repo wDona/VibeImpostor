@@ -204,7 +204,11 @@ object GameEngine {
         room.mutex.lock()
         try {
             if (room.state != RoomState.IN_GAME) return room.state
-            if (room.roundIsComplete() || room.currentTurnPlayer() == null) {
+            if (room.activePlayers().size < MIN_PLAYERS) {
+                room.state = RoomState.FINISHED
+                return RoomState.FINISHED
+            }
+            if (room.roundIsComplete()) {
                 room.state = RoomState.ASK_VOTE
                 room.wantVoteResponses = emptyMap()
                 return RoomState.ASK_VOTE

@@ -218,6 +218,13 @@ private suspend fun leaveRoom(room: Room, player: Player) {
     try {
         room.players.remove(player)
 
+        val playerIndex = room.turnOrder.indexOf(player.id)
+        room.turnOrder = room.turnOrder.filter { it != player.id }
+
+        if (playerIndex >= 0 && playerIndex < room.currentTurnIndex) {
+            room.currentTurnIndex--
+        }
+
         if (player.isHost && room.players.isNotEmpty()) {
             room.players[0].isHost = true
         }
