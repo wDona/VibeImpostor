@@ -38,7 +38,7 @@ object GameEngine {
             val numImpostors = rawImpostors.coerceIn(1, maxOf(1, active.size - 1))
 
             room.impostorIds = active.shuffled().take(numImpostors).map { it.id }.toSet()
-            room.turnOrder = active.map { it.id }
+            room.turnOrder = active.shuffled().map { it.id }
             room.currentTurnIndex = 0
             room.roundNumber = 1
             room.playedThisRound = emptySet()
