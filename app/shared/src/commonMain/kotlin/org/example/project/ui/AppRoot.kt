@@ -55,6 +55,7 @@ fun AppRoot() {
                     Screen.ROUND_RESULT -> RoundResultScreen(viewModel)
                     Screen.RESULT -> ResultScreen(viewModel)
                     Screen.SETTINGS -> SettingsScreen(viewModel)
+                    Screen.PACKS -> PacksScreen(viewModel)
                 }
             }
         }

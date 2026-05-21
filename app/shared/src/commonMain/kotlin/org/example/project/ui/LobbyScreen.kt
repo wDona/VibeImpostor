@@ -88,10 +88,12 @@ fun LobbyScreen(viewModel: GameViewModel) {
 
         HorizontalDivider()
 
-        Text("Configuración")
-        Text("${Strings.get("lobby_game_mode", language)}: ${if (room.config.gameMode.name == "VOICE") Strings.get("lobby_voice", language) else Strings.get("lobby_text", language)}")
-        Text("${Strings.get("lobby_impostors", language)}: ${room.config.numImpostors}")
-        Text("${Strings.get("lobby_vote_time", language)}: ${room.config.voteTimeLimitSeconds}s")
+        RoomConfigPanel(
+            viewModel = viewModel,
+            room = room,
+            isHost = state.value.room?.hostId == state.value.yourPlayerId,
+            language = language
+        )
 
         if (state.value.room?.hostId == state.value.yourPlayerId) {
             val enoughPlayers = room.players.size >= MIN_PLAYERS

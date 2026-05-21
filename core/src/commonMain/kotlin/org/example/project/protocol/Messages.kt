@@ -110,7 +110,8 @@ sealed interface ServerMessage {
     data class VotingResult(
         val ejectedPlayerId: String?,
         val wasImpostor: Boolean,
-        val room: RoomSnapshot
+        val room: RoomSnapshot,
+        val votes: Map<String, String> = emptyMap()
     ) : ServerMessage
 
     @Serializable
@@ -144,6 +145,15 @@ sealed interface ServerMessage {
     data class RemovedFromRoom(
         val reason: String
     ) : ServerMessage
+
+    @Serializable
+    data class EndGameProposed(
+        val agreedPlayerIds: List<String>,
+        val totalActive: Int
+    ) : ServerMessage
+
+    @Serializable
+    data object EndGameCancelled : ServerMessage
 }
 
 object ProtocolJson {

@@ -15,13 +15,15 @@ import org.example.project.model.RoomConfig
 import org.example.project.model.RoomSnapshot
 import org.example.project.model.RoomState
 import org.example.project.net.GameClient
+import org.example.project.net.ApiClient
+import org.example.project.net.CategoryResponse
 import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ServerMessage
 import org.example.project.settings.SettingsStorage
 import org.example.project.settings.UserSettings
 
 enum class Screen {
-    HOME, LOBBY, GAME, VOTING, ROUND_RESULT, RESULT, SETTINGS
+    HOME, LOBBY, GAME, VOTING, ROUND_RESULT, RESULT, SETTINGS, PACKS
 }
 
 data class GameState(
@@ -35,6 +37,7 @@ data class GameState(
     val error: String? = null,
     val lastWordsPlayed: Map<String, String> = emptyMap(),
     val votingResult: Pair<String?, Boolean>? = null,
+    val lastRoundVotes: Map<String, String> = emptyMap(),
     val settings: UserSettings = UserSettings(),
     val askingForVote: Boolean = false,
     val voteDeadlineMs: Long = 0L
@@ -42,6 +45,15 @@ data class GameState(
     val debugMessages: List<String> = emptyList(),
     val connecting: Boolean = false,
     val showRematchPopup: Boolean = false
+    ,
+    val showEndGameDialog: Boolean = false,
+    val endGameAgreed: Int = 0,
+    val endGameTotal: Int = 0
+    ,
+    val authUsername: String? = null,
+    val authBusy: Boolean = false
+    ,
+    val availableCategories: List<CategoryResponse> = emptyList()
 )
 
 class GameViewModel : ViewModel() {
@@ -51,6 +63,7 @@ class GameViewModel : ViewModel() {
     private var gameClient: GameClient? = null
     private var playerName: String = ""
     private val baseUrl = serverBaseUrl
+    val apiClient = ApiClient(baseUrl)
     private var connectJob: Job? = null
 
     init {
@@ -58,6 +71,7 @@ class GameViewModel : ViewModel() {
             val settings = SettingsStorage.load()
             _state.value = _state.value.copy(settings = settings)
         }
+        refreshCategories()
     }
 
     fun setPlayerName(name: String) {
@@ -198,6 +212,35 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun openPacks() {
+        _state.value = _state.value.copy(screen = Screen.PACKS)
+    }
+
+    fun closePacks() {
+        _state.value = _state.value.copy(screen = Screen.SETTINGS)
+    }
+
+    fun createCategory(name: String, words: List<String>, onDone: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val id = apiClient.createCategoryPack(name, _state.value.settings.language, words)
+            onDone(id != null)
+        }
+    }
+
+    fun importPackJson(json: String, onDone: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val id = apiClient.importPack(json)
+            onDone(id != null)
+        }
+    }
+
+    fun refreshCategories() {
+        viewModelScope.launch {
+            val categories = apiClient.getCategories()
+            _state.value = _state.value.copy(availableCategories = categories)
+        }
+    }
+
     fun dismissError() {
         _state.value = _state.value.copy(error = null)
     }
@@ -205,6 +248,46 @@ class GameViewModel : ViewModel() {
     fun respondVote(wants: Boolean) {
         _state.value = _state.value.copy(askingForVote = false)
         viewModelScope.launch { sendGameMessage(ClientMessage.AnswerWantVote(wants)) }
+    }
+
+    fun proposeEndGame() {
+        viewModelScope.launch { sendGameMessage(ClientMessage.AnswerEndGame(true)) }
+    }
+
+    fun answerEndGame(agrees: Boolean) {
+        _state.value = _state.value.copy(showEndGameDialog = false)
+        viewModelScope.launch { sendGameMessage(ClientMessage.AnswerEndGame(agrees)) }
+    }
+
+    fun register(username: String, password: String) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(authBusy = true)
+            val token = apiClient.register(username, password)
+            _state.value = if (token != null) {
+                refreshCategories()
+                _state.value.copy(authUsername = username, authBusy = false)
+            } else {
+                _state.value.copy(authBusy = false, error = "No se pudo registrar (¿usuario ya existe?)")
+            }
+        }
+    }
+
+    fun login(username: String, password: String) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(authBusy = true)
+            val token = apiClient.login(username, password)
+            _state.value = if (token != null) {
+                refreshCategories()
+                _state.value.copy(authUsername = username, authBusy = false)
+            } else {
+                _state.value.copy(authBusy = false, error = "Usuario o contraseña incorrectos")
+            }
+        }
+    }
+
+    fun logout() {
+        apiClient.logout()
+        _state.value = _state.value.copy(authUsername = null)
     }
 
     private suspend fun sendGameMessage(msg: ClientMessage) {
@@ -252,8 +335,10 @@ class GameViewModel : ViewModel() {
                     showRematchPopup = false,
                     lastWordsPlayed = emptyMap(),
                     votingResult = null,
+                    lastRoundVotes = emptyMap(),
                     askingForVote = false,
-                    voteDeadlineMs = 0L
+                    voteDeadlineMs = 0L,
+                    showEndGameDialog = false
                 )
             }
 
@@ -288,6 +373,7 @@ class GameViewModel : ViewModel() {
                 _state.value = _state.value.copy(
                     screen = if (gameOver) Screen.RESULT else Screen.ROUND_RESULT,
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
+                    lastRoundVotes = msg.votes,
                     room = msg.room,
                     players = msg.room.players
                 )
@@ -341,6 +427,19 @@ class GameViewModel : ViewModel() {
                 connectJob = null
                 viewModelScope.launch { gameClient?.disconnect() }
                 gameClient = null
+            }
+
+            is ServerMessage.EndGameProposed -> {
+                val youAlready = _state.value.yourPlayerId in msg.agreedPlayerIds
+                _state.value = _state.value.copy(
+                    showEndGameDialog = !youAlready,
+                    endGameAgreed = msg.agreedPlayerIds.size,
+                    endGameTotal = msg.totalActive
+                )
+            }
+
+            is ServerMessage.EndGameCancelled -> {
+                _state.value = _state.value.copy(showEndGameDialog = false)
             }
 
             is ServerMessage.ErrorMessage -> {

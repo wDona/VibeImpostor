@@ -63,6 +63,8 @@ fun ResultScreen(viewModel: GameViewModel) {
             )
         }
 
+        VoteReveal(room, state.value.lastRoundVotes, language)
+
         HorizontalDivider()
 
         Text(Strings.get("result_final_scores", language), fontWeight = FontWeight.Bold)

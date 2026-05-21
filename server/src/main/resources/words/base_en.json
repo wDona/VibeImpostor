@@ -1,0 +1,138 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Animals",
+      "words": ["dog", "cat", "elephant", "giraffe", "lion", "tiger", "bear", "panda", "crocodile", "snake", "eagle", "owl", "parrot", "penguin", "dolphin", "shark", "whale", "horse", "sheep", "goat", "cow", "pig", "chicken", "duck", "goose", "turkey", "rabbit", "mouse", "ant", "bee", "butterfly", "dragonfly", "beetle", "frog", "toad", "lizard", "chameleon", "octopus", "crab", "lobster", "shrimp"]
+    },
+    {
+      "name": "Food and drink",
+      "words": ["pizza", "apple", "rice", "pasta", "chicken", "meat", "fish", "tomato", "onion", "garlic", "bread", "cheese", "milk", "egg", "chocolate", "coffee", "tea", "water", "wine", "beer", "juice", "soda", "hamburger", "sandwich", "taco", "enchilada", "sushi", "ramen", "paella", "tortilla", "potato", "carrot", "banana", "orange", "strawberry", "pineapple", "melon", "watermelon", "lemon", "lime", "grape", "cherry", "peach", "pear", "kiwi", "mango"]
+    },
+    {
+      "name": "Sports",
+      "words": ["football", "soccer", "tennis", "basketball", "baseball", "volleyball", "badminton", "swimming", "athletics", "gymnastics", "cycling", "skiing", "skating", "boxing", "wrestling", "golf", "billiards", "ping pong", "cricket", "rugby", "hockey", "snowboarding", "surfing", "diving", "climbing", "hiking", "horse riding"]
+    },
+    {
+      "name": "Professions",
+      "words": ["doctor", "nurse", "teacher", "engineer", "lawyer", "architect", "chef", "electrician", "plumber", "carpenter", "painter", "musician", "actor", "film director", "journalist", "police officer", "soldier", "firefighter", "farmer", "rancher", "mechanic", "pilot", "captain", "sailor", "astronaut", "scientist", "researcher", "secretary", "accountant", "salesman"]
+    },
+    {
+      "name": "Countries and cities",
+      "words": ["Spain", "France", "Germany", "Italy", "Portugal", "Greece", "Russia", "China", "Japan", "India", "Brazil", "Argentina", "Mexico", "Canada", "United States", "Australia", "Egypt", "South Africa", "Thailand", "Vietnam", "Madrid", "Paris", "Berlin", "Rome", "London", "New York", "Tokyo", "Sydney", "Dubai", "Bangkok", "Barcelona", "Amsterdam", "Istanbul", "Prague", "Vienna", "Copenhagen"]
+    },
+    {
+      "name": "Nature",
+      "words": ["mountain", "river", "lake", "ocean", "beach", "island", "desert", "forest", "rainforest", "tundra", "meadow", "volcano", "glacier", "waterfall", "cave", "tree", "flower", "rose", "tulip", "sunflower", "daisy", "lily", "orchid", "clover", "moss", "mushroom", "grass", "shrub", "rock", "stone", "sand", "soil"]
+    },
+    {
+      "name": "Colors",
+      "words": ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "gray", "white", "black", "gold", "silver", "turquoise", "indigo", "magenta", "cyan", "beige", "cream", "coral", "scarlet", "crimson", "violet", "dark", "light", "bright", "matte", "pastel", "fluorescent"]
+    },
+    {
+      "name": "House and home",
+      "words": ["house", "apartment", "mansion", "cabin", "castle", "door", "window", "roof", "wall", "floor", "stairs", "elevator", "living room", "bedroom", "kitchen", "bathroom", "dining room", "library", "garage", "basement", "attic", "garden", "balcony", "terrace", "fireplace", "lamp", "sofa", "bed", "table", "chair", "closet", "mirror", "picture", "carpet", "curtain"]
+    },
+    {
+      "name": "Clothing and accessories",
+      "words": ["t-shirt", "shirt", "pants", "skirt", "dress", "coat", "jacket", "sweater", "sock", "shoe", "boot", "sandal", "hat", "cap", "scarf", "glove", "belt", "tie", "handkerchief", "purse", "backpack", "suitcase", "wallet", "watch", "ring", "necklace", "bracelet", "earring", "glasses", "contact lens"]
+    },
+    {
+      "name": "Transportation",
+      "words": ["car", "bicycle", "motorcycle", "bus", "truck", "tractor", "train", "subway", "streetcar", "boat", "sailboat", "yacht", "cruise", "airplane", "helicopter", "hot air balloon", "parachute", "rocket", "spaceship", "cart", "sleigh", "scooter", "skateboard", "roller skates"]
+    },
+    {
+      "name": "Technology",
+      "words": ["computer", "laptop", "tablet", "mobile phone", "television", "radio", "camera", "video camera", "smartwatch", "headphones", "speaker", "microphone", "keyboard", "mouse", "monitor", "printer", "scanner", "router", "modem", "battery", "charger", "cable", "plug", "outlet", "touchscreen", "processor", "memory"]
+    },
+    {
+      "name": "Musical instrument",
+      "words": ["guitar", "piano", "violin", "flute", "trumpet", "saxophone", "clarinet", "oboe", "french horn", "trombone", "tuba", "drum", "kettle drum", "xylophone", "marimba", "tambourine", "bells", "triangle", "cymbals", "castanets", "lyre", "harp", "mandolin", "ukulele", "banjo", "cello", "double bass", "accordion", "organ"]
+    },
+    {
+      "name": "Human body",
+      "words": ["head", "face", "eye", "nose", "mouth", "ear", "tooth", "tongue", "chin", "cheek", "forehead", "hair", "neck", "shoulder", "arm", "elbow", "wrist", "hand", "finger", "chest", "back", "waist", "hip", "leg", "knee", "ankle", "foot", "heel", "heart", "lung", "stomach", "liver", "kidney", "brain"]
+    },
+    {
+      "name": "Family",
+      "words": ["father", "mother", "son", "daughter", "brother", "sister", "grandfather", "grandmother", "uncle", "aunt", "cousin", "nephew", "niece", "husband", "wife", "boyfriend", "girlfriend", "friend", "neighbor", "colleague", "boss", "employee", "baby", "child", "teenager", "adult", "elderly"]
+    },
+    {
+      "name": "Emotions",
+      "words": ["joy", "sadness", "anger", "fear", "surprise", "disgust", "love", "hate", "trust", "distrust", "hope", "despair", "pride", "shame", "curiosity", "boredom", "enthusiasm", "apathy", "nostalgia", "euphoria", "melancholy", "anxiety", "tranquility", "peace", "chaos", "confusion", "clarity", "satisfaction", "dissatisfaction"]
+    },
+    {
+      "name": "Time and weather",
+      "words": ["sun", "rain", "snow", "cloud", "wind", "storm", "lightning", "thunder", "hail", "dew", "frost", "ice", "rainbow", "spring", "summer", "fall", "winter", "morning", "afternoon", "night", "midnight", "sunrise", "sunset", "dawn", "dusk", "day", "week", "month", "year", "century"]
+    },
+    {
+      "name": "Education",
+      "words": ["school", "high school", "university", "class", "classroom", "blackboard", "desk", "chair", "notebook", "pencil", "pen", "ballpoint pen", "eraser", "rubber", "compass", "protractor", "ruler", "calculator", "book", "novel", "dictionary", "encyclopedia", "library", "exam", "test", "homework", "assignment", "grade", "diploma"]
+    },
+    {
+      "name": "Everyday objects",
+      "words": ["telephone", "clock", "wallet", "purse", "coin", "bill", "card", "key", "lock", "chain", "rope", "ribbon", "thread", "button", "zipper", "needle", "pin", "paperclip", "rubber band", "box", "bag", "container", "glass", "cup", "plate", "teaspoon", "fork", "knife", "spoon", "pan", "pot", "pot"]
+    },
+    {
+      "name": "Movies and entertainment",
+      "words": ["comedy", "drama", "action", "horror", "science fiction", "fantasy", "adventure", "romance", "thriller", "animation", "documentary", "western", "superhero", "zombies", "vampires", "werewolves", "ghosts", "pirates", "dinosaurs", "aliens", "robot", "cyborg", "magic", "witchcraft", "sorcery", "supernatural power"]
+    },
+    {
+      "name": "Games",
+      "words": ["chess", "checkers", "dominoes", "poker", "blackjack", "dice", "cards", "lottery", "bingo", "video game", "console", "joystick", "controller", "screen", "level", "points", "lives", "coins", "power-up", "enemy", "final boss", "multiplayer", "online", "offline", "adventure mode", "survival mode"]
+    },
+    {
+      "name": "Beverages",
+      "words": ["water", "mineral water", "orange juice", "apple juice", "lemonade", "cola", "soda", "beer", "red wine", "white wine", "sparkling wine", "champagne", "whisky", "rum", "vodka", "tequila", "gin", "cognac", "brandy", "liqueur", "coffee", "coffee with milk", "americano", "espresso", "black tea", "green tea", "herbal tea", "hot chocolate", "hot milk"]
+    },
+    {
+      "name": "Desserts and sweets",
+      "words": ["cake", "torte", "sponge cake", "cookie", "donut", "bagel", "muffin", "brownie", "pie", "cheesecake", "tiramisu", "flan", "mousse", "pudding", "ice cream", "sorbet", "popsicle", "candy", "gum", "chewing gum", "chocolate", "bonbon", "nougat", "marzipan", "almond", "candy", "meringue"]
+    },
+    {
+      "name": "Shapes and figures",
+      "words": ["circle", "square", "rectangle", "triangle", "oval", "diamond", "pentagon", "hexagon", "heptagon", "octagon", "sphere", "cube", "cylinder", "cone", "pyramid", "prism", "tetrahedron", "octahedron", "icosahedron", "spiral", "zigzag", "line", "point", "ray", "angle", "straight line", "curved line", "arc"]
+    },
+    {
+      "name": "Literature and writing",
+      "words": ["novel", "short story", "poem", "poetry", "verse", "prose", "drama", "tragedy", "comedy", "epic", "fable", "legend", "myth", "essay", "biography", "autobiography", "diary", "chronicle", "article", "editorial", "review", "criticism", "prologue", "epilogue", "chapter", "act", "scene", "dialogue", "monologue", "accent", "meter"]
+    },
+    {
+      "name": "Medicine and health",
+      "words": ["hospital", "clinic", "pharmacy", "doctor's office", "ambulance", "bandage", "gauze", "dressing", "tape", "injection", "vaccine", "medicine", "pill", "tablet", "capsule", "syrup", "ointment", "cream", "salve", "thermometer", "blood pressure meter", "stethoscope", "x-ray", "blood test", "operation", "surgery", "anesthesia", "scar", "condition", "disease", "virus", "bacteria"]
+    },
+    {
+      "name": "Art and painting",
+      "words": ["painting", "canvas", "paintbrush", "palette", "easel", "sculpture", "statue", "bust", "relief", "bas-relief", "engraving", "lithography", "screen printing", "photography", "portrait", "landscape", "still life", "caricature", "comic", "mural", "fresco", "mosaic", "stained glass", "ceramics", "porcelain", "enamel", "glass", "clay"]
+    },
+    {
+      "name": "Chemical elements",
+      "words": ["hydrogen", "oxygen", "nitrogen", "carbon", "iron", "copper", "gold", "silver", "aluminum", "zinc", "tin", "lead", "mercury", "sodium", "potassium", "calcium", "magnesium", "phosphorus", "sulfur", "chlorine", "bromine", "fluorine", "radon", "uranium", "plutonium"]
+    },
+    {
+      "name": "Plants and flowers",
+      "words": ["rose", "tulip", "sunflower", "daisy", "lily", "orchid", "violet", "poppy", "lily of the valley", "dahlia", "clematis", "gardenia", "azalea", "rhododendron", "hyacinth", "narcissus", "gladiolus", "freesia", "camellia", "peony", "carnation", "lotus", "cherry blossom", "almond blossom", "bougainvillea", "lavender", "fire lily", "hibiscus", "magnolia", "zinnia"]
+    },
+    {
+      "name": "School supplies",
+      "words": ["book", "notebook", "writing pad", "agenda", "pencil case", "pencil", "colored pencil", "marker", "highlighter", "ballpoint pen", "fountain pen", "eraser", "eraser", "glue", "liquid glue", "adhesive tape", "scissors", "ruler", "set square", "set square", "compass", "protractor", "calculator", "whiteboard", "chalk", "interactive whiteboard"]
+    },
+    {
+      "name": "Actions and verbs",
+      "words": ["run", "jump", "walk", "swim", "fly", "dance", "sing", "laugh", "cry", "shout", "talk", "listen", "eat", "drink", "sleep", "wake up", "dream", "think", "believe", "know", "learn", "teach", "understand", "forget", "remember", "see", "look", "watch", "touch", "taste", "smell", "hear"]
+    },
+    {
+      "name": "Numbers and math",
+      "words": ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "twenty", "thirty", "forty", "fifty", "hundred", "thousand", "million", "zero", "addition", "subtraction", "multiplication", "division", "fraction", "decimal", "percentage", "angle", "line", "point", "geometry", "algebra", "trigonometry", "calculus"]
+    },
+    {
+      "name": "Mythology and fantasy",
+      "words": ["god", "goddess", "titan", "giant", "dwarf", "elf", "fairy", "wizard", "warlock", "witch", "dragon", "phoenix", "unicorn", "pegasus", "griffin", "minotaur", "mermaid", "triton", "centaur", "satyr", "banshee", "ghoul", "skeleton", "mummy", "zombie", "vampire", "werewolf", "demon", "angel", "archangel"]
+    },
+    {
+      "name": "Money and finance",
+      "words": ["coin", "bill", "bank", "bank account", "credit card", "debit card", "loan", "mortgage", "interest", "dividend", "investment", "stock market", "stocks", "bonds", "foreign currency", "exchange rate", "inflation", "deflation", "savings", "expense", "income", "salary", "wage", "commission", "bonus", "tip", "donation"]
+    }
+  ]
+}

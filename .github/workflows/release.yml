@@ -10,49 +10,193 @@ permissions:
   id-token: write
 
 jobs:
-  release:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version: 1.0.0.${{ github.run_number }}
+    steps:
+      - run: echo "Version will be 1.0.0.${{ github.run_number }}"
+
+  build-server:
     if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # 1. Construir el Fat JAR del Servidor
-      - name: Build Server Shadow JAR
+      - run: chmod +x gradlew
+      - name: Build Server JAR
         run: ./gradlew :server:shadowJar
+      - name: Upload Server Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-jar
+          path: server/build/libs/server-all.jar
+          retention-days: 7
 
-      # 2. Construir la Web (Wasm)
-      - name: Build Web App
+  build-android:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - run: chmod +x gradlew
+      - name: Build Android APK
+        run: ./gradlew :app:androidApp:assembleRelease
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: app/androidApp/build/outputs/apk/release/
+          retention-days: 7
+
+  build-desktop-linux:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - run: chmod +x gradlew
+      - name: Build Linux DEB
+        run: ./gradlew :app:desktopApp:packageDeb
+      - name: Upload Linux DEB
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-deb
+          path: app/desktopApp/build/compose/binaries/main/deb/
+          retention-days: 7
+
+  build-desktop-windows:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: setup
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - name: Build Windows MSI
+        run: .\gradlew.bat :app:desktopApp:packageMsi
+      - name: Upload Windows MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-msi
+          path: app/desktopApp/build/compose/binaries/main/msi/
+          retention-days: 7
+
+  build-web:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - run: chmod +x gradlew
+      - name: Build Web WASM
         run: ./gradlew :app:webApp:wasmJsBrowserDistribution
+      - name: Prepare Pages artifact
+        run: mkdir -p pages-artifact && cp -r app/webApp/build/dist/wasmJs/productionExecutable/* pages-artifact/
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'pages-artifact'
 
-      # 3. Crear la Release en GitHub y subir el JAR
+  publish-release:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: [setup, build-server, build-android, build-desktop-linux, build-desktop-windows, build-web]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Server
+        uses: actions/download-artifact@v4
+        with:
+          name: server-jar
+          path: artifacts/
+      - name: Download APK
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: artifacts/
+      - name: Download DEB
+        uses: actions/download-artifact@v4
+        with:
+          name: desktop-deb
+          path: artifacts/
+      - name: Download MSI
+        uses: actions/download-artifact@v4
+        with:
+          name: desktop-msi
+          path: artifacts/
+      - name: Rename artifacts with version
+        run: |
+          VERSION="${{ needs.setup.outputs.version }}"
+          cd artifacts
+
+          # Server
+          if [ -f "server-all.jar" ]; then mv "server-all.jar" "server-${VERSION}.jar"; fi
+
+          # APK
+          APK=$(find . -name "*-release.apk" -type f | head -1)
+          if [ ! -z "$APK" ]; then mv "$APK" "impostor-${VERSION}.apk"; fi
+
+          # DEB
+          DEB=$(find . -name "*.deb" -type f | head -1)
+          if [ ! -z "$DEB" ]; then mv "$DEB" "impostor-${VERSION}.deb"; fi
+
+          # MSI
+          MSI=$(find . -name "*.msi" -type f | head -1)
+          if [ ! -z "$MSI" ]; then mv "$MSI" "impostor-${VERSION}.msi"; fi
+
+          ls -la
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: server/build/libs/server-all.jar
-          tag_name: v${{ github.run_number }}
-          name: Release ${{ github.run_number }}
+          files: artifacts/*
+          tag_name: v${{ needs.setup.outputs.version }}
+          name: Release ${{ needs.setup.outputs.version }}
           body: |
-            Release automática generada por commit.
-            Servidor: server-all.jar (Listo para Pterodactyl)
+            Releases distribuidas automáticas.
+
+            **Artefactos:**
+            - server-${{ needs.setup.outputs.version }}.jar (Ktor, para Pterodactyl)
+            - impostor-${{ needs.setup.outputs.version }}.apk (Android)
+            - impostor-${{ needs.setup.outputs.version }}.deb (Linux)
+            - impostor-${{ needs.setup.outputs.version }}.msi (Windows)
+            - Web: GitHub Pages actualizado
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 4. Desplegar la Web a GitHub Pages
-      - name: Upload Web Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'app/webApp/build/dist/wasmJs/productionExecutable'
-
+  deploy-pages:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: build-web
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

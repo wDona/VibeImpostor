@@ -28,9 +28,11 @@ object WordRepository {
         (baseCategories + userCategories).map { CategoryDto(it.id.value, it.name) }
     }
 
-    fun randomWordFrom(categoryIds: List<Int>): Pair<String, String>? = transaction {
+    fun randomWordFrom(categoryIds: List<Int>, language: String): Pair<String, String>? = transaction {
         val categoriesToUse = if (categoryIds.isEmpty()) {
-            val basePackIds = WordPacks.select(WordPacks.id).where { WordPacks.isBuiltIn eq true }
+            val basePackIds = WordPacks.select(WordPacks.id).where {
+                (WordPacks.isBuiltIn eq true) and (WordPacks.language eq language)
+            }
             CategoryEntity.find {
                 Categories.packId inSubQuery basePackIds
             }

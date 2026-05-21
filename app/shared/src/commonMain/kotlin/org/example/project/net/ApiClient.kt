@@ -30,6 +30,12 @@ data class ImportPackRequest(val json: String)
 @Serializable
 data class ImportPackResponse(val packId: Int)
 
+@Serializable
+data class NewPackCategory(val name: String, val words: List<String>)
+
+@Serializable
+data class NewPack(val name: String, val language: String, val categories: List<NewPackCategory>)
+
 class ApiClient(private val baseUrl: String) {
     private val client = HttpClient()
     var authToken: String? = null
@@ -92,6 +98,12 @@ class ApiClient(private val baseUrl: String) {
         true
     } catch (e: Exception) {
         false
+    }
+
+    suspend fun createCategoryPack(name: String, language: String, words: List<String>): Int? {
+        val pack = NewPack(name, language, listOf(NewPackCategory(name, words)))
+        val json = ProtocolJson.json.encodeToString(NewPack.serializer(), pack)
+        return importPack(json)
     }
 
     fun logout() {

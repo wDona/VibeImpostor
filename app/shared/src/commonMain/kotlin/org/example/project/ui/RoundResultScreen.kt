@@ -27,9 +27,9 @@ fun RoundResultScreen(viewModel: GameViewModel) {
     val room = state.value.room ?: return
     val language = state.value.settings.language
 
-    var secondsLeft by remember { mutableStateOf(6) }
+    var secondsLeft by remember { mutableStateOf(12) }
     LaunchedEffect(Unit) {
-        secondsLeft = 6
+        secondsLeft = 12
         while (secondsLeft > 0) {
             delay(1000)
             secondsLeft -= 1
@@ -48,10 +48,10 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
-        state.value.votingResult?.let { (ejectedId, _) ->
+        state.value.votingResult?.let { (ejectedId, wasImpostor) ->
             val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "?"
             Text(
-                text = Strings.get("result_impostor_escaped", language),
+                text = if (wasImpostor) Strings.get("round_impostor_caught", language) else Strings.get("result_impostor_escaped", language),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 16.dp)
@@ -62,6 +62,9 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
+
+        VoteReveal(room, state.value.lastRoundVotes, language)
+
         Text(
             text = "${Strings.get("round_result_continues", language)} $secondsLeft",
             fontSize = 16.sp,

@@ -54,76 +54,81 @@ fun GameScreen(viewModel: GameViewModel) {
             )
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = when (state.value.yourRole) {
-                        Role.IMPOSTOR -> Strings.get("role_impostor", language)
-                        Role.INNOCENT -> Strings.get("role_innocent", language)
-                        null -> Strings.get("game_waiting", language)
-                    },
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = state.value.yourContent ?: "",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(8.dp)
-                )
-                Text(
-                    text = if (state.value.contentIsWord) Strings.get("game_word", language) else Strings.get("game_category", language),
-                    fontSize = 14.sp
-                )
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(Strings.get("game_players", language), fontWeight = FontWeight.Bold)
-            room.players.forEach { player ->
-                val isCurrentTurn = player.id == room.currentTurnPlayerId
-                val lastWord = state.value.lastWordsPlayed[player.id]
-
-                Card(
+        CircularPlayers(
+            players = room.players,
+            currentTurnId = room.currentTurnPlayerId,
+            center = {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            if (isCurrentTurn) MaterialTheme.colorScheme.tertiary
-                            else MaterialTheme.colorScheme.surface
-                        ),
-                    shape = RoundedCornerShape(16.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(16.dp)
                 ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = player.name,
-                            fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal,
-                            color = if (player.isSpectator)
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                            else
-                                MaterialTheme.colorScheme.onSurface
-                        )
-                        if (room.config.gameMode == GameMode.TEXT && lastWord != null) {
+                    Text(
+                        text = when (state.value.yourRole) {
+                            Role.IMPOSTOR -> Strings.get("role_impostor", language)
+                            Role.INNOCENT -> Strings.get("role_innocent", language)
+                            null -> Strings.get("game_waiting", language)
+                        },
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = state.value.yourContent ?: "",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Text(
+                        text = if (state.value.contentIsWord)
+                            Strings.get("game_word", language)
+                        else
+                            Strings.get("game_category", language),
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        )
+
+        if (room.config.gameMode == GameMode.TEXT) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(Strings.get("game_players", language), fontWeight = FontWeight.Bold)
+                room.players.forEach { player ->
+                    val isCurrentTurn = player.id == room.currentTurnPlayerId
+                    val lastWord = state.value.lastWordsPlayed[player.id]
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                if (isCurrentTurn) MaterialTheme.colorScheme.tertiary
+                                else MaterialTheme.colorScheme.surface
+                            ),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(8.dp)) {
                             Text(
-                                text = "\"$lastWord\"",
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                text = player.name,
+                                fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal,
+                                color = if (player.isSpectator)
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                                else
+                                    MaterialTheme.colorScheme.onSurface
                             )
+                            if (lastWord != null) {
+                                Text(
+                                    text = "\"$lastWord\"",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                )
+                            }
                         }
                     }
                 }
@@ -167,6 +172,38 @@ fun GameScreen(viewModel: GameViewModel) {
         }
 
         LeaveGameButton(viewModel, language)
+
+        if (!amSpectator) {
+            androidx.compose.material3.OutlinedButton(
+                onClick = { viewModel.proposeEndGame() },
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
+            ) {
+                Text(Strings.get("game_propose_end", language))
+            }
+        }
+
+        if (state.value.showEndGameDialog) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { viewModel.answerEndGame(false) },
+                title = { Text(Strings.get("end_game_title", language)) },
+                text = {
+                    Text(
+                        Strings.get("end_game_text", language) +
+                            " (${state.value.endGameAgreed}/${state.value.endGameTotal})"
+                    )
+                },
+                confirmButton = {
+                    Button(onClick = { viewModel.answerEndGame(true) }) {
+                        Text(Strings.get("common_yes", language))
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { viewModel.answerEndGame(false) }) {
+                        Text(Strings.get("common_no", language))
+                    }
+                }
+            )
+        }
 
         if (state.value.askingForVote && !amSpectator) {
             androidx.compose.material3.AlertDialog(

@@ -22,18 +22,20 @@ object GameEngine {
                 it.lastWord = null
             }
 
-            val word = WordRepository.randomWordFrom(room.config.selectedCategoryIds)
+            val word = WordRepository.randomWordFrom(room.config.selectedCategoryIds, room.config.language)
                 ?: return "No hay palabras disponibles"
 
             room.word = word.first
             room.category = word.second
 
             val active = room.activePlayers()
-            val numImpostors = when {
-                room.config.impostorMode.ordinal == 1 -> Random.nextInt(1, maxOf(2, active.size))
-                room.config.allCanBeImpostor -> Random.nextInt(1, maxOf(2, active.size))
-                else -> room.config.numImpostors
+            val configured = room.config.numImpostors
+            val rawImpostors = if (configured > 2) {
+                Random.nextInt(2, configured + 1)
+            } else {
+                configured
             }
+            val numImpostors = rawImpostors.coerceIn(1, maxOf(1, active.size - 1))
 
             room.impostorIds = active.shuffled().take(numImpostors).map { it.id }.toSet()
             room.turnOrder = active.map { it.id }
@@ -81,11 +83,11 @@ object GameEngine {
         }
     }
 
-    suspend fun checkVotingStart(room: Room): Boolean {
+    suspend fun checkVotingStart(room: Room, force: Boolean = false): Boolean {
         room.mutex.lock()
         try {
             val active = room.activePlayers().map { it.id }.toSet()
-            if (room.wantVoteResponses.keys.size < active.size) return false
+            if (!force && room.wantVoteResponses.keys.size < active.size) return false
 
             val yesCount = room.wantVoteResponses.values.count { it }
             val shouldVote = yesCount > active.size / 2
@@ -117,13 +119,19 @@ object GameEngine {
         }
     }
 
-    suspend fun checkVotingEnd(room: Room): Pair<String?, Boolean>? {
+    suspend fun checkVotingEnd(room: Room, force: Boolean = false): Pair<String?, Boolean>? {
         room.mutex.lock()
         try {
             val active = room.activePlayers().map { it.id }
             val voted = room.votes.keys
 
-            if (voted.size < active.size) return null
+            if (!force && voted.size < active.size) return null
+            if (force && voted.isEmpty() && active.isNotEmpty()) {
+                room.lastRoundVotes = emptyMap()
+                room.resetForNewRound()
+                room.state = RoomState.IN_GAME
+                return Pair(null, false)
+            }
 
             val nonVoters = active.filterNot { it in voted }
             val finalVotes = room.votes.toMutableMap()
@@ -143,36 +151,43 @@ object GameEngine {
             val ejected = if (tied.size == 1) tied.first() else tied.random()
             val wasImpostor = ejected in room.impostorIds
 
-            if (wasImpostor) {
-                val winners = room.activePlayers().filterNot { it.id in room.impostorIds }
-                winners.forEach { it.score++ }
-                room.state = RoomState.FINISHED
-                room.players.forEach { it.isSpectator = false }
-                room.roundNumber = 1
-                return Pair(ejected, true)
-            } else {
-                val ejectedPlayer = room.players.find { it.id == ejected }
-                if (ejectedPlayer != null) ejectedPlayer.isSpectator = true
+            room.lastRoundVotes = room.votes.toMap()
 
+            val ejectedPlayer = room.players.find { it.id == ejected }
+            if (ejectedPlayer != null) ejectedPlayer.isSpectator = true
+
+            if (wasImpostor) {
+                val remainingImpostors = room.activePlayers().count { it.id in room.impostorIds }
+                if (remainingImpostors == 0) {
+                    val winners = room.players.filterNot { it.id in room.impostorIds }
+                    winners.forEach { it.score++ }
+                    room.state = RoomState.FINISHED
+                    room.players.forEach { it.isSpectator = false }
+                    room.roundNumber = 1
+                    return Pair(ejected, true)
+                }
+            } else {
                 room.impostorIds.forEach { id ->
                     val player = room.players.find { it.id == id }
                     if (player != null) player.score++
                 }
+            }
 
-                val activeNow = room.activePlayers()
-                val activeImpostors = activeNow.count { it.id in room.impostorIds }
-                val activeInnocents = activeNow.size - activeImpostors
-                if (activeInnocents <= activeImpostors) {
-                    room.state = RoomState.FINISHED
-                    room.players.forEach { it.isSpectator = false }
-                    room.roundNumber = 1
-                    return Pair(ejected, false)
-                }
-
-                room.resetForNewRound()
-                room.state = RoomState.IN_GAME
+            val activeNow = room.activePlayers()
+            val activeImpostors = activeNow.count { it.id in room.impostorIds }
+            val activeInnocents = activeNow.size - activeImpostors
+            val impostorsWin = activeImpostors >= 1 && (activeNow.size <= 2 || activeInnocents == 0)
+            if (impostorsWin) {
+                activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
                 return Pair(ejected, false)
             }
+
+            room.resetForNewRound()
+            room.state = RoomState.IN_GAME
+            return Pair(ejected, false)
         } finally {
             room.mutex.unlock()
         }

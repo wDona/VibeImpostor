@@ -26,8 +26,10 @@ class Room(
     var playedThisRound: Set<String> = emptySet()
     var wantVoteResponses: Map<String, Boolean> = emptyMap()
     var votes: Map<String, String> = emptyMap()
+    var lastRoundVotes: Map<String, String> = emptyMap()
     var endGameResponses: Map<String, Boolean> = emptyMap()
     var rematchJob: Job? = null
+    var voteTimerJob: Job? = null
 
     fun getPublicPlayers() = players.map {
         org.example.project.model.PublicPlayer(

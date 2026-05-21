@@ -19,7 +19,7 @@ import org.example.project.protocol.ProtocolJson
 import org.example.project.protocol.ServerMessage
 import java.util.UUID
 
-private const val ROUND_RESULT_DELAY_MS = 6_000L
+private const val ROUND_RESULT_DELAY_MS = 12_000L
 
 fun Route.gameServer() {
     webSocket("/ws/game") {
@@ -116,6 +116,7 @@ fun Route.gameServer() {
                             if (newState == RoomState.ASK_VOTE) {
                                 val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
                                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
+                                startVoteTimer(room)
                             } else if (newState == RoomState.IN_GAME) {
                                 val current = room.currentTurnPlayer()
                                 if (current != null) {
@@ -133,6 +134,7 @@ fun Route.gameServer() {
                             if (newState == RoomState.ASK_VOTE) {
                                 val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
                                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
+                                startVoteTimer(room)
                             } else if (newState == RoomState.IN_GAME) {
                                 val current = room.currentTurnPlayer()
                                 if (current != null) {
@@ -146,21 +148,7 @@ fun Route.gameServer() {
                         if (room != null && player != null && !player.isSpectator) {
                             GameEngine.answerWantVote(room, player.id, message.wantsToVote)
                             GameEngine.checkVotingStart(room)
-                            when (room.state) {
-                                RoomState.VOTING -> {
-                                    val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
-                                    val candidates = room.activePlayers().map { it.id }
-                                    broadcastToActivePlayers(room, ServerMessage.VotingStarted(candidates, deadline))
-                                }
-                                RoomState.IN_GAME -> {
-                                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-                                    val current = room.currentTurnPlayer()
-                                    if (current != null) {
-                                        broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                                    }
-                                }
-                                else -> {}
-                            }
+                            afterAskVoteResolved(room)
                         }
                     }
 
@@ -169,19 +157,7 @@ fun Route.gameServer() {
                             GameEngine.castVote(room, player.id, message.targetPlayerId)
                             val result = GameEngine.checkVotingEnd(room)
                             if (result != null) {
-                                val (ejectedId, wasImpostor) = result
-                                broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot()))
-
-                                if (room.state != RoomState.FINISHED) {
-                                    delay(ROUND_RESULT_DELAY_MS)
-                                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-                                    val current = room.currentTurnPlayer()
-                                    if (current != null) {
-                                        broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                                    }
-                                } else {
-                                    broadcastServerMessage(room, ServerMessage.GameEnded(room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id }, room.getRoomSnapshot()))
-                                }
+                                afterVotingResolved(room, result)
                             }
                         }
                     }
@@ -211,6 +187,14 @@ fun Route.gameServer() {
                         val p = player
                         if (r != null && p != null) {
                             handleRequestRematch(r, p)
+                        }
+                    }
+
+                    is ClientMessage.AnswerEndGame -> {
+                        val r = room
+                        val p = player
+                        if (r != null && p != null) {
+                            handleAnswerEndGame(r, p, message.agrees)
                         }
                     }
 
@@ -292,42 +276,14 @@ private suspend fun handleGameProgressAfterLeave(room: Room) {
         }
 
         RoomState.ASK_VOTE -> {
-            val shouldVote = GameEngine.checkVotingStart(room)
-            when (room.state) {
-                RoomState.VOTING -> {
-                    val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
-                    val candidates = room.activePlayers().map { it.id }
-                    broadcastToActivePlayers(room, ServerMessage.VotingStarted(candidates, deadline))
-                }
-                RoomState.IN_GAME -> {
-                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-                    val current = room.currentTurnPlayer()
-                    if (current != null) {
-                        broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                    }
-                }
-                else -> {}
-            }
+            GameEngine.checkVotingStart(room)
+            afterAskVoteResolved(room)
         }
 
         RoomState.VOTING -> {
             val result = GameEngine.checkVotingEnd(room)
             if (result != null) {
-                val (ejectedId, wasImpostor) = result
-                broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot()))
-                if (room.state != RoomState.FINISHED) {
-                    delay(ROUND_RESULT_DELAY_MS)
-                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-                    val current = room.currentTurnPlayer()
-                    if (current != null) {
-                        broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                    }
-                } else {
-                    broadcastServerMessage(room, ServerMessage.GameEnded(
-                        room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id },
-                        room.getRoomSnapshot()
-                    ))
-                }
+                afterVotingResolved(room, result)
             }
         }
 
@@ -493,5 +449,103 @@ private suspend fun finishRematch(room: Room) {
         }
     } else {
         broadcastServerMessage(room, ServerMessage.ReturnedToLobby(room.getRoomSnapshot()))
+    }
+}
+
+private suspend fun handleAnswerEndGame(room: Room, player: Player, agrees: Boolean) {
+    var cancelled = false
+    var ended = false
+    var proposed = false
+    room.mutex.lock()
+    try {
+        if (!room.isGameRunning() || player.isSpectator) return
+        if (!agrees) {
+            room.endGameResponses = emptyMap()
+            cancelled = true
+        } else {
+            room.endGameResponses = room.endGameResponses + (player.id to true)
+            val activeIds = room.activePlayers().map { it.id }
+            if (activeIds.isNotEmpty() && activeIds.all { room.endGameResponses[it] == true }) {
+                room.voteTimerJob?.cancel()
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
+                room.endGameResponses = emptyMap()
+                ended = true
+            } else {
+                proposed = true
+            }
+        }
+    } finally {
+        room.mutex.unlock()
+    }
+
+    when {
+        ended -> broadcastServerMessage(room, ServerMessage.GameEnded(emptyList(), room.getRoomSnapshot()))
+        cancelled -> broadcastServerMessage(room, ServerMessage.EndGameCancelled)
+        proposed -> {
+            val agreedIds = room.endGameResponses.keys.toList()
+            val total = room.activePlayers().size
+            broadcastServerMessage(room, ServerMessage.EndGameProposed(agreedIds, total))
+        }
+    }
+}
+
+private suspend fun startVoteTimer(room: Room) {
+    room.voteTimerJob?.cancel()
+    val phase = room.state
+    room.voteTimerJob = RoomManager.scope.launch {
+        delay(room.config.voteTimeLimitSeconds * 1000L)
+        if (room.state != phase) return@launch
+        when (phase) {
+            RoomState.ASK_VOTE -> {
+                GameEngine.checkVotingStart(room, force = true)
+                afterAskVoteResolved(room)
+            }
+            RoomState.VOTING -> {
+                val result = GameEngine.checkVotingEnd(room, force = true)
+                if (result != null) afterVotingResolved(room, result)
+            }
+            else -> {}
+        }
+    }
+}
+
+private suspend fun afterAskVoteResolved(room: Room) {
+    when (room.state) {
+        RoomState.VOTING -> {
+            val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
+            val candidates = room.activePlayers().map { it.id }
+            broadcastToActivePlayers(room, ServerMessage.VotingStarted(candidates, deadline))
+            startVoteTimer(room)
+        }
+        RoomState.IN_GAME -> {
+            room.voteTimerJob?.cancel()
+            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+            val current = room.currentTurnPlayer()
+            if (current != null) {
+                broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+            }
+        }
+        else -> {}
+    }
+}
+
+private suspend fun afterVotingResolved(room: Room, result: Pair<String?, Boolean>) {
+    room.voteTimerJob?.cancel()
+    val (ejectedId, wasImpostor) = result
+    broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot(), room.lastRoundVotes))
+    if (room.state != RoomState.FINISHED) {
+        delay(ROUND_RESULT_DELAY_MS)
+        broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+        val current = room.currentTurnPlayer()
+        if (current != null) {
+            broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+        }
+    } else {
+        broadcastServerMessage(room, ServerMessage.GameEnded(
+            room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id },
+            room.getRoomSnapshot()
+        ))
     }
 }

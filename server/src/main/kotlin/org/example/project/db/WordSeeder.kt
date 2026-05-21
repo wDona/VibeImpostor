@@ -2,6 +2,7 @@ package org.example.project.db
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @Serializable
@@ -18,9 +19,14 @@ data class CategoryJson(
 )
 
 fun seedBaseWordsIfEmpty() {
+    seedBasePack("words/base_es.json", "es")
+    seedBasePack("words/base_en.json", "en")
+}
+
+private fun seedBasePack(resourcePath: String, lang: String) {
     transaction {
         val existingPack = WordPackEntity.find {
-            WordPacks.isBuiltIn eq true
+            (WordPacks.isBuiltIn eq true) and (WordPacks.language eq lang)
         }.firstOrNull()
 
         if (existingPack != null) return@transaction
@@ -28,10 +34,10 @@ fun seedBaseWordsIfEmpty() {
         val json = Json { ignoreUnknownKeys = true }
         val packJson = json.decodeFromString<WordPackJson>(
             object {}.javaClass.classLoader
-                .getResourceAsStream("words/base_es.json")
+                .getResourceAsStream(resourcePath)
                 ?.bufferedReader()
                 ?.readText()
-                ?: throw RuntimeException("base_es.json not found")
+                ?: throw RuntimeException("$resourcePath not found")
         )
 
         val pack = WordPackEntity.new {
