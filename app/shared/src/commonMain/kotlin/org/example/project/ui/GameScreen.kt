@@ -57,6 +57,7 @@ fun GameScreen(viewModel: GameViewModel) {
         CircularPlayers(
             players = room.players,
             currentTurnId = room.currentTurnPlayerId,
+            lastWordsPlayed = state.value.lastWordsPlayed,
             center = {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

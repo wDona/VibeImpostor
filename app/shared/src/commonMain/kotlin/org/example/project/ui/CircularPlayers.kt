@@ -2,6 +2,7 @@ package org.example.project.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.example.project.model.PublicPlayer
 import kotlin.math.PI
 import kotlin.math.cos
@@ -24,13 +26,14 @@ import kotlin.math.sin
 fun CircularPlayers(
     players: List<PublicPlayer>,
     currentTurnId: String?,
+    lastWordsPlayed: Map<String, String> = emptyMap(),
     center: @Composable () -> Unit
 ) {
     BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth().aspectRatio(1f)
+        modifier = Modifier.fillMaxWidth().aspectRatio(2f)
     ) {
         val side = if (maxWidth < maxHeight) maxWidth else maxHeight
-        val radius = side.value / 2f - 56f
+        val radius = side.value / 2.5f - 40f
 
         Box(modifier = Modifier.align(Alignment.Center)) {
             center()
@@ -53,15 +56,27 @@ fun CircularPlayers(
                         MaterialTheme.colorScheme.surfaceVariant
                 )
             ) {
-                Text(
-                    text = player.name,
+                Column(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                    fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
-                    color = if (player.isSpectator)
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                    else
-                        MaterialTheme.colorScheme.onSurface
-                )
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = player.name,
+                        fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
+                        color = if (player.isSpectator)
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        else
+                            MaterialTheme.colorScheme.onSurface
+                    )
+                    val lastWord = lastWordsPlayed[player.id]
+                    if (lastWord != null) {
+                        Text(
+                            text = "\"$lastWord\"",
+                            fontSize = 10.sp,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        )
+                    }
+                }
             }
         }
     }
