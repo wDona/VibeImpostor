@@ -1,11 +1,15 @@
 package org.example.project.game
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.example.project.model.RoomConfig
 import kotlin.random.Random
 
 object RoomManager {
-    private val rooms = mutableMapOf<String, Room>()
+    private val rooms = java.util.concurrent.ConcurrentHashMap<String, Room>()
     private val random = Random(System.currentTimeMillis())
+    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     fun generateCode(): String {
         while (true) {
@@ -21,7 +25,7 @@ object RoomManager {
         return room
     }
 
-    fun findRoom(code: String): Room? = rooms[code]
+    fun findRoom(code: String): Room? = rooms[code.trim().uppercase()]
 
     fun deleteRoom(code: String) {
         rooms.remove(code)

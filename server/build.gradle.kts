@@ -2,12 +2,20 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.shadow)
 }
 
 group = "org.example.project"
 version = "1.0.0"
+
 application {
-    mainClass = "org.example.project.ApplicationKt"
+    mainClass.set("org.example.project.ApplicationKt")
+}
+
+// Configuración de ShadowJar para crear el Fat JAR
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    archiveFileName.set("server-all.jar")
+    mergeServiceFiles() // Necesario para Ktor/Logback
 }
 
 dependencies {

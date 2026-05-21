@@ -66,11 +66,15 @@ fun HomeScreen(viewModel: GameViewModel) {
                 viewModel.setPlayerName(playerName.value)
                 viewModel.createRoom()
             },
+            enabled = playerName.value.isNotBlank() && !state.value.connecting,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(Strings.get("home_create_room", language))
+            Text(
+                if (state.value.connecting) Strings.get("home_connecting", language)
+                else Strings.get("home_create_room", language)
+            )
         }
 
         TextField(
@@ -85,13 +89,19 @@ fun HomeScreen(viewModel: GameViewModel) {
         Button(
             onClick = {
                 viewModel.setPlayerName(playerName.value)
-                viewModel.joinRoom(roomCode.value)
+                viewModel.joinRoom(roomCode.value.trim().uppercase())
             },
+            enabled = playerName.value.isNotBlank() &&
+                roomCode.value.isNotBlank() &&
+                !state.value.connecting,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(Strings.get("home_join_room", language))
+            Text(
+                if (state.value.connecting) Strings.get("home_connecting", language)
+                else Strings.get("home_join_room", language)
+            )
         }
     }
 }

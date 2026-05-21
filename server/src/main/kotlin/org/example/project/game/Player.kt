@@ -16,5 +16,6 @@ data class Player(
     var role: Role? = null,
     var word: String? = null,
     var category: String? = null,
-    var lastWord: String? = null
+    var lastWord: String? = null,
+    var wantsRematch: Boolean = false
 )

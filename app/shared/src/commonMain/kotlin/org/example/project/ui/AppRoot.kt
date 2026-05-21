@@ -52,19 +52,9 @@ fun AppRoot() {
                     Screen.LOBBY -> LobbyScreen(viewModel)
                     Screen.GAME -> GameScreen(viewModel)
                     Screen.VOTING -> VotingScreen(viewModel)
+                    Screen.ROUND_RESULT -> RoundResultScreen(viewModel)
                     Screen.RESULT -> ResultScreen(viewModel)
                     Screen.SETTINGS -> SettingsScreen(viewModel)
-                }
-
-                // Debug panel (visible during development) showing a snapshot of essential state
-                androidx.compose.foundation.layout.Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                ) {
-                    androidx.compose.material3.Text("DEBUG: screen=${state.value.screen} playerId=${state.value.yourPlayerId ?: "-"} players=${state.value.players.size} connecting=${state.value.connecting}")
-                    state.value.debugMessages.forEach { msg ->
-                        androidx.compose.material3.Text(msg)
-                    }
                 }
             }
         }

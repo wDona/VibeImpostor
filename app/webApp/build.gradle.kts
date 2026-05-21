@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,21 +9,34 @@ plugins {
 
 kotlin {
     js {
-        browser()
+        browser {
+            commonWebpackConfig {
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).copy(port = 3000)
+            }
+        }
         binaries.executable()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
+        browser {
+            commonWebpackConfig {
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).copy(port = 3001)
+            }
+        }
         binaries.executable()
     }
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(projects.app.shared)
-
-            implementation(libs.compose.ui)
+        val webMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(projects.app.shared)
+                implementation(libs.compose.ui)
+                implementation(libs.wrappers.browser)
+            }
         }
+        jsMain.get().dependsOn(webMain)
+        wasmJsMain.get().dependsOn(webMain)
     }
 }

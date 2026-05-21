@@ -22,6 +22,7 @@ exposed = "0.58.0"
 h2 = "2.3.232"
 postgresql = "42.7.4"
 hikari = "6.2.1"
+shadow = "9.1.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -77,3 +78,4 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

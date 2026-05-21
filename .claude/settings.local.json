@@ -17,7 +17,9 @@
       "Bash(./gradlew :app:shared:compileKotlinJvm -x test --no-daemon)",
       "Bash(./gradlew :server:build :app:shared:compileKotlinJvm -x test --no-daemon)",
       "Bash(./gradlew :app:shared:compileDebugKotlinAndroid -x test)",
-      "Bash(./gradlew :server:buildFatJar)"
+      "Bash(./gradlew :server:buildFatJar)",
+      "Bash(./gradlew *)",
+      "Bash(xargs ls)"
     ]
   }
 }

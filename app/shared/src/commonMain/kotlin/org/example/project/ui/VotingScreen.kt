@@ -11,6 +11,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -39,20 +41,34 @@ fun VotingScreen(viewModel: GameViewModel) {
             modifier = Modifier.padding(16.dp)
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            room.players.forEach { player ->
-                Button(
-                    onClick = { viewModel.castVote(player.id) },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(player.name)
-                }
+        val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
+        val voted = remember { mutableStateOf(false) }
+
+        if (amSpectator) {
+            Text(Strings.get("voting_spectator", language))
+        } else if (voted.value) {
+            Text(Strings.get("voting_voted", language))
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                room.players
+                    .filter { it.id != state.value.yourPlayerId && !it.isSpectator }
+                    .forEach { player ->
+                        Button(
+                            onClick = {
+                                viewModel.castVote(player.id)
+                                voted.value = true
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(player.name)
+                        }
+                    }
             }
         }
     }

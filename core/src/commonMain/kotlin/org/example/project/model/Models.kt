@@ -8,7 +8,8 @@ enum class RoomState {
     IN_GAME,
     ASK_VOTE,
     VOTING,
-    FINISHED
+    FINISHED,
+    REMATCH
 }
 
 @Serializable
@@ -37,7 +38,8 @@ data class PublicPlayer(
     val connected: Boolean,
     val isHost: Boolean,
     val waitingNextGame: Boolean,
-    val isSpectator: Boolean
+    val isSpectator: Boolean,
+    val wantsRematch: Boolean = false
 )
 
 @Serializable

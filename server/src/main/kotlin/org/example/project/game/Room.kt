@@ -1,5 +1,6 @@
 package org.example.project.game
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.Mutex
 import org.example.project.model.RoomConfig
 import org.example.project.model.RoomState
@@ -26,6 +27,7 @@ class Room(
     var wantVoteResponses: Map<String, Boolean> = emptyMap()
     var votes: Map<String, String> = emptyMap()
     var endGameResponses: Map<String, Boolean> = emptyMap()
+    var rematchJob: Job? = null
 
     fun getPublicPlayers() = players.map {
         org.example.project.model.PublicPlayer(
@@ -35,12 +37,15 @@ class Room(
             connected = it.connected,
             isHost = it.isHost,
             waitingNextGame = it.waitingNextGame,
-            isSpectator = it.isSpectator
+            isSpectator = it.isSpectator,
+            wantsRematch = it.wantsRematch
         )
     }
 
     fun isLobby() = state == RoomState.LOBBY
-    fun isGameRunning() = state != RoomState.LOBBY && state != RoomState.FINISHED
+    fun isGameRunning() = state == RoomState.IN_GAME ||
+        state == RoomState.ASK_VOTE ||
+        state == RoomState.VOTING
     fun activePlayers() = players.filter { it.connected && !it.isSpectator && !it.waitingNextGame }
     fun allPlayers() = players.filter { it.connected }
     fun currentTurnPlayer(): Player? {

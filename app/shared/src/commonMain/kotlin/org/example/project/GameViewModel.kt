@@ -13,6 +13,7 @@ import org.example.project.model.PublicPlayer
 import org.example.project.model.Role
 import org.example.project.model.RoomConfig
 import org.example.project.model.RoomSnapshot
+import org.example.project.model.RoomState
 import org.example.project.net.GameClient
 import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ServerMessage
@@ -20,7 +21,7 @@ import org.example.project.settings.SettingsStorage
 import org.example.project.settings.UserSettings
 
 enum class Screen {
-    HOME, LOBBY, GAME, VOTING, RESULT, SETTINGS
+    HOME, LOBBY, GAME, VOTING, ROUND_RESULT, RESULT, SETTINGS
 }
 
 data class GameState(
@@ -39,7 +40,8 @@ data class GameState(
     val voteDeadlineMs: Long = 0L
     ,
     val debugMessages: List<String> = emptyList(),
-    val connecting: Boolean = false
+    val connecting: Boolean = false,
+    val showRematchPopup: Boolean = false
 )
 
 class GameViewModel : ViewModel() {
@@ -48,7 +50,6 @@ class GameViewModel : ViewModel() {
 
     private var gameClient: GameClient? = null
     private var playerName: String = ""
-    private var lastFirstMessage: ClientMessage? = null
     private val baseUrl = serverBaseUrl
     private var connectJob: Job? = null
 
@@ -64,85 +65,56 @@ class GameViewModel : ViewModel() {
     }
 
     fun createRoom() {
-        connectJob?.cancel()
-        connectJob = viewModelScope.launch {
-            println("GameViewModel.createRoom(): attempting to create room as '$playerName' using baseUrl=$baseUrl")
-            _state.value = _state.value.copy(connecting = true)
-            gameClient?.disconnect()
-            gameClient = GameClient(baseUrl)
-            val firstMsg = ClientMessage.CreateRoom(playerName, null)
-            lastFirstMessage = firstMsg
-            try {
-                val collected = kotlinx.coroutines.withTimeoutOrNull(10000L) {
-                    gameClient!!.connect(firstMsg)
-                        .onCompletion {
-                            if (_state.value.screen != Screen.HOME) {
-                                delay(3000)
-                                reconnect()
-                            }
-                        }
-                        .catch { e ->
-                            e.printStackTrace()
-                            _state.value = _state.value.copy(
-                                error = "Connection error: ${e.message ?: "unknown"}",
-                                connecting = false
-                            )
-                        }
-                        .collect { msg ->
-                            // any message from server means connection succeeded
-                            _state.value = _state.value.copy(connecting = false)
-                            handleServerMessage(msg)
-                        }
-                }
-                if (collected == null) {
-                    // timeout
-                    _state.value = _state.value.copy(error = "Connection timed out", connecting = false)
-                }
-            } finally {
-                // clear job when the connect coroutine ends
-                connectJob = null
-                _state.value = _state.value.copy(connecting = false)
-            }
-        }
+        startConnection(ClientMessage.CreateRoom(playerName, null))
     }
 
     fun joinRoom(code: String) {
+        startConnection(ClientMessage.JoinRoom(code, playerName, null))
+    }
+
+    private fun startConnection(firstMsg: ClientMessage) {
         connectJob?.cancel()
         connectJob = viewModelScope.launch {
-            println("GameViewModel.joinRoom(): attempting to join room '$code' as '$playerName' using baseUrl=$baseUrl")
-            _state.value = _state.value.copy(connecting = true)
+            _state.value = _state.value.copy(connecting = true, error = null)
             gameClient?.disconnect()
-            gameClient = GameClient(baseUrl)
-            val firstMsg = ClientMessage.JoinRoom(code, playerName, null)
-            lastFirstMessage = firstMsg
-            try {
-                val collected = kotlinx.coroutines.withTimeoutOrNull(10000L) {
-                    gameClient!!.connect(firstMsg)
-                        .onCompletion {
-                            if (_state.value.screen != Screen.HOME) {
-                                delay(3000)
-                                reconnect()
-                            }
+            val client = GameClient(baseUrl)
+            gameClient = client
+
+            val collectJob = launch {
+                client.connect(firstMsg)
+                    .catch { e ->
+                        e.printStackTrace()
+                        _state.value = _state.value.copy(
+                            error = "Error de conexión: ${e.message ?: "desconocido"}",
+                            connecting = false
+                        )
+                    }
+                    .onCompletion {
+                        if (_state.value.screen != Screen.HOME) {
+                            _state.value = _state.value.copy(error = "Conexión perdida")
                         }
-                        .catch { e ->
-                            e.printStackTrace()
-                            _state.value = _state.value.copy(
-                                error = "Connection error: ${e.message ?: "unknown"}",
-                                connecting = false
-                            )
-                        }
-                        .collect { msg ->
-                            _state.value = _state.value.copy(connecting = false)
-                            handleServerMessage(msg)
-                        }
-                }
-                if (collected == null) {
-                    _state.value = _state.value.copy(error = "Connection timed out", connecting = false)
-                }
-            } finally {
-                connectJob = null
-                _state.value = _state.value.copy(connecting = false)
+                    }
+                    .collect { msg ->
+                        _state.value = _state.value.copy(connecting = false)
+                        handleServerMessage(msg)
+                    }
             }
+
+            val watchdog = launch {
+                delay(10_000)
+                if (_state.value.connecting) {
+                    _state.value = _state.value.copy(
+                        error = "La conexión tardó demasiado",
+                        connecting = false
+                    )
+                    collectJob.cancel()
+                    client.disconnect()
+                }
+            }
+
+            collectJob.join()
+            watchdog.cancel()
+            connectJob = null
         }
     }
 
@@ -190,9 +162,24 @@ class GameViewModel : ViewModel() {
 
     fun leaveRoom() {
         viewModelScope.launch {
-            val msg = ClientMessage.LeaveRoom
-            sendGameMessage(msg)
+            sendGameMessage(ClientMessage.LeaveRoom)
             _state.value = _state.value.copy(screen = Screen.HOME, room = null, yourPlayerId = null)
+            connectJob?.cancel()
+            connectJob = null
+            gameClient?.disconnect()
+            gameClient = null
+        }
+    }
+
+    fun backToLobby() {
+        viewModelScope.launch {
+            sendGameMessage(ClientMessage.BackToLobby)
+        }
+    }
+
+    fun requestRematch() {
+        viewModelScope.launch {
+            sendGameMessage(ClientMessage.RequestRematch)
         }
     }
 
@@ -232,18 +219,25 @@ class GameViewModel : ViewModel() {
         _state.value = _state.value.copy(debugMessages = newDebug)
         when (msg) {
             is ServerMessage.Joined -> {
+                val screen = when (msg.room.state) {
+                    RoomState.FINISHED -> Screen.RESULT
+                    RoomState.REMATCH -> Screen.RESULT
+                    else -> Screen.LOBBY
+                }
                 _state.value = _state.value.copy(
-                    screen = Screen.LOBBY,
+                    screen = screen,
                     room = msg.room,
                     yourPlayerId = msg.yourPlayerId,
-                    players = msg.room.players
+                    players = msg.room.players,
+                    showRematchPopup = msg.room.state == RoomState.REMATCH
                 )
             }
 
             is ServerMessage.RoomUpdated -> {
                 _state.value = _state.value.copy(
                     room = msg.room,
-                    players = msg.room.players
+                    players = msg.room.players,
+                    showRematchPopup = msg.room.state == RoomState.REMATCH
                 )
             }
 
@@ -254,7 +248,12 @@ class GameViewModel : ViewModel() {
                     yourContent = msg.content,
                     contentIsWord = msg.contentIsWord,
                     room = msg.room,
-                    players = msg.room.players
+                    players = msg.room.players,
+                    showRematchPopup = false,
+                    lastWordsPlayed = emptyMap(),
+                    votingResult = null,
+                    askingForVote = false,
+                    voteDeadlineMs = 0L
                 )
             }
 
@@ -285,13 +284,13 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.VotingResult -> {
+                val gameOver = msg.room.state == RoomState.FINISHED
                 _state.value = _state.value.copy(
-                    screen = Screen.RESULT,
+                    screen = if (gameOver) Screen.RESULT else Screen.ROUND_RESULT,
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
                     room = msg.room,
                     players = msg.room.players
                 )
-                println("state.screen: $prevScreen -> ${_state.value.screen}")
             }
 
             is ServerMessage.RoundContinues -> {
@@ -305,8 +304,43 @@ class GameViewModel : ViewModel() {
                 _state.value = _state.value.copy(
                     screen = Screen.RESULT,
                     room = msg.room,
-                    players = msg.room.players
+                    players = msg.room.players,
+                    showRematchPopup = false
                 )
+            }
+
+            is ServerMessage.RematchStarted -> {
+                _state.value = _state.value.copy(
+                    screen = Screen.RESULT,
+                    room = msg.room,
+                    players = msg.room.players,
+                    showRematchPopup = true
+                )
+            }
+
+            is ServerMessage.ReturnedToLobby -> {
+                _state.value = _state.value.copy(
+                    screen = Screen.LOBBY,
+                    room = msg.room,
+                    players = msg.room.players,
+                    showRematchPopup = false,
+                    votingResult = null,
+                    lastWordsPlayed = emptyMap()
+                )
+            }
+
+            is ServerMessage.RemovedFromRoom -> {
+                _state.value = _state.value.copy(
+                    screen = Screen.HOME,
+                    room = null,
+                    yourPlayerId = null,
+                    showRematchPopup = false,
+                    error = msg.reason
+                )
+                connectJob?.cancel()
+                connectJob = null
+                viewModelScope.launch { gameClient?.disconnect() }
+                gameClient = null
             }
 
             is ServerMessage.ErrorMessage -> {
@@ -316,26 +350,4 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    private fun reconnect() {
-        val msg = lastFirstMessage ?: return
-        connectJob?.cancel()
-        connectJob = viewModelScope.launch {
-            gameClient = GameClient(baseUrl)
-            try {
-                gameClient!!.connect(msg)
-                    .onCompletion {
-                        if (_state.value.screen != Screen.HOME) {
-                            delay(3000)
-                            reconnect()
-                        }
-                    }
-                    .catch { e ->
-                        e.printStackTrace()
-                    }
-                    .collect { handleServerMessage(it) }
-            } finally {
-                connectJob = null
-            }
-        }
-    }
 }

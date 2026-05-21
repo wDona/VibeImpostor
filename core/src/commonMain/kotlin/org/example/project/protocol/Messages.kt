@@ -54,6 +54,12 @@ sealed interface ClientMessage {
     data class AnswerEndGame(
         val agrees: Boolean
     ) : ClientMessage
+
+    @Serializable
+    data object BackToLobby : ClientMessage
+
+    @Serializable
+    data object RequestRematch : ClientMessage
 }
 
 @Serializable
@@ -122,6 +128,21 @@ sealed interface ServerMessage {
     @Serializable
     data class ErrorMessage(
         val text: String
+    ) : ServerMessage
+
+    @Serializable
+    data class RematchStarted(
+        val room: RoomSnapshot
+    ) : ServerMessage
+
+    @Serializable
+    data class ReturnedToLobby(
+        val room: RoomSnapshot
+    ) : ServerMessage
+
+    @Serializable
+    data class RemovedFromRoom(
+        val reason: String
     ) : ServerMessage
 }
 

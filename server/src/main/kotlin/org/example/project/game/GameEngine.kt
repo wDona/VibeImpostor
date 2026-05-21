@@ -11,7 +11,15 @@ object GameEngine {
 
         room.mutex.lock()
         try {
-            room.players.forEach { it.waitingNextGame = false; it.isSpectator = false }
+            room.players.forEach {
+                it.waitingNextGame = false
+                it.isSpectator = false
+                it.wantsRematch = false
+                it.role = null
+                it.word = null
+                it.category = null
+                it.lastWord = null
+            }
 
             val word = WordRepository.randomWordFrom(room.config.selectedCategoryIds)
                 ?: return "No hay palabras disponibles"
@@ -33,6 +41,7 @@ object GameEngine {
             room.playedThisRound = emptySet()
             room.wantVoteResponses = emptyMap()
             room.votes = emptyMap()
+            room.endGameResponses = emptyMap()
 
             room.state = RoomState.IN_GAME
 
@@ -138,6 +147,8 @@ object GameEngine {
                 val winners = room.activePlayers().filterNot { it.id in room.impostorIds }
                 winners.forEach { it.score++ }
                 room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
                 return Pair(ejected, true)
             } else {
                 val ejectedPlayer = room.players.find { it.id == ejected }
@@ -146,6 +157,16 @@ object GameEngine {
                 room.impostorIds.forEach { id ->
                     val player = room.players.find { it.id == id }
                     if (player != null) player.score++
+                }
+
+                val activeNow = room.activePlayers()
+                val activeImpostors = activeNow.count { it.id in room.impostorIds }
+                val activeInnocents = activeNow.size - activeImpostors
+                if (activeInnocents <= activeImpostors) {
+                    room.state = RoomState.FINISHED
+                    room.players.forEach { it.isSpectator = false }
+                    room.roundNumber = 1
+                    return Pair(ejected, false)
                 }
 
                 room.resetForNewRound()

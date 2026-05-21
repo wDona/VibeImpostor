@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.model.GameMode
+import org.example.project.model.Role
 
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
@@ -33,6 +34,7 @@ fun GameScreen(viewModel: GameViewModel) {
     val room = state.value.room ?: return
     val wordInput = remember { mutableStateOf("") }
     val language = state.value.settings.language
+    val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
 
     Column(
         modifier = Modifier
@@ -42,6 +44,14 @@ fun GameScreen(viewModel: GameViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("${Strings.get("game_round", language)} ${room.roundNumber}")
+
+        if (amSpectator) {
+            Text(
+                text = Strings.get("spectator_banner", language),
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -56,7 +66,11 @@ fun GameScreen(viewModel: GameViewModel) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = state.value.yourRole?.name ?: Strings.get("game_waiting", language),
+                    text = when (state.value.yourRole) {
+                        Role.IMPOSTOR -> Strings.get("role_impostor", language)
+                        Role.INNOCENT -> Strings.get("role_innocent", language)
+                        null -> Strings.get("game_waiting", language)
+                    },
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -95,8 +109,12 @@ fun GameScreen(viewModel: GameViewModel) {
                 ) {
                     Column(modifier = Modifier.padding(8.dp)) {
                         Text(
-                            text = "${player.name}",
-                            fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal
+                            text = player.name,
+                            fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal,
+                            color = if (player.isSpectator)
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                            else
+                                MaterialTheme.colorScheme.onSurface
                         )
                         if (room.config.gameMode == GameMode.TEXT && lastWord != null) {
                             Text(
@@ -125,6 +143,7 @@ fun GameScreen(viewModel: GameViewModel) {
                         viewModel.submitWord(wordInput.value)
                         wordInput.value = ""
                     },
+                    enabled = wordInput.value.isNotBlank(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -145,16 +164,20 @@ fun GameScreen(viewModel: GameViewModel) {
             Text("${Strings.get("game_waiting", language)} ${room.players.find { it.id == room.currentTurnPlayerId }?.name}...")
         }
 
-        if (state.value.askingForVote) {
+        if (state.value.askingForVote && !amSpectator) {
             androidx.compose.material3.AlertDialog(
                 onDismissRequest = { viewModel.respondVote(false) },
-                title = { Text("¿Votar ahora?") },
-                text = { Text("¿Quieres votar para expulsar a alguien?") },
+                title = { Text(Strings.get("game_ask_vote_title", language)) },
+                text = { Text(Strings.get("game_ask_vote_text", language)) },
                 confirmButton = {
-                    Button(onClick = { viewModel.respondVote(true) }) { Text("Sí") }
+                    Button(onClick = { viewModel.respondVote(true) }) {
+                        Text(Strings.get("common_yes", language))
+                    }
                 },
                 dismissButton = {
-                    Button(onClick = { viewModel.respondVote(false) }) { Text("No") }
+                    Button(onClick = { viewModel.respondVote(false) }) {
+                        Text(Strings.get("common_no", language))
+                    }
                 }
             )
         }
