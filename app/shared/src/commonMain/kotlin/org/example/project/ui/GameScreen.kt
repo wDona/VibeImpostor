@@ -30,6 +30,7 @@ import org.example.project.model.GameMode
 import org.example.project.model.Role
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
@@ -38,6 +39,10 @@ fun GameScreen(viewModel: GameViewModel) {
     val wordInput = remember { mutableStateOf("") }
     val language = state.value.settings.language
     val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
+    val cardColor = if (state.value.yourRole == Role.IMPOSTOR)
+        Color(0xFFD32F2F).copy(alpha = 0.7f)
+    else
+        MaterialTheme.colorScheme.primaryContainer
 
     Column(
         modifier = Modifier
@@ -78,7 +83,7 @@ fun GameScreen(viewModel: GameViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(cardColor)
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
