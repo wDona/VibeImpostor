@@ -11,6 +11,7 @@ enum class RoomState {
     IN_GAME,
     ASK_VOTE,
     VOTING,
+    IMPOSTORS_GUESSING,
     FINISHED,
     REMATCH
 }

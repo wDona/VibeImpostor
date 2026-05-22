@@ -23,7 +23,7 @@ import org.example.project.settings.SettingsStorage
 import org.example.project.settings.UserSettings
 
 enum class Screen {
-    HOME, LOBBY, GAME, VOTING, ROUND_RESULT, RESULT, SETTINGS, PACKS
+    HOME, LOBBY, GAME, VOTING, ROUND_RESULT, IMPOSTOR_GUESSING, IMPOSTOR_GUESSING_RESULT, RESULT, SETTINGS, PACKS
 }
 
 data class GameState(
@@ -55,7 +55,12 @@ data class GameState(
     ,
     val authMessage: String? = null
     ,
-    val availableCategories: List<CategoryResponse> = emptyList()
+    val availableCategories: List<CategoryResponse> = emptyList(),
+    val impostorGuesses: Map<String, ImpostorGuessResult> = emptyMap()
+)
+
+data class ImpostorGuessResult(
+    val guessed: Boolean
 )
 
 class GameViewModel : ViewModel() {
@@ -263,6 +268,14 @@ class GameViewModel : ViewModel() {
     fun answerEndGame(agrees: Boolean) {
         _state.value = _state.value.copy(showEndGameDialog = false)
         viewModelScope.launch { sendGameMessage(ClientMessage.AnswerEndGame(agrees)) }
+    }
+
+    fun submitImpostorGuess(word: String) {
+        viewModelScope.launch { sendGameMessage(ClientMessage.SubmitImpostorGuess(word)) }
+    }
+
+    fun continueToResults() {
+        _state.value = _state.value.copy(screen = Screen.RESULT)
     }
 
     fun register(username: String, password: String) {

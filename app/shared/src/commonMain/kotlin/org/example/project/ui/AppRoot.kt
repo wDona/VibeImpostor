@@ -53,6 +53,8 @@ fun AppRoot() {
                     Screen.GAME -> GameScreen(viewModel)
                     Screen.VOTING -> VotingScreen(viewModel)
                     Screen.ROUND_RESULT -> RoundResultScreen(viewModel)
+                    Screen.IMPOSTOR_GUESSING -> ImpostorGuessingScreen(viewModel)
+                    Screen.IMPOSTOR_GUESSING_RESULT -> ImpostorGuessingResultScreen(viewModel)
                     Screen.RESULT -> ResultScreen(viewModel)
                     Screen.SETTINGS -> SettingsScreen(viewModel)
                     Screen.PACKS -> PacksScreen(viewModel)

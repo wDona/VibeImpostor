@@ -115,10 +115,18 @@ object Strings {
             "lobby_leave_confirm_text" to "Perderás tu sitio en esta sala.",
             "lobby_categories_none" to "todos",
             "common_done" to "Listo",
+            "common_submit" to "Enviar",
             "voting_tie" to "Empate. Nadie fue expulsado.",
             "player_ejected" to "Se ha expulsado a un jugador",
             "game_waiting_player" to "Esperando turno de",
-            "lobby_win_first_ejection" to "Gana en primera expulsión"
+            "lobby_win_first_ejection" to "Gana en primera expulsión",
+            "impostor_guessing_waiting" to "Esperando a que el/los impostores escriban la palabra...",
+            "impostor_guessing_title" to "¿Cuál era la palabra?",
+            "impostor_guessing_text" to "Los inocentes han ganado. Intenta adivinar cuál era la palabra. Si aciertas, ganas 1 punto.",
+            "impostor_guessing_input" to "Tu adivinanza",
+            "impostor_guessing_results" to "Resultados de adivinanzas",
+            "impostor_guessed_correct" to "✓ Sí ha encontrado la palabra",
+            "impostor_guessed_wrong" to "✗ No sabía la palabra"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -229,10 +237,18 @@ object Strings {
             "lobby_leave_confirm_text" to "You will lose your spot in this room.",
             "lobby_categories_none" to "all",
             "common_done" to "Done",
+            "common_submit" to "Submit",
             "voting_tie" to "Tie. No one was ejected.",
             "player_ejected" to "A player has been ejected",
             "game_waiting_player" to "Waiting for",
-            "lobby_win_first_ejection" to "Win on first ejection"
+            "lobby_win_first_ejection" to "Win on first ejection",
+            "impostor_guessing_waiting" to "Waiting for the impostor(s) to guess the word...",
+            "impostor_guessing_title" to "What was the word?",
+            "impostor_guessing_text" to "The innocents have won. Try to guess what the word was. If you get it right, you earn 1 point.",
+            "impostor_guessing_input" to "Your guess",
+            "impostor_guessing_results" to "Guessing results",
+            "impostor_guessed_correct" to "✓ Found the word",
+            "impostor_guessed_wrong" to "✗ Didn't know the word"
         )
     )
 }
