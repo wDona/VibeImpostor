@@ -352,7 +352,7 @@ class GameViewModel : ViewModel() {
                     players = msg.room.players,
                     showRematchPopup = msg.room.state == RoomState.REMATCH,
                     screen = newScreen,
-                    impostorGuesses = msg.room.impostorGuesses
+                    impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) }
                 )
             }
 
@@ -413,7 +413,7 @@ class GameViewModel : ViewModel() {
                     lastRoundVotes = msg.votes,
                     room = msg.room,
                     players = msg.room.players,
-                    impostorGuesses = msg.room.impostorGuesses
+                    impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) }
                 )
             }
 
