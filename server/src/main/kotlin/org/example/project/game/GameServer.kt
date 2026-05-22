@@ -555,17 +555,23 @@ private suspend fun afterVotingResolved(room: Room, result: Pair<String?, Boolea
     room.voteTimerJob?.cancel()
     val (ejectedId, wasImpostor) = result
     broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot(), room.lastRoundVotes))
-    if (room.state != RoomState.FINISHED) {
-        delay(ROUND_RESULT_DELAY_MS)
-        broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-        val current = room.currentTurnPlayer()
-        if (current != null) {
-            broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+    when (room.state) {
+        RoomState.FINISHED -> {
+            broadcastServerMessage(room, ServerMessage.GameEnded(
+                room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id },
+                room.getRoomSnapshot()
+            ))
         }
-    } else {
-        broadcastServerMessage(room, ServerMessage.GameEnded(
-            room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id },
-            room.getRoomSnapshot()
-        ))
+        RoomState.IMPOSTORS_GUESSING -> {
+            // No enviar RoundContinues, esperar a que impostores adivinen
+        }
+        else -> {
+            delay(ROUND_RESULT_DELAY_MS)
+            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+            val current = room.currentTurnPlayer()
+            if (current != null) {
+                broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+            }
+        }
     }
 }
