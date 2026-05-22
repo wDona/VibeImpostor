@@ -56,7 +56,8 @@ data class GameState(
     val authMessage: String? = null
     ,
     val availableCategories: List<CategoryResponse> = emptyList(),
-    val impostorGuesses: Map<String, ImpostorGuessResult> = emptyMap()
+    val impostorGuesses: Map<String, ImpostorGuessResult> = emptyMap(),
+    val impostorGuessingNext: Boolean = false
 )
 
 data class ImpostorGuessResult(
@@ -278,6 +279,10 @@ class GameViewModel : ViewModel() {
         _state.value = _state.value.copy(screen = Screen.RESULT)
     }
 
+    fun goToImpostorGuessing() {
+        _state.value = _state.value.copy(screen = Screen.IMPOSTOR_GUESSING, impostorGuessingNext = false)
+    }
+
     fun register(username: String, password: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(authBusy = true, authMessage = null)
@@ -342,10 +347,10 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.RoomUpdated -> {
-                val newScreen = if (msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.IMPOSTOR_GUESSING) {
-                    Screen.IMPOSTOR_GUESSING_RESULT
-                } else {
-                    _state.value.screen
+                val newScreen = when {
+                    msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.IMPOSTOR_GUESSING -> Screen.IMPOSTOR_GUESSING_RESULT
+                    msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.ROUND_RESULT -> Screen.RESULT
+                    else -> _state.value.screen
                 }
                 _state.value = _state.value.copy(
                     room = msg.room,
@@ -404,16 +409,13 @@ class GameViewModel : ViewModel() {
                 val gameOver = msg.room.state == RoomState.FINISHED
                 val impostorGuessing = msg.room.state == RoomState.IMPOSTORS_GUESSING
                 _state.value = _state.value.copy(
-                    screen = when {
-                        impostorGuessing -> Screen.IMPOSTOR_GUESSING
-                        gameOver -> Screen.RESULT
-                        else -> Screen.ROUND_RESULT
-                    },
+                    screen = Screen.ROUND_RESULT,
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
                     lastRoundVotes = msg.votes,
                     room = msg.room,
                     players = msg.room.players,
-                    impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) }
+                    impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) },
+                    impostorGuessingNext = impostorGuessing
                 )
             }
 

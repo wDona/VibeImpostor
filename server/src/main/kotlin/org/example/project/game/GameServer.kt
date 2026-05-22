@@ -167,11 +167,9 @@ fun Route.gameServer() {
                             GameEngine.submitImpostorGuess(room, player.id, message.word)
                             val complete = GameEngine.checkImpostorGuessingComplete(room)
                             if (complete) {
-                                room.state = RoomState.FINISHED
-                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
-                            } else {
-                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                                GameEngine.finalizeImpostorGuessing(room)
                             }
+                            broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                         }
                     }
 

@@ -34,6 +34,9 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             delay(1000)
             secondsLeft -= 1
         }
+        if (state.value.impostorGuessingNext) {
+            viewModel.goToImpostorGuessing()
+        }
     }
 
     Column(

@@ -250,6 +250,26 @@ object GameEngine {
         }
     }
 
+    suspend fun finalizeImpostorGuessing(room: Room) {
+        room.mutex.lock()
+        try {
+            if (room.state != RoomState.IMPOSTORS_GUESSING) return
+
+            room.impostorGuesses.forEach { (impostorId, guessed) ->
+                if (guessed) {
+                    val impostor = room.players.find { it.id == impostorId }
+                    if (impostor != null) impostor.score++
+                }
+            }
+
+            room.state = RoomState.FINISHED
+            room.players.forEach { it.isSpectator = false }
+            room.roundNumber = 1
+        } finally {
+            room.mutex.unlock()
+        }
+    }
+
     suspend fun recheckRound(room: Room): RoomState {
         room.mutex.lock()
         try {
