@@ -32,31 +32,27 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String)
 
     fun nameOf(id: String): String = room.players.find { it.id == id }?.name ?: "?"
 
-    val targets = votes.values.distinct()
+    val targets = votes.values.distinct().sortedBy { nameOf(it) }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Text(Strings.get("votes_title", language), fontWeight = FontWeight.Bold)
 
-        targets.forEachIndexed { index, targetId ->
-            val color = voteColors[index % voteColors.size]
+        targets.forEach { targetId ->
             val voters = votes.filter { it.value == targetId }.keys.map { nameOf(it) }
+            val voteCount = voters.size
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.18f))
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF424242).copy(alpha = 0.5f))
             ) {
-                Column(modifier = Modifier.padding(8.dp)) {
+                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
                     Text(
-                        text = "-> ${nameOf(targetId)}",
-                        fontWeight = FontWeight.Bold,
-                        color = color
+                        text = "${nameOf(targetId)} (${voteCount})",
+                        fontWeight = FontWeight.Bold
                     )
-                    voters.forEach { voterName ->
-                        Text(text = voterName)
-                    }
                 }
             }
         }

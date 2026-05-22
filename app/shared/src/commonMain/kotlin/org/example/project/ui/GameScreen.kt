@@ -69,19 +69,18 @@ fun GameScreen(viewModel: GameViewModel) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Center content (role + word/category)
+        // Center content (role + word/category) - full width
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            shape = RoundedCornerShape(12.dp)
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .padding(20.dp)
             ) {
                 Text(
                     text = when (state.value.yourRole) {
@@ -89,21 +88,21 @@ fun GameScreen(viewModel: GameViewModel) {
                         Role.INNOCENT -> Strings.get("role_innocent", language)
                         null -> Strings.get("game_waiting", language)
                     },
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = state.value.yourContent ?: "",
-                    fontSize = 26.sp,
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(12.dp)
                 )
                 Text(
                     text = if (state.value.contentIsWord)
                         Strings.get("game_word", language)
                     else
                         Strings.get("game_category", language),
-                    fontSize = 12.sp
+                    fontSize = 13.sp
                 )
             }
         }
@@ -188,7 +187,7 @@ fun GameScreen(viewModel: GameViewModel) {
                 }
             }
         } else {
-            Text("${Strings.get("game_waiting", language)} ${room.players.find { it.id == room.currentTurnPlayerId }?.name}...")
+            Text("${Strings.get("game_waiting_player", language)} ${room.players.find { it.id == room.currentTurnPlayerId }?.name}...")
         }
 
         // Bottom buttons
