@@ -49,18 +49,27 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             fontWeight = FontWeight.Bold
         )
         state.value.votingResult?.let { (ejectedId, wasImpostor) ->
-            val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "?"
-            Text(
-                text = if (wasImpostor) Strings.get("round_impostor_caught", language) else Strings.get("result_impostor_escaped", language),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-            Text(
-                text = "${Strings.get("result_ejected", language)}: $ejectedName",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            if (ejectedId == null) {
+                Text(
+                    text = Strings.get("voting_tie", language),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            } else {
+                val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "?"
+                Text(
+                    text = if (wasImpostor) Strings.get("round_impostor_caught", language) else Strings.get("player_ejected", language),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+                Text(
+                    text = "$ejectedName",
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
         }
 
         VoteReveal(room, state.value.lastRoundVotes, language)

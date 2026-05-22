@@ -114,7 +114,9 @@ object Strings {
             "lobby_leave_confirm_title" to "¿Salir de la sala?",
             "lobby_leave_confirm_text" to "Perderás tu sitio en esta sala.",
             "lobby_categories_none" to "todos",
-            "common_done" to "Listo"
+            "common_done" to "Listo",
+            "voting_tie" to "Empate. Nadie fue expulsado.",
+            "player_ejected" to "Se ha expulsado a un jugador"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -224,7 +226,9 @@ object Strings {
             "lobby_leave_confirm_title" to "Leave the room?",
             "lobby_leave_confirm_text" to "You will lose your spot in this room.",
             "lobby_categories_none" to "all",
-            "common_done" to "Done"
+            "common_done" to "Done",
+            "voting_tie" to "Tie. No one was ejected.",
+            "player_ejected" to "A player has been ejected"
         )
     )
 }
