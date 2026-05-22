@@ -117,7 +117,8 @@ object Strings {
             "common_done" to "Listo",
             "voting_tie" to "Empate. Nadie fue expulsado.",
             "player_ejected" to "Se ha expulsado a un jugador",
-            "game_waiting_player" to "Esperando turno de"
+            "game_waiting_player" to "Esperando turno de",
+            "lobby_win_first_ejection" to "Gana en primera expulsión"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -230,7 +231,8 @@ object Strings {
             "common_done" to "Done",
             "voting_tie" to "Tie. No one was ejected.",
             "player_ejected" to "A player has been ejected",
-            "game_waiting_player" to "Waiting for"
+            "game_waiting_player" to "Waiting for",
+            "lobby_win_first_ejection" to "Win on first ejection"
         )
     )
 }

@@ -167,6 +167,20 @@ fun RoomConfigPanel(
             }
         )
     }
+
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(Strings.get("lobby_win_first_ejection", language))
+        Checkbox(
+            checked = config.winOnFirstEjection,
+            onCheckedChange = { checked ->
+                apply(config.copy(winOnFirstEjection = checked))
+            }
+        )
+    }
 }
 
 @Composable

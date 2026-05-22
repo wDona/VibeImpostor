@@ -53,7 +53,8 @@ data class RoomConfig(
     val allCanBeImpostor: Boolean = false,
     val voteTimeLimitSeconds: Int = 60,
     val selectedCategoryIds: List<Int> = emptyList(),
-    val language: String = "es"
+    val language: String = "es",
+    val winOnFirstEjection: Boolean = false
 )
 
 @Serializable

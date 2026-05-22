@@ -158,6 +158,27 @@ object GameEngine {
                 val ejectedPlayer = room.players.find { it.id == ejected }
                 if (ejectedPlayer != null) ejectedPlayer.isSpectator = true
 
+                // Win on first ejection mode
+                if (room.config.winOnFirstEjection) {
+                    if (wasImpostor) {
+                        val winners = room.players.filterNot { it.id in room.impostorIds }
+                        winners.forEach { it.score++ }
+                        room.state = RoomState.FINISHED
+                        room.players.forEach { it.isSpectator = false }
+                        room.roundNumber = 1
+                        return Pair(ejected, true)
+                    } else {
+                        room.impostorIds.forEach { id ->
+                            val player = room.players.find { it.id == id }
+                            if (player != null) player.score++
+                        }
+                        room.state = RoomState.FINISHED
+                        room.players.forEach { it.isSpectator = false }
+                        room.roundNumber = 1
+                        return Pair(ejected, false)
+                    }
+                }
+
                 if (wasImpostor) {
                     val remainingImpostors = room.activePlayers().count { it.id in room.impostorIds }
                     if (remainingImpostors == 0) {
