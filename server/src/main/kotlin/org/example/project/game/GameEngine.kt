@@ -184,9 +184,9 @@ object GameEngine {
                     if (remainingImpostors == 0) {
                         val winners = room.players.filterNot { it.id in room.impostorIds }
                         winners.forEach { it.score++ }
-                        room.state = RoomState.FINISHED
-                        room.players.forEach { it.isSpectator = false }
-                        room.roundNumber = 1
+                        // Transition to IMPOSTORS_GUESSING so they can guess the word
+                        room.state = RoomState.IMPOSTORS_GUESSING
+                        room.impostorGuesses = emptyMap()
                         return Pair(ejected, true)
                     }
                 } else {
@@ -222,6 +222,32 @@ object GameEngine {
         player.lastWord = word
 
         return endTurn(room, playerId)
+    }
+
+    suspend fun submitImpostorGuess(room: Room, impostorId: String, guess: String) {
+        room.mutex.lock()
+        try {
+            if (room.state != RoomState.IMPOSTORS_GUESSING) return
+
+            val guessed = WordMatcher.matches(guess, room.word ?: "", room.config.language)
+            room.impostorGuesses = room.impostorGuesses + (impostorId to guessed)
+        } finally {
+            room.mutex.unlock()
+        }
+    }
+
+    suspend fun checkImpostorGuessingComplete(room: Room): Boolean {
+        room.mutex.lock()
+        try {
+            if (room.state != RoomState.IMPOSTORS_GUESSING) return false
+
+            val impostors = room.players.filter { it.id in room.impostorIds }
+            val responded = room.impostorGuesses.keys
+
+            return impostors.all { it.id in responded }
+        } finally {
+            room.mutex.unlock()
+        }
     }
 
     suspend fun recheckRound(room: Room): RoomState {

@@ -162,6 +162,19 @@ fun Route.gameServer() {
                         }
                     }
 
+                    is ClientMessage.SubmitImpostorGuess -> {
+                        if (room != null && player != null && player.id in room.impostorIds) {
+                            GameEngine.submitImpostorGuess(room, player.id, message.word)
+                            val complete = GameEngine.checkImpostorGuessingComplete(room)
+                            if (complete) {
+                                room.state = RoomState.FINISHED
+                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                            } else {
+                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                            }
+                        }
+                    }
+
                     is ClientMessage.BackToLobby -> {
                         val r = room
                         if (r != null && player != null) {
@@ -343,7 +356,9 @@ private fun Room.getRoomSnapshot(): RoomSnapshot {
         hostId = this.players.find { it.isHost }?.id ?: "",
         currentTurnPlayerId = this.currentTurnPlayer()?.id,
         turnOrder = this.turnOrder,
-        roundNumber = this.roundNumber
+        roundNumber = this.roundNumber,
+        impostorIds = this.impostorIds,
+        impostorGuesses = this.impostorGuesses
     )
 }
 

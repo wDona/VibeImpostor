@@ -342,10 +342,17 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.RoomUpdated -> {
+                val newScreen = if (msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.IMPOSTOR_GUESSING) {
+                    Screen.IMPOSTOR_GUESSING_RESULT
+                } else {
+                    _state.value.screen
+                }
                 _state.value = _state.value.copy(
                     room = msg.room,
                     players = msg.room.players,
-                    showRematchPopup = msg.room.state == RoomState.REMATCH
+                    showRematchPopup = msg.room.state == RoomState.REMATCH,
+                    screen = newScreen,
+                    impostorGuesses = msg.room.impostorGuesses
                 )
             }
 
@@ -395,12 +402,18 @@ class GameViewModel : ViewModel() {
 
             is ServerMessage.VotingResult -> {
                 val gameOver = msg.room.state == RoomState.FINISHED
+                val impostorGuessing = msg.room.state == RoomState.IMPOSTORS_GUESSING
                 _state.value = _state.value.copy(
-                    screen = if (gameOver) Screen.RESULT else Screen.ROUND_RESULT,
+                    screen = when {
+                        impostorGuessing -> Screen.IMPOSTOR_GUESSING
+                        gameOver -> Screen.RESULT
+                        else -> Screen.ROUND_RESULT
+                    },
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
                     lastRoundVotes = msg.votes,
                     room = msg.room,
-                    players = msg.room.players
+                    players = msg.room.players,
+                    impostorGuesses = msg.room.impostorGuesses
                 )
             }
 
