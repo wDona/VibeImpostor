@@ -47,8 +47,10 @@ fun RoomConfigPanel(
             Strings.get("lobby_voice", language) else Strings.get("lobby_text", language)
         val langLabel = if (config.language == "en")
             Strings.get("settings_english", language) else Strings.get("settings_spanish", language)
+        val maxImpostors = maxOf(1, room.players.size - 1)
+        val impostersLabel = if (maxImpostors == 1) "1" else "1 hasta $maxImpostors"
         Text("${Strings.get("lobby_game_mode", language)}: $modeLabel")
-        Text("${Strings.get("lobby_impostors", language)}: ${config.numImpostors}")
+        Text("${Strings.get("lobby_impostors", language)}: $impostersLabel")
         Text("${Strings.get("lobby_vote_time", language)}: ${config.voteTimeLimitSeconds}s")
         Text("${Strings.get("lobby_word_language", language)}: $langLabel")
         Text(Strings.get("lobby_only_host", language), fontWeight = FontWeight.Bold)
@@ -73,14 +75,19 @@ fun RoomConfigPanel(
         )
     }
 
+    val maxImpostors = maxOf(1, room.players.size - 1)
+    val impostersLabel = if (maxImpostors == 1)
+        Strings.get("lobby_impostors", language)
+    else
+        "${Strings.get("lobby_impostors", language)}: 1 - $maxImpostors"
     StepperRow(
-        label = Strings.get("lobby_impostors", language),
+        label = impostersLabel,
         value = config.numImpostors.toString(),
         onMinus = {
             if (config.numImpostors > 1) apply(config.copy(numImpostors = config.numImpostors - 1))
         },
         onPlus = {
-            if (config.numImpostors < 8) apply(config.copy(numImpostors = config.numImpostors + 1))
+            if (config.numImpostors < maxImpostors) apply(config.copy(numImpostors = config.numImpostors + 1))
         }
     )
 
@@ -175,7 +182,14 @@ fun RoomConfigPanel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { apply(config.copy(winOnFirstEjection = !config.winOnFirstEjection)) },
+            .clickable {
+                val newValue = !config.winOnFirstEjection
+                if (newValue) {
+                    apply(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                } else {
+                    apply(config.copy(winOnFirstEjection = false))
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -183,7 +197,11 @@ fun RoomConfigPanel(
         Checkbox(
             checked = config.winOnFirstEjection,
             onCheckedChange = { checked ->
-                apply(config.copy(winOnFirstEjection = checked))
+                if (checked) {
+                    apply(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                } else {
+                    apply(config.copy(winOnFirstEjection = false))
+                }
             }
         )
     }
