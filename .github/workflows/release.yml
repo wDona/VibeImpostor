@@ -93,7 +93,10 @@ jobs:
       - name: Rename artifact
         run: |
           VERSION="${{ needs.setup.outputs.version }}"
-          APK=$(find app/androidApp/build/outputs/apk/release/ -name "*-release.apk" | head -1)
+          echo "=== Buscando APKs ==="
+          find app/androidApp/build/outputs/ -name "*.apk" -type f
+          APK=$(find app/androidApp/build/outputs/ -name "*.apk" -type f | head -1)
+          echo "APK encontrao: $APK"
           mv "$APK" "app/androidApp/build/outputs/apk/release/impostor-${VERSION}.apk"
       - name: Upload to release
         uses: softprops/action-gh-release@v1
