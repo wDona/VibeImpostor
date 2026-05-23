@@ -107,9 +107,16 @@ jobs:
 
       - name: Upload JAR to Pterodactyl
         run: |
-          curl -X POST "${{ secrets.PTERODACTYL_URL }}/api/client/servers/${{ secrets.PTERODACTYL_SERVER_UUID }}/files/upload?directory=/" \
+          # 1. Pedir signed URL
+          UPLOAD_URL=$(curl -s -X GET "${{ secrets.PTERODACTYL_URL }}/api/client/servers/${{ secrets.PTERODACTYL_SERVER_UUID }}/files/upload" \
             -H "Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}" \
             -H "Accept: application/json" \
+            | jq -r '.attributes.url')
+
+          echo "Upload URL: $UPLOAD_URL"
+
+          # 2. Subir el JAR a esa URL
+          curl -X POST "$UPLOAD_URL" \
             -F "files=@artifacts/server-all.jar"
 
       - name: Restart server
