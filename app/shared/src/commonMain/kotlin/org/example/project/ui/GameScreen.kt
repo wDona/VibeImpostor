@@ -47,12 +47,17 @@ fun GameScreen(viewModel: GameViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
-        Text("${Strings.get("game_round", language)} ${room.roundNumber}")
+        Text(
+            "${Strings.get("game_round", language)} ${room.roundNumber}",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
 
         if (amSpectator) {
             Text(
@@ -156,50 +161,70 @@ fun GameScreen(viewModel: GameViewModel) {
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Turn action (input/button)
-        if (state.value.room?.currentTurnPlayerId == state.value.yourPlayerId) {
-            if (room.config.gameMode == GameMode.TEXT) {
-                TextField(
-                    value = wordInput.value,
-                    onValueChange = { wordInput.value = it },
-                    label = { Text(Strings.get("game_your_word", language)) },
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            if (state.value.room?.currentTurnPlayerId == state.value.yourPlayerId) {
+                Column(
                     modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .fillMaxWidth()
-                        .padding(8.dp)
-                )
-                Button(
-                    onClick = {
-                        viewModel.submitWord(wordInput.value)
-                        wordInput.value = ""
-                    },
-                    enabled = wordInput.value.isNotBlank(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(Strings.get("game_submit_word", language))
+                    if (room.config.gameMode == GameMode.TEXT) {
+                        TextField(
+                            value = wordInput.value,
+                            onValueChange = { wordInput.value = it },
+                            label = { Text(Strings.get("game_your_word", language)) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Button(
+                            onClick = {
+                                viewModel.submitWord(wordInput.value)
+                                wordInput.value = ""
+                            },
+                            enabled = wordInput.value.isNotBlank(),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(Strings.get("game_submit_word", language))
+                        }
+                    } else {
+                        Button(
+                            onClick = { viewModel.endTurn() },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(Strings.get("game_end_turn", language))
+                        }
+                    }
                 }
             } else {
-                Button(
-                    onClick = { viewModel.endTurn() },
+                Column(
                     modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(Strings.get("game_end_turn", language))
+                    Text(
+                        "${Strings.get("game_waiting_player", language)} ${room.players.find { it.id == room.currentTurnPlayerId }?.name}...",
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
-        } else {
-            Text("${Strings.get("game_waiting_player", language)} ${room.players.find { it.id == room.currentTurnPlayerId }?.name}...")
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Bottom buttons
         if (!amSpectator) {
             androidx.compose.material3.OutlinedButton(
                 onClick = { viewModel.proposeEndGame() },
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(Strings.get("game_propose_end", language))
             }

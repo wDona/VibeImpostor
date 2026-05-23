@@ -172,11 +172,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                 Button(
                     onClick = { viewModel.startGame() },
                     enabled = enoughPlayers,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4CAF50),
-                        disabledContainerColor = Color(0xFFBDBDBD)
-                    )
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(Strings.get("lobby_start_game", language), fontWeight = FontWeight.Bold)
                 }

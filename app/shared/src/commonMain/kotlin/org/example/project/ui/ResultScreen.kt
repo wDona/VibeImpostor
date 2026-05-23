@@ -1,5 +1,6 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +11,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,7 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -38,6 +43,7 @@ fun ResultScreen(viewModel: GameViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -53,36 +59,60 @@ fun ResultScreen(viewModel: GameViewModel) {
             val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "Unknown"
             val impostorsWon = room.lastWinners.all { it in room.impostorIds }
 
-            Text(
-                text = if (impostorsWon) Strings.get("result_impostor_wins", language) else Strings.get("result_innocents_win", language),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "${Strings.get("result_ejected", language)}: $ejectedName",
-                fontSize = 16.sp
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (impostorsWon)
+                        Color(0xFFD32F2F).copy(alpha = 0.15f)
+                    else
+                        Color(0xFF1976D2).copy(alpha = 0.15f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = if (impostorsWon) Strings.get("result_impostor_wins", language) else Strings.get("result_innocents_win", language),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "${Strings.get("result_ejected", language)}: $ejectedName",
+                        fontSize = 16.sp
+                    )
+                }
+            }
         }
 
         VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes)
 
         HorizontalDivider()
 
-        Text(Strings.get("result_final_scores", language), fontWeight = FontWeight.Bold)
+        Text(Strings.get("result_final_scores", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
 
         val sortedPlayers = room.players.sortedByDescending { it.score }
         val topScore = sortedPlayers.firstOrNull()?.score ?: 0
         sortedPlayers.forEach { player ->
             val isWinner = player.score == topScore && topScore > 0
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = if (isWinner)
+                    CardDefaults.cardColors(containerColor = Color(0xFFFDD835).copy(alpha = 0.3f))
+                else
+                    CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            ) {
                 Text(
                     text = if (isWinner) {
                         "${player.name}: ${player.score} pts  - ${Strings.get("result_winner", language)}"
                     } else {
                         "${player.name}: ${player.score} pts"
                     },
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 18.sp,
+                    modifier = Modifier.padding(12.dp),
+                    fontSize = 16.sp,
                     fontWeight = if (isWinner) FontWeight.Bold else FontWeight.Normal
                 )
             }
@@ -94,7 +124,7 @@ fun ResultScreen(viewModel: GameViewModel) {
             onClick = { viewModel.requestRematch() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(vertical = 4.dp)
         ) {
             Text(Strings.get("result_play_again", language))
         }
@@ -103,7 +133,7 @@ fun ResultScreen(viewModel: GameViewModel) {
             onClick = { viewModel.backToLobby() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(vertical = 4.dp)
         ) {
             Text(Strings.get("result_back_to_lobby", language))
         }
@@ -112,7 +142,7 @@ fun ResultScreen(viewModel: GameViewModel) {
             onClick = { viewModel.leaveRoom() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(vertical = 4.dp)
         ) {
             Text(Strings.get("result_leave", language))
         }
@@ -137,9 +167,19 @@ fun ResultScreen(viewModel: GameViewModel) {
             onDismissRequest = { },
             title = { Text(Strings.get("rematch_title", language)) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(Strings.get("rematch_waiting", language))
-                    Text("${Strings.get("rematch_seconds", language)}: $secondsLeft")
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
+                    ) {
+                        Text(
+                            "${Strings.get("rematch_seconds", language)}: $secondsLeft",
+                            modifier = Modifier.padding(12.dp),
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFE65100)
+                        )
+                    }
                     Text("${Strings.get("rematch_ready_count", language)}: $readyCount / $totalCount")
                 }
             },
