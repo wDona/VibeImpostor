@@ -185,31 +185,28 @@ object GameEngine {
                     }
                 }
 
+                if (wasImpostor) {
+                    room.pendingGuessImpostorId = ejected
+                    room.impostorGuesses = emptyMap()
+                    room.state = RoomState.IMPOSTORS_GUESSING
+                    return Pair(ejected, true)
+                }
+
+                room.impostorIds.forEach { id ->
+                    val player = room.players.find { it.id == id }
+                    if (player != null) player.score++
+                }
+
                 val activeNow = room.activePlayers()
                 val activeImpostors = activeNow.count { it.id in room.impostorIds }
-                val activeInnocents = activeNow.size - activeImpostors
 
-                if (!wasImpostor) {
-                    room.impostorIds.forEach { id ->
-                        val player = room.players.find { it.id == id }
-                        if (player != null) player.score++
-                    }
-                }
-
-                if (activeImpostors == 0) {
-                    val winners = room.players.filterNot { it.id in room.impostorIds }
-                    winners.forEach { it.score++ }
-                    room.state = RoomState.IMPOSTORS_GUESSING
-                    room.impostorGuesses = emptyMap()
-                    return Pair(ejected, wasImpostor)
-                }
-
-                if (activeNow.size <= 2 || activeInnocents == 0) {
+                if (activeNow.size <= 2) {
                     activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
                     room.state = RoomState.FINISHED
                     room.players.forEach { it.isSpectator = false }
                     room.roundNumber = 1
-                    return Pair(ejected, wasImpostor)
+                    room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
+                    return Pair(ejected, false)
                 }
             }
 
@@ -232,7 +229,7 @@ object GameEngine {
         room.mutex.lock()
         try {
             if (room.state != RoomState.IMPOSTORS_GUESSING) return
-
+            if (room.pendingGuessImpostorId != impostorId) return
             val guessed = WordMatcher.matches(guess, room.word ?: "", room.config.language)
             room.impostorGuesses = room.impostorGuesses + (impostorId to guessed)
         } finally {
@@ -244,31 +241,57 @@ object GameEngine {
         room.mutex.lock()
         try {
             if (room.state != RoomState.IMPOSTORS_GUESSING) return false
-
-            val impostors = room.players.filter { it.id in room.impostorIds }
-            val responded = room.impostorGuesses.keys
-
-            return impostors.all { it.id in responded }
+            val pending = room.pendingGuessImpostorId ?: return false
+            return pending in room.impostorGuesses.keys
         } finally {
             room.mutex.unlock()
         }
     }
 
-    suspend fun finalizeImpostorGuessing(room: Room) {
+    suspend fun finalizeImpostorGuessing(room: Room): RoomState {
         room.mutex.lock()
         try {
-            if (room.state != RoomState.IMPOSTORS_GUESSING) return
+            if (room.state != RoomState.IMPOSTORS_GUESSING) return room.state
 
-            room.impostorGuesses.forEach { (impostorId, guessed) ->
-                if (guessed) {
-                    val impostor = room.players.find { it.id == impostorId }
-                    if (impostor != null) impostor.score++
-                }
+            val pending = room.pendingGuessImpostorId
+            val guessedCorrect = pending != null && room.impostorGuesses[pending] == true
+
+            room.pendingGuessImpostorId = null
+
+            if (guessedCorrect) {
+                room.players.filter { it.id in room.impostorIds }.forEach { it.score++ }
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
+                room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
+                return RoomState.FINISHED
             }
 
-            room.state = RoomState.FINISHED
-            room.players.forEach { it.isSpectator = false }
-            room.roundNumber = 1
+            val activeNow = room.activePlayers()
+            val activeImpostors = activeNow.count { it.id in room.impostorIds }
+
+            if (activeImpostors == 0) {
+                val winners = room.players.filterNot { it.id in room.impostorIds }
+                winners.forEach { it.score++ }
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
+                room.lastWinners = winners.map { it.id }
+                return RoomState.FINISHED
+            }
+
+            if (activeNow.size <= 2) {
+                activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
+                room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
+                return RoomState.FINISHED
+            }
+
+            room.resetForNewRound()
+            room.state = RoomState.IN_GAME
+            return RoomState.IN_GAME
         } finally {
             room.mutex.unlock()
         }

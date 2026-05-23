@@ -30,10 +30,10 @@ fun ImpostorGuessingScreen(viewModel: GameViewModel) {
     val language = state.value.settings.language
 
     val guessInput = remember { mutableStateOf("") }
-    val isImpostorRole = state.value.yourRole == Role.IMPOSTOR
+    val isPending = state.value.yourPlayerId == room.pendingGuessImpostorId
 
-    if (!isImpostorRole) {
-        // Innocent players wait
+    if (!isPending) {
+        // Only non-pending players wait
         Column(
             modifier = Modifier
                 .fillMaxSize()

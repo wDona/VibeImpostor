@@ -30,6 +30,8 @@ class Room(
     var endGameResponses: Map<String, Boolean> = emptyMap()
     var impostorGuesses: Map<String, Boolean> = emptyMap()
     var continueResponses: Set<String> = emptySet()
+    var pendingGuessImpostorId: String? = null
+    var lastWinners: List<String> = emptyList()
     var rematchJob: Job? = null
     var voteTimerJob: Job? = null
 
@@ -83,6 +85,8 @@ class Room(
         votes = emptyMap()
         endGameResponses = emptyMap()
         continueResponses = emptySet()
+        pendingGuessImpostorId = null
+        impostorGuesses = emptyMap()
 
         while (currentTurnIndex < turnOrder.size) {
             val player = players.find { it.id == turnOrder[currentTurnIndex] }

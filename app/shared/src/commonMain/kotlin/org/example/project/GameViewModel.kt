@@ -356,6 +356,7 @@ class GameViewModel : ViewModel() {
                 val newScreen = when {
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.IMPOSTOR_GUESSING -> Screen.IMPOSTOR_GUESSING_RESULT
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.ROUND_RESULT -> Screen.RESULT
+                    msg.room.state == RoomState.IN_GAME && _state.value.screen == Screen.IMPOSTOR_GUESSING -> Screen.GAME
                     else -> _state.value.screen
                 }
                 _state.value = _state.value.copy(

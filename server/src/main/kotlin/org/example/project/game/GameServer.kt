@@ -163,13 +163,28 @@ fun Route.gameServer() {
                     }
 
                     is ClientMessage.SubmitImpostorGuess -> {
-                        if (room != null && player != null && player.id in room.impostorIds) {
+                        if (room != null && player != null && player.id == room.pendingGuessImpostorId) {
                             GameEngine.submitImpostorGuess(room, player.id, message.word)
                             val complete = GameEngine.checkImpostorGuessingComplete(room)
                             if (complete) {
-                                GameEngine.finalizeImpostorGuessing(room)
+                                val newState = GameEngine.finalizeImpostorGuessing(room)
+                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                                when (newState) {
+                                    RoomState.FINISHED -> {
+                                        broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, room.getRoomSnapshot()))
+                                    }
+                                    RoomState.IN_GAME -> {
+                                        broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+                                        val current = room.currentTurnPlayer()
+                                        if (current != null) {
+                                            broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+                                        }
+                                    }
+                                    else -> {}
+                                }
+                            } else {
+                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                             }
-                            broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                         }
                     }
 
@@ -377,7 +392,8 @@ private fun Room.getRoomSnapshot(): RoomSnapshot {
         turnOrder = this.turnOrder,
         roundNumber = this.roundNumber,
         impostorIds = this.impostorIds,
-        impostorGuesses = this.impostorGuesses
+        impostorGuesses = this.impostorGuesses,
+        pendingGuessImpostorId = this.pendingGuessImpostorId
     )
 }
 
@@ -578,10 +594,7 @@ private suspend fun afterVotingResolved(room: Room, result: Pair<String?, Boolea
     broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot(), room.lastRoundVotes))
     when (room.state) {
         RoomState.FINISHED -> {
-            broadcastServerMessage(room, ServerMessage.GameEnded(
-                room.activePlayers().filterNot { it.id in room.impostorIds }.map { it.id },
-                room.getRoomSnapshot()
-            ))
+            broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, room.getRoomSnapshot()))
         }
         RoomState.IMPOSTORS_GUESSING -> {
             // No enviar RoundContinues, esperar a que impostores adivinen
