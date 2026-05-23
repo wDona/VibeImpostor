@@ -1,5 +1,6 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +12,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -25,10 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.model.MAX_PLAYERS
@@ -43,90 +47,147 @@ fun LobbyScreen(viewModel: GameViewModel) {
     val isHost = state.value.room?.hostId == state.value.yourPlayerId
     var showLeaveConfirm by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
+    ) {
         Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            if (room.state != RoomState.LOBBY) {
-                Text(
-                    Strings.get("lobby_waiting_game", language),
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Text(
+                "Impostor",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
 
-            val clipboardManager = LocalClipboardManager.current
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("${Strings.get("lobby_room_code", language)}: ${room.code}")
-                Button(onClick = { clipboardManager.setText(AnnotatedString(room.code)) }) {
-                    Text(Strings.get("lobby_copy_code", language))
+            if (room.state != RoomState.LOBBY) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
+                ) {
+                    Text(
+                        Strings.get("lobby_waiting_game", language),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(12.dp)
+                    )
                 }
             }
 
-            HorizontalDivider()
-
-            Text("${Strings.get("lobby_players", language)} (${room.players.size}/$MAX_PLAYERS)")
-            room.players.forEach { player ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        Strings.get("lobby_room_code", language),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
                     Row(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            player.name,
-                            color = if (player.isSpectator)
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                            else
-                                MaterialTheme.colorScheme.onSurface
+                            room.code,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
                         )
-                        Text(" - Puntos: ${player.score}")
-                        if (player.isHost) Text(" (Host)")
+                        val clipboardManager = LocalClipboardManager.current
+                        Button(
+                            onClick = { clipboardManager.setText(AnnotatedString(room.code)) },
+                            modifier = Modifier.padding(start = 8.dp)
+                        ) {
+                            Text(Strings.get("lobby_copy_code", language))
+                        }
                     }
                 }
             }
 
-            HorizontalDivider()
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "${Strings.get("lobby_players", language)} (${room.players.size}/$MAX_PLAYERS)",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                    room.players.forEach { player ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp))
+                                .padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                player.name,
+                                fontWeight = FontWeight.Medium,
+                                color = if (player.isSpectator)
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                else
+                                    MaterialTheme.colorScheme.onSurface
+                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text("${player.score} pts", fontSize = 12.sp)
+                                if (player.isHost) {
+                                    Text("Host", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6B6B))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-            RoomConfigPanel(
-                viewModel = viewModel,
-                room = room,
-                isHost = isHost,
-                language = language
-            )
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    RoomConfigPanel(
+                        viewModel = viewModel,
+                        room = room,
+                        isHost = isHost,
+                        language = language
+                    )
+                }
+            }
         }
 
-        HorizontalDivider()
-
-        if (isHost) {
-            val enoughPlayers = room.players.size >= MIN_PLAYERS
-            if (!enoughPlayers) {
-                Text(Strings.get("lobby_need_players", language))
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+            if (isHost) {
+                val enoughPlayers = room.players.size >= MIN_PLAYERS
+                if (!enoughPlayers) {
+                    Text(
+                        Strings.get("lobby_need_players", language),
+                        color = Color(0xFFFF6B6B),
+                        fontSize = 12.sp
+                    )
+                }
+                Button(
+                    onClick = { viewModel.startGame() },
+                    enabled = enoughPlayers,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF4CAF50),
+                        disabledContainerColor = Color(0xFFBDBDBD)
+                    )
+                ) {
+                    Text(Strings.get("lobby_start_game", language), fontWeight = FontWeight.Bold)
+                }
             }
-            Button(
-                onClick = { viewModel.startGame() },
-                enabled = enoughPlayers,
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+
+            OutlinedButton(
+                onClick = { showLeaveConfirm = true },
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(Strings.get("lobby_start_game", language))
+                Text(Strings.get("lobby_leave", language))
             }
-        }
-
-        OutlinedButton(
-            onClick = { showLeaveConfirm = true },
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
-        ) {
-            Text(Strings.get("lobby_leave", language))
         }
     }
 

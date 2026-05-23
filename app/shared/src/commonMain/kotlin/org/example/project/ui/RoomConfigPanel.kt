@@ -77,12 +77,8 @@ fun RoomConfigPanel(
     }
 
     val maxImpostors = room.players.size
-    val impostersLabel = if (maxImpostors == 1)
-        Strings.get("lobby_impostors", language)
-    else
-        "${Strings.get("lobby_impostors", language)} (1-$maxImpostors)"
     StepperRow(
-        label = impostersLabel,
+        label = Strings.get("lobby_max_impostors", language),
         value = config.numImpostors.toString(),
         onMinus = {
             if (!config.winOnFirstEjection && config.numImpostors > 1) apply(config.copy(numImpostors = config.numImpostors - 1))
@@ -95,7 +91,7 @@ fun RoomConfigPanel(
 
     if (config.numImpostors >= 2) {
         Text(
-            text = "Hay ~5% de probabilidad de que no haya impostores",
+            text = Strings.get("lobby_impostor_no_chance", language),
             fontSize = 12.sp,
             modifier = Modifier.padding(top = 4.dp)
         )
