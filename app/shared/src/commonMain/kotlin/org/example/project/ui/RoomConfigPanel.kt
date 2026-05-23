@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.model.GameMode
@@ -47,8 +48,8 @@ fun RoomConfigPanel(
             Strings.get("lobby_voice", language) else Strings.get("lobby_text", language)
         val langLabel = if (config.language == "en")
             Strings.get("settings_english", language) else Strings.get("settings_spanish", language)
-        val maxImpostors = maxOf(1, room.players.size - 1)
-        val impostersLabel = if (maxImpostors == 1) "1" else "1 hasta $maxImpostors"
+        val maxImpostors = room.players.size
+        val impostersLabel = if (maxImpostors == 1) "1" else "${config.numImpostors} (1-$maxImpostors)"
         Text("${Strings.get("lobby_game_mode", language)}: $modeLabel")
         Text("${Strings.get("lobby_impostors", language)}: $impostersLabel")
         Text("${Strings.get("lobby_vote_time", language)}: ${config.voteTimeLimitSeconds}s")
@@ -75,11 +76,11 @@ fun RoomConfigPanel(
         )
     }
 
-    val maxImpostors = maxOf(1, room.players.size - 1)
+    val maxImpostors = room.players.size
     val impostersLabel = if (maxImpostors == 1)
         Strings.get("lobby_impostors", language)
     else
-        "${Strings.get("lobby_impostors", language)}: 1 - $maxImpostors"
+        "${Strings.get("lobby_impostors", language)} (1-$maxImpostors)"
     StepperRow(
         label = impostersLabel,
         value = config.numImpostors.toString(),
@@ -91,6 +92,14 @@ fun RoomConfigPanel(
         },
         enabled = !config.winOnFirstEjection
     )
+
+    if (config.numImpostors >= 2) {
+        Text(
+            text = "Hay ~5% de probabilidad de que no haya impostores",
+            fontSize = 12.sp,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+    }
 
     StepperRow(
         label = Strings.get("lobby_vote_time", language),
