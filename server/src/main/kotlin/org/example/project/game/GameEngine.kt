@@ -192,6 +192,7 @@ object GameEngine {
                     room.pendingGuessImpostorId = ejected
                     room.impostorGuesses = emptyMap()
                     room.state = RoomState.IMPOSTORS_GUESSING
+                    println("[checkVotingEnd] IMPOSTOR EJECTED setting pending=$ejected state=${room.state}")
                     return Pair(ejected, true)
                 }
 
@@ -254,6 +255,7 @@ object GameEngine {
     suspend fun finalizeImpostorGuessing(room: Room): RoomState {
         room.mutex.lock()
         try {
+            println("[finalizeImpostorGuessing] state=${room.state} pending=${room.pendingGuessImpostorId} guesses=${room.impostorGuesses}")
             if (room.state != RoomState.IMPOSTORS_GUESSING) return room.state
 
             val pending = room.pendingGuessImpostorId
@@ -267,6 +269,7 @@ object GameEngine {
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
                 room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
+                println("[finalizeImpostorGuessing] returning FINISHED (guessed correct) lastWinners=${room.lastWinners}")
                 return RoomState.FINISHED
             }
 
@@ -280,6 +283,7 @@ object GameEngine {
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
                 room.lastWinners = winners.map { it.id }
+                println("[finalizeImpostorGuessing] returning FINISHED (no active impostors) lastWinners=${room.lastWinners}")
                 return RoomState.FINISHED
             }
 
@@ -289,11 +293,13 @@ object GameEngine {
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
                 room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
+                println("[finalizeImpostorGuessing] returning FINISHED (<=2 vivos) lastWinners=${room.lastWinners}")
                 return RoomState.FINISHED
             }
 
             room.resetForNewRound()
             room.state = RoomState.IN_GAME
+            println("[finalizeImpostorGuessing] returning IN_GAME (next round)")
             return RoomState.IN_GAME
         } finally {
             room.mutex.unlock()
@@ -339,7 +345,9 @@ object GameEngine {
             room.continueResponses = room.continueResponses + playerId
             val required = room.activePlayers().map { it.id }.toMutableSet()
             room.pendingGuessImpostorId?.let { required.add(it) }
-            return room.continueResponses.containsAll(required)
+            val complete = room.continueResponses.containsAll(required)
+            println("[registerContinue] player=$playerId responses=${room.continueResponses} required=$required complete=$complete")
+            return complete
         } finally {
             room.mutex.unlock()
         }

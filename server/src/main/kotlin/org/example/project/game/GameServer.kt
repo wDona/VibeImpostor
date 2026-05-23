@@ -193,34 +193,36 @@ fun Route.gameServer() {
                     is ClientMessage.ContinueRound -> {
                         if (room != null && player != null) {
                             val canContinue = !player.isSpectator || player.id == room.pendingGuessImpostorId
-                            if (canContinue) {
+                            if (!canContinue) {
+                                println("[ContinueRound] denied player=${player.id} isSpectator=${player.isSpectator} pending=${room.pendingGuessImpostorId}")
+                            } else {
                                 val allContinued = GameEngine.registerContinue(room, player.id)
-                                println("[ContinueRound] player=${player.id} state=${room.state} pending=${room.pendingGuessImpostorId} continued=${room.continueResponses} allContinued=$allContinued")
-                                if (allContinued) {
+                                println("[ContinueRound] player=${player.id} state=${room.state} pending=${room.pendingGuessImpostorId} responses=${room.continueResponses} all=$allContinued")
+                                if (!allContinued) {
+                                    broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                                } else {
                                     GameEngine.resetContinueResponses(room)
-                                    when (room.state) {
-                                        RoomState.IMPOSTORS_GUESSING -> {
-                                            broadcastServerMessage(room, ServerMessage.ProceedToGuessing(room.getRoomSnapshot()))
+                                    val snap = room.getRoomSnapshot()
+                                    println("[ContinueRound] BROADCAST allContinued state=${snap.state} pending=${snap.pendingGuessImpostorId}")
+                                    when {
+                                        snap.state == RoomState.FINISHED -> {
+                                            broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, snap))
                                         }
-                                        RoomState.IN_GAME -> {
-                                            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+                                        snap.pendingGuessImpostorId != null -> {
+                                            broadcastServerMessage(room, ServerMessage.ProceedToGuessing(snap))
+                                        }
+                                        snap.state == RoomState.IN_GAME -> {
+                                            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, snap))
                                             val current = room.currentTurnPlayer()
                                             if (current != null) {
                                                 broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
                                             }
                                         }
-                                        RoomState.FINISHED -> {
-                                            broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, room.getRoomSnapshot()))
-                                        }
                                         else -> {
-                                            broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                                            broadcastServerMessage(room, ServerMessage.RoomUpdated(snap))
                                         }
                                     }
-                                } else {
-                                    broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                                 }
-                            } else {
-                                println("[ContinueRound] denied player=${player.id} isSpectator=${player.isSpectator} pending=${room.pendingGuessImpostorId}")
                             }
                         }
                     }
