@@ -42,6 +42,9 @@ fun RoundResultScreen(viewModel: GameViewModel) {
         }
         if (state.value.impostorGuessingNext) {
             viewModel.goToImpostorGuessing()
+        } else if (!amSpectator && !userContinued) {
+            userContinued = true
+            viewModel.continueRound()
         }
     }
 

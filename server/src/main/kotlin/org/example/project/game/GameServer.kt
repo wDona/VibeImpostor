@@ -179,13 +179,14 @@ fun Route.gameServer() {
                             if (allContinued) {
                                 GameEngine.resetContinueResponses(room)
                                 room.voteTimerJob?.cancel()
-                                room.resetForNewRound()
-                                room.state = RoomState.IN_GAME
+                                if (room.state != RoomState.IN_GAME) {
+                                    room.resetForNewRound()
+                                    room.state = RoomState.IN_GAME
+                                }
+                                broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
                                 val current = room.currentTurnPlayer()
                                 if (current != null) {
                                     broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                                } else {
-                                    broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                                 }
                             } else {
                                 broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))

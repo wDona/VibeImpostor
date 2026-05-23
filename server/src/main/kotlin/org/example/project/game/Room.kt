@@ -82,6 +82,7 @@ class Room(
         wantVoteResponses = emptyMap()
         votes = emptyMap()
         endGameResponses = emptyMap()
+        continueResponses = emptySet()
 
         while (currentTurnIndex < turnOrder.size) {
             val player = players.find { it.id == turnOrder[currentTurnIndex] }
