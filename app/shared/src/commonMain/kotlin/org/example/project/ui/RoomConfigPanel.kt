@@ -49,7 +49,7 @@ fun RoomConfigPanel(
         val langLabel = if (config.language == "en")
             Strings.get("settings_english", language) else Strings.get("settings_spanish", language)
         val maxImpostors = room.players.size
-        val impostersLabel = if (maxImpostors == 1) "1" else "${config.numImpostors} (1-$maxImpostors)"
+        val impostersLabel = if (maxImpostors == 1) "1" else "0-${config.numImpostors}"
         Text("${Strings.get("lobby_game_mode", language)}: $modeLabel")
         Text("${Strings.get("lobby_impostors", language)}: $impostersLabel")
         Text("${Strings.get("lobby_vote_time", language)}: ${config.voteTimeLimitSeconds}s")

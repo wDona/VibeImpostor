@@ -76,7 +76,7 @@ object Strings {
             "voting_spectator" to "Eres espectador, no puedes votar.",
             "game_leave" to "Salir de la partida",
             "game_leave_confirm_title" to "¿Salir de la partida?",
-            "game_leave_confirm_text" to "Si sales, perderás tu sitio en esta partida.",
+            "game_leave_confirm_text" to "Si te sales, perderás tu sitio en esta partida.",
             "common_cancel" to "Cancelar",
             "lobby_config" to "Configuración de la sala",
             "lobby_word_language" to "Idioma de las palabras",
