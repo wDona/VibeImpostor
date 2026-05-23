@@ -413,8 +413,6 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.VotingResult -> {
-                val gameOver = msg.room.state == RoomState.FINISHED
-                val impostorGuessing = msg.room.state == RoomState.IMPOSTORS_GUESSING
                 _state.value = _state.value.copy(
                     screen = Screen.ROUND_RESULT,
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
@@ -422,13 +420,19 @@ class GameViewModel : ViewModel() {
                     room = msg.room,
                     players = msg.room.players,
                     impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) },
-                    impostorGuessingNext = impostorGuessing
+                    impostorGuessingNext = false
                 )
             }
 
             is ServerMessage.RoundContinues -> {
+                val newScreen = when (msg.room.state) {
+                    RoomState.IMPOSTORS_GUESSING -> Screen.IMPOSTOR_GUESSING
+                    else -> Screen.GAME
+                }
                 _state.value = _state.value.copy(
-                    screen = Screen.GAME,
+                    screen = newScreen,
+                    room = msg.room,
+                    players = msg.room.players,
                     lastWordsPlayed = emptyMap()
                 )
             }

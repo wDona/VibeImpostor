@@ -19,8 +19,6 @@ import org.example.project.protocol.ProtocolJson
 import org.example.project.protocol.ServerMessage
 import java.util.UUID
 
-private const val ROUND_RESULT_DELAY_MS = 12_000L
-
 fun Route.gameServer() {
     webSocket("/ws/game") {
         val playerId = UUID.randomUUID().toString()
@@ -189,22 +187,22 @@ fun Route.gameServer() {
                     }
 
                     is ClientMessage.ContinueRound -> {
-                        if (room != null && player != null && !player.isSpectator) {
-                            val allContinued = GameEngine.registerContinue(room, player.id)
-                            if (allContinued) {
-                                GameEngine.resetContinueResponses(room)
-                                room.voteTimerJob?.cancel()
-                                if (room.state != RoomState.IN_GAME) {
-                                    room.resetForNewRound()
-                                    room.state = RoomState.IN_GAME
+                        if (room != null && player != null) {
+                            val canContinue = !player.isSpectator || player.id == room.pendingGuessImpostorId
+                            if (canContinue) {
+                                val allContinued = GameEngine.registerContinue(room, player.id)
+                                if (allContinued) {
+                                    GameEngine.resetContinueResponses(room)
+                                    broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
+                                    if (room.state == RoomState.IN_GAME) {
+                                        val current = room.currentTurnPlayer()
+                                        if (current != null) {
+                                            broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+                                        }
+                                    }
+                                } else {
+                                    broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                                 }
-                                broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-                                val current = room.currentTurnPlayer()
-                                if (current != null) {
-                                    broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                                }
-                            } else {
-                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                             }
                         }
                     }
@@ -264,6 +262,7 @@ private suspend fun leaveRoom(room: Room, player: Player) {
     room.mutex.lock()
     try {
         room.players.remove(player)
+        if (room.pendingGuessImpostorId == player.id) room.pendingGuessImpostorId = null
 
         val playerIndex = room.turnOrder.indexOf(player.id)
         room.turnOrder = room.turnOrder.filter { it != player.id }
@@ -600,12 +599,7 @@ private suspend fun afterVotingResolved(room: Room, result: Pair<String?, Boolea
             // No enviar RoundContinues, esperar a que impostores adivinen
         }
         else -> {
-            delay(ROUND_RESULT_DELAY_MS)
-            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, room.getRoomSnapshot()))
-            val current = room.currentTurnPlayer()
-            if (current != null) {
-                broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-            }
+            // Cliente espera en ROUND_RESULT. Avance ocurre cuando todos pulsen Continue.
         }
     }
 }

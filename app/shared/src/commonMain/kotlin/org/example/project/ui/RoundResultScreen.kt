@@ -8,19 +8,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 
@@ -30,23 +26,11 @@ fun RoundResultScreen(viewModel: GameViewModel) {
     val room = state.value.room ?: return
     val language = state.value.settings.language
 
-    var secondsLeft by remember { mutableStateOf(12) }
-    var userContinued by remember { mutableStateOf(false) }
-    val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
-
-    LaunchedEffect(Unit) {
-        secondsLeft = 12
-        while (secondsLeft > 0) {
-            delay(1000)
-            secondsLeft -= 1
-        }
-        if (state.value.impostorGuessingNext) {
-            viewModel.goToImpostorGuessing()
-        } else if (!amSpectator && !userContinued) {
-            userContinued = true
-            viewModel.continueRound()
-        }
-    }
+    var userContinued = remember { mutableStateOf(false) }
+    val yourId = state.value.yourPlayerId
+    val amSpectator = room.players.find { it.id == yourId }?.isSpectator == true
+    val isPendingImpostor = yourId != null && yourId == room.pendingGuessImpostorId
+    val mustContinue = !amSpectator || isPendingImpostor
 
     val bgColor = if (room.config.winOnFirstEjection) {
         state.value.votingResult?.let { (_, wasImpostor) ->
@@ -86,7 +70,7 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                     modifier = Modifier.padding(top = 16.dp)
                 )
                 Text(
-                    text = "$ejectedName",
+                    text = ejectedName,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -95,20 +79,14 @@ fun RoundResultScreen(viewModel: GameViewModel) {
 
         VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes)
 
-        Text(
-            text = "${Strings.get("round_result_continues", language)} $secondsLeft",
-            fontSize = 16.sp,
-            modifier = Modifier.padding(top = 24.dp)
-        )
-
-        if (!amSpectator) {
-            if (!userContinued) {
+        if (mustContinue) {
+            if (!userContinued.value) {
                 Button(
                     onClick = {
-                        userContinued = true
+                        userContinued.value = true
                         viewModel.continueRound()
                     },
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 24.dp)
                 ) {
                     Text(Strings.get("common_continue", language))
                 }
@@ -116,9 +94,15 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                 Text(
                     text = Strings.get("waiting_others_continue", language),
                     fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 24.dp)
                 )
             }
+        } else {
+            Text(
+                text = Strings.get("waiting_others_continue", language),
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 24.dp)
+            )
         }
 
         LeaveGameButton(viewModel, language)

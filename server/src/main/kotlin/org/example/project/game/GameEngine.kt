@@ -334,8 +334,9 @@ object GameEngine {
         room.mutex.lock()
         try {
             room.continueResponses = room.continueResponses + playerId
-            val active = room.activePlayers().map { it.id }.toSet()
-            return room.continueResponses == active
+            val required = room.activePlayers().map { it.id }.toMutableSet()
+            room.pendingGuessImpostorId?.let { required.add(it) }
+            return room.continueResponses.containsAll(required)
         } finally {
             room.mutex.unlock()
         }
