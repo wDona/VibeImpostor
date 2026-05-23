@@ -185,33 +185,31 @@ object GameEngine {
                     }
                 }
 
-                if (wasImpostor) {
-                    val remainingImpostors = room.activePlayers().count { it.id in room.impostorIds }
-                    if (remainingImpostors == 0) {
-                        val winners = room.players.filterNot { it.id in room.impostorIds }
-                        winners.forEach { it.score++ }
-                        // Transition to IMPOSTORS_GUESSING so they can guess the word
-                        room.state = RoomState.IMPOSTORS_GUESSING
-                        room.impostorGuesses = emptyMap()
-                        return Pair(ejected, true)
-                    }
-                } else {
+                val activeNow = room.activePlayers()
+                val activeImpostors = activeNow.count { it.id in room.impostorIds }
+                val activeInnocents = activeNow.size - activeImpostors
+
+                if (!wasImpostor) {
                     room.impostorIds.forEach { id ->
                         val player = room.players.find { it.id == id }
                         if (player != null) player.score++
                     }
                 }
 
-                val activeNow = room.activePlayers()
-                val activeImpostors = activeNow.count { it.id in room.impostorIds }
-                val activeInnocents = activeNow.size - activeImpostors
-                val impostorsWin = activeImpostors >= 1 && (activeNow.size <= 2 || activeInnocents == 0)
-                if (impostorsWin) {
+                if (activeImpostors == 0) {
+                    val winners = room.players.filterNot { it.id in room.impostorIds }
+                    winners.forEach { it.score++ }
+                    room.state = RoomState.IMPOSTORS_GUESSING
+                    room.impostorGuesses = emptyMap()
+                    return Pair(ejected, wasImpostor)
+                }
+
+                if (activeNow.size <= 2 || activeInnocents == 0) {
                     activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
                     room.state = RoomState.FINISHED
                     room.players.forEach { it.isSpectator = false }
                     room.roundNumber = 1
-                    return Pair(ejected, false)
+                    return Pair(ejected, wasImpostor)
                 }
             }
 
