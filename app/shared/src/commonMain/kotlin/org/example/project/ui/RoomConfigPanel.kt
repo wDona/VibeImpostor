@@ -48,12 +48,23 @@ fun RoomConfigPanel(
             Strings.get("lobby_voice", language) else Strings.get("lobby_text", language)
         val langLabel = if (config.language == "en")
             Strings.get("settings_english", language) else Strings.get("settings_spanish", language)
-        val maxImpostors = room.players.size
-        val impostersLabel = if (maxImpostors == 1) "1" else "0-${config.numImpostors}"
+        val impostersLabel = if (config.numImpostors == 1) "1" else "0-${config.numImpostors}"
+        val packsLabel = if (config.selectedCategoryIds.isEmpty())
+            Strings.get("lobby_word_packs_all", language) else config.selectedCategoryIds.size.toString()
+
         Text("${Strings.get("lobby_game_mode", language)}: $modeLabel")
         Text("${Strings.get("lobby_impostors", language)}: $impostersLabel")
         Text("${Strings.get("lobby_vote_time", language)}: ${config.voteTimeLimitSeconds}s")
         Text("${Strings.get("lobby_word_language", language)}: $langLabel")
+        Text("${Strings.get("lobby_word_packs_selected", language)}: $packsLabel")
+
+        if (config.winOnFirstEjection) {
+            Text("${Strings.get("lobby_win_first_ejection", language)}: ${Strings.get("lobby_enabled", language)}")
+        }
+        if (config.anonymousVotes) {
+            Text("${Strings.get("lobby_anonymous_votes", language)}: ${Strings.get("lobby_enabled", language)}")
+        }
+
         Text(Strings.get("lobby_only_host", language), fontWeight = FontWeight.Bold)
         return
     }

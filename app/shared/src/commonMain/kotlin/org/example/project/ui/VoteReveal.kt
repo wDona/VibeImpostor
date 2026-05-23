@@ -50,16 +50,11 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String,
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF424242).copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
-                    if (anonymousVotes) {
-                        Text(
-                            text = voteCount.toString(),
-                            fontWeight = FontWeight.Bold
-                        )
-                    } else {
-                        Text(
-                            text = "${nameOf(targetId)} (${voteCount})",
-                            fontWeight = FontWeight.Bold
-                        )
+                    Text(
+                        text = "${nameOf(targetId)} (${voteCount})",
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (!anonymousVotes) {
                         voters.forEach { voterId ->
                             Text(nameOf(voterId), fontSize = 12.sp)
                         }

@@ -137,7 +137,10 @@ object Strings {
             "lobby_impostor_no_chance" to "Hay ~5% de probabilidad de que no haya impostores",
             "lobby_max_impostors" to "Máx. Impostores",
             "lobby_select_all_categories" to "Seleccionar todos",
-            "lobby_deselect_all_categories" to "Deseleccionar todo"
+            "lobby_deselect_all_categories" to "Deseleccionar todo",
+            "lobby_word_packs_selected" to "Paquetes de palabras",
+            "lobby_word_packs_all" to "todos",
+            "lobby_enabled" to "Activado"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -270,7 +273,10 @@ object Strings {
             "lobby_impostor_no_chance" to "There is ~5% chance of having no impostors",
             "lobby_max_impostors" to "Max Impostors",
             "lobby_select_all_categories" to "Select all",
-            "lobby_deselect_all_categories" to "Deselect all"
+            "lobby_deselect_all_categories" to "Deselect all",
+            "lobby_word_packs_selected" to "Word packs",
+            "lobby_word_packs_all" to "all",
+            "lobby_enabled" to "Enabled"
         )
     )
 }
