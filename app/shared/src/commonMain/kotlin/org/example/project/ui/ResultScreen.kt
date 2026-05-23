@@ -51,9 +51,10 @@ fun ResultScreen(viewModel: GameViewModel) {
 
         state.value.votingResult?.let { (ejectedId, wasImpostor) ->
             val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "Unknown"
+            val impostorsWon = room.lastWinners.all { it in room.impostorIds }
 
             Text(
-                text = if (wasImpostor) Strings.get("result_innocents_win", language) else Strings.get("result_impostor_wins", language),
+                text = if (impostorsWon) Strings.get("result_impostor_wins", language) else Strings.get("result_innocents_win", language),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )

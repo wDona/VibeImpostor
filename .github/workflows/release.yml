@@ -97,12 +97,21 @@ jobs:
           name: server-deploy
           path: artifacts/
 
+      - name: Delete old JAR
+        run: |
+          curl -X POST "${{ secrets.PTERODACTYL_URL }}/api/client/servers/${{ secrets.PTERODACTYL_SERVER_UUID }}/files/delete" \
+            -H "Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -d '{"root": "/", "files": ["server-all.jar"]}'
+
       - name: Upload JAR to Pterodactyl
         run: |
           curl -X POST "${{ secrets.PTERODACTYL_URL }}/api/client/servers/${{ secrets.PTERODACTYL_SERVER_UUID }}/files/upload" \
             -H "Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}" \
             -H "Accept: application/json" \
-            -F "files=@artifacts/server-all.jar"
+            -F "files=@artifacts/server-all.jar" \
+            -G --data-urlencode "directory=/"
 
       - name: Restart server
         run: |

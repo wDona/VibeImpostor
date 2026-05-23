@@ -71,5 +71,6 @@ data class RoomSnapshot(
     val roundNumber: Int,
     val impostorIds: Set<String> = emptySet(),
     val impostorGuesses: Map<String, Boolean> = emptyMap(),
-    val pendingGuessImpostorId: String? = null
+    val pendingGuessImpostorId: String? = null,
+    val lastWinners: List<String> = emptyList()
 )
