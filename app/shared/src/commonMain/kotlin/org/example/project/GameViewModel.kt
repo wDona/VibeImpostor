@@ -427,8 +427,13 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.RoundContinues -> {
+                val newScreen = if (msg.room.pendingGuessImpostorId != null || msg.room.state == RoomState.IMPOSTORS_GUESSING) {
+                    Screen.IMPOSTOR_GUESSING
+                } else {
+                    Screen.GAME
+                }
                 _state.value = _state.value.copy(
-                    screen = Screen.GAME,
+                    screen = newScreen,
                     room = msg.room,
                     players = msg.room.players,
                     lastWordsPlayed = emptyMap()
