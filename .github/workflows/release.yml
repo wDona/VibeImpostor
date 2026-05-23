@@ -64,17 +64,53 @@ jobs:
       - run: chmod +x gradlew
       - name: Build Server JAR
         run: ./gradlew :server:shadowJar
-      - name: Rename artifact
+      - name: Prepare artifacts
         run: |
           VERSION="${{ needs.setup.outputs.version }}"
-          mv server/build/libs/server-all.jar server/build/libs/server-${VERSION}.jar
-      - name: Upload to release
+          mkdir -p artifacts
+          # Copia versionada para GitHub Release
+          cp server/build/libs/server-all.jar artifacts/server-${VERSION}.jar
+          # Copia fija para Pterodactyl (sobreescribe siempre)
+          cp server/build/libs/server-all.jar artifacts/server-all.jar
+      - name: Upload artifact for deploy job
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-deploy
+          path: artifacts/server-all.jar
+          retention-days: 1
+      - name: Upload versioned JAR to release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.setup.outputs.version }}
-          files: server/build/libs/server-*.jar
+          files: artifacts/server-${{ needs.setup.outputs.version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-server:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: [setup, build-server]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download server-all.jar
+        uses: actions/download-artifact@v4
+        with:
+          name: server-deploy
+          path: artifacts/
+
+      - name: Upload JAR to Pterodactyl
+        run: |
+          curl -X POST "${{ secrets.PTERODACTYL_URL }}/api/client/servers/${{ secrets.PTERODACTYL_SERVER_UUID }}/files/upload" \
+            -H "Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}" \
+            -H "Accept: application/json" \
+            -F "files=@artifacts/server-all.jar"
+
+      - name: Restart server
+        run: |
+          curl -X POST "${{ secrets.PTERODACTYL_URL }}/api/client/servers/${{ secrets.PTERODACTYL_SERVER_UUID }}/power" \
+            -H "Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -d '{"signal": "restart"}'
 
   build-android:
     if: contains(github.event.head_commit.message, 'RELEASE')
