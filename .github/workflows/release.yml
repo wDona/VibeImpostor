@@ -17,9 +17,42 @@ jobs:
     steps:
       - run: echo "Version will be 1.0.0.${{ github.run_number }}"
 
-  build-server:
+  create-release:
     if: contains(github.event.head_commit.message, 'RELEASE')
     needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create and push tag
+        run: |
+          VERSION="${{ needs.setup.outputs.version }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create empty release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.setup.outputs.version }}
+          name: Release ${{ needs.setup.outputs.version }}
+          body: |
+            Releases distribuidas automáticas.
+
+            **Artefactos:**
+            - server-${{ needs.setup.outputs.version }}.jar (Ktor, para Pterodactyl)
+            - impostor-${{ needs.setup.outputs.version }}.apk (Android)
+            - impostor-${{ needs.setup.outputs.version }}.deb (Linux)
+            - impostor-${{ needs.setup.outputs.version }}.msi (Windows)
+            - Web: GitHub Pages actualizado
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-server:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    needs: [setup, create-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,16 +64,21 @@ jobs:
       - run: chmod +x gradlew
       - name: Build Server JAR
         run: ./gradlew :server:shadowJar
-      - name: Upload Server Artifact
-        uses: actions/upload-artifact@v4
+      - name: Rename artifact
+        run: |
+          VERSION="${{ needs.setup.outputs.version }}"
+          mv server/build/libs/server-all.jar server/build/libs/server-${VERSION}.jar
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          name: server-jar
-          path: server/build/libs/server-all.jar
-          retention-days: 7
+          tag_name: v${{ needs.setup.outputs.version }}
+          files: server/build/libs/server-*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-android:
     if: contains(github.event.head_commit.message, 'RELEASE')
-    needs: setup
+    needs: [setup, create-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,16 +90,22 @@ jobs:
       - run: chmod +x gradlew
       - name: Build Android APK
         run: ./gradlew :app:androidApp:assembleRelease
-      - name: Upload Android APK
-        uses: actions/upload-artifact@v4
+      - name: Rename artifact
+        run: |
+          VERSION="${{ needs.setup.outputs.version }}"
+          APK=$(find app/androidApp/build/outputs/apk/release/ -name "*-release.apk" | head -1)
+          mv "$APK" "app/androidApp/build/outputs/apk/release/impostor-${VERSION}.apk"
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          name: android-apk
-          path: app/androidApp/build/outputs/apk/release/
-          retention-days: 7
+          tag_name: v${{ needs.setup.outputs.version }}
+          files: app/androidApp/build/outputs/apk/release/impostor-*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-desktop-linux:
     if: contains(github.event.head_commit.message, 'RELEASE')
-    needs: setup
+    needs: [setup, create-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,16 +117,22 @@ jobs:
       - run: chmod +x gradlew
       - name: Build Linux DEB
         run: ./gradlew :app:desktopApp:packageDeb
-      - name: Upload Linux DEB
-        uses: actions/upload-artifact@v4
+      - name: Rename artifact
+        run: |
+          VERSION="${{ needs.setup.outputs.version }}"
+          DEB=$(find app/desktopApp/build/compose/binaries/main/deb/ -name "*.deb" | head -1)
+          mv "$DEB" "app/desktopApp/build/compose/binaries/main/deb/impostor-${VERSION}.deb"
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          name: desktop-deb
-          path: app/desktopApp/build/compose/binaries/main/deb/
-          retention-days: 7
+          tag_name: v${{ needs.setup.outputs.version }}
+          files: app/desktopApp/build/compose/binaries/main/deb/impostor-*.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-desktop-windows:
     if: contains(github.event.head_commit.message, 'RELEASE')
-    needs: setup
+    needs: [setup, create-release]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -93,16 +143,23 @@ jobs:
           cache: 'gradle'
       - name: Build Windows MSI
         run: .\gradlew.bat :app:desktopApp:packageMsi
-      - name: Upload Windows MSI
-        uses: actions/upload-artifact@v4
+      - name: Rename artifact
+        shell: bash
+        run: |
+          VERSION="${{ needs.setup.outputs.version }}"
+          MSI=$(find app/desktopApp/build/compose/binaries/main/msi/ -name "*.msi" | head -1)
+          mv "$MSI" "app/desktopApp/build/compose/binaries/main/msi/impostor-${VERSION}.msi"
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          name: desktop-msi
-          path: app/desktopApp/build/compose/binaries/main/msi/
-          retention-days: 7
+          tag_name: v${{ needs.setup.outputs.version }}
+          files: app/desktopApp/build/compose/binaries/main/msi/impostor-*.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-web:
     if: contains(github.event.head_commit.message, 'RELEASE')
-    needs: setup
+    needs: [setup, create-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -120,71 +177,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'pages-artifact'
-
-  publish-release:
-    if: contains(github.event.head_commit.message, 'RELEASE')
-    needs: [setup, build-server, build-android, build-desktop-linux, build-desktop-windows, build-web]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download Server
-        uses: actions/download-artifact@v4
-        with:
-          name: server-jar
-          path: artifacts/
-      - name: Download APK
-        uses: actions/download-artifact@v4
-        with:
-          name: android-apk
-          path: artifacts/
-      - name: Download DEB
-        uses: actions/download-artifact@v4
-        with:
-          name: desktop-deb
-          path: artifacts/
-      - name: Download MSI
-        uses: actions/download-artifact@v4
-        with:
-          name: desktop-msi
-          path: artifacts/
-      - name: Rename artifacts with version
-        run: |
-          VERSION="${{ needs.setup.outputs.version }}"
-          cd artifacts
-
-          # Server
-          if [ -f "server-all.jar" ]; then mv "server-all.jar" "server-${VERSION}.jar"; fi
-
-          # APK
-          APK=$(find . -name "*-release.apk" -type f | head -1)
-          if [ ! -z "$APK" ]; then mv "$APK" "impostor-${VERSION}.apk"; fi
-
-          # DEB
-          DEB=$(find . -name "*.deb" -type f | head -1)
-          if [ ! -z "$DEB" ]; then mv "$DEB" "impostor-${VERSION}.deb"; fi
-
-          # MSI
-          MSI=$(find . -name "*.msi" -type f | head -1)
-          if [ ! -z "$MSI" ]; then mv "$MSI" "impostor-${VERSION}.msi"; fi
-
-          ls -la
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: artifacts/*
-          tag_name: v${{ needs.setup.outputs.version }}
-          name: Release ${{ needs.setup.outputs.version }}
-          body: |
-            Releases distribuidas automáticas.
-
-            **Artefactos:**
-            - server-${{ needs.setup.outputs.version }}.jar (Ktor, para Pterodactyl)
-            - impostor-${{ needs.setup.outputs.version }}.apk (Android)
-            - impostor-${{ needs.setup.outputs.version }}.deb (Linux)
-            - impostor-${{ needs.setup.outputs.version }}.msi (Windows)
-            - Web: GitHub Pages actualizado
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-pages:
     if: contains(github.event.head_commit.message, 'RELEASE')
