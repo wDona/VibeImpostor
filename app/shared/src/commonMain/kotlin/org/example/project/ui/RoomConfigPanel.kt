@@ -84,11 +84,12 @@ fun RoomConfigPanel(
         label = impostersLabel,
         value = config.numImpostors.toString(),
         onMinus = {
-            if (config.numImpostors > 1) apply(config.copy(numImpostors = config.numImpostors - 1))
+            if (!config.winOnFirstEjection && config.numImpostors > 1) apply(config.copy(numImpostors = config.numImpostors - 1))
         },
         onPlus = {
-            if (config.numImpostors < maxImpostors) apply(config.copy(numImpostors = config.numImpostors + 1))
-        }
+            if (!config.winOnFirstEjection && config.numImpostors < maxImpostors) apply(config.copy(numImpostors = config.numImpostors + 1))
+        },
+        enabled = !config.winOnFirstEjection
     )
 
     StepperRow(
@@ -238,14 +239,15 @@ private fun StepperRow(
     label: String,
     value: String,
     onMinus: () -> Unit,
-    onPlus: () -> Unit
+    onPlus: () -> Unit,
+    enabled: Boolean = true
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text("$label: $value", modifier = Modifier.padding(end = 8.dp))
-        Button(onClick = onMinus) { Text("-") }
-        Button(onClick = onPlus) { Text("+") }
+        Button(onClick = onMinus, enabled = enabled) { Text("-") }
+        Button(onClick = onPlus, enabled = enabled) { Text("+") }
     }
 }
