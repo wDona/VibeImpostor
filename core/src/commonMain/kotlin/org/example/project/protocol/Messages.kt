@@ -129,6 +129,11 @@ sealed interface ServerMessage {
     ) : ServerMessage
 
     @Serializable
+    data class ProceedToGuessing(
+        val room: RoomSnapshot
+    ) : ServerMessage
+
+    @Serializable
     data class GameEnded(
         val winnerIds: List<String>,
         val room: RoomSnapshot

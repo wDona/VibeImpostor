@@ -356,6 +356,8 @@ class GameViewModel : ViewModel() {
                 val newScreen = when {
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.IMPOSTOR_GUESSING -> Screen.IMPOSTOR_GUESSING_RESULT
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.ROUND_RESULT -> Screen.RESULT
+                    msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.GAME -> Screen.RESULT
+                    msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.VOTING -> Screen.RESULT
                     msg.room.state == RoomState.IN_GAME && _state.value.screen == Screen.IMPOSTOR_GUESSING -> Screen.GAME
                     else -> _state.value.screen
                 }
@@ -425,15 +427,19 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.RoundContinues -> {
-                val newScreen = when (msg.room.state) {
-                    RoomState.IMPOSTORS_GUESSING -> Screen.IMPOSTOR_GUESSING
-                    else -> Screen.GAME
-                }
                 _state.value = _state.value.copy(
-                    screen = newScreen,
+                    screen = Screen.GAME,
                     room = msg.room,
                     players = msg.room.players,
                     lastWordsPlayed = emptyMap()
+                )
+            }
+
+            is ServerMessage.ProceedToGuessing -> {
+                _state.value = _state.value.copy(
+                    screen = Screen.IMPOSTOR_GUESSING,
+                    room = msg.room,
+                    players = msg.room.players
                 )
             }
 

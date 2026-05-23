@@ -90,6 +90,13 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                 ) {
                     Text(Strings.get("common_continue", language))
                 }
+                if (isPendingImpostor) {
+                    Text(
+                        text = Strings.get("impostor_guess_after_continue_hint", language),
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                }
             } else {
                 Text(
                     text = Strings.get("waiting_others_continue", language),

@@ -37,14 +37,17 @@ object GameEngine {
             }
             val numImpostors = rawImpostors.coerceIn(1, maxOf(1, active.size - 1))
 
-            room.impostorIds = active.shuffled().take(numImpostors).map { it.id }.toSet()
-            room.turnOrder = active.shuffled().map { it.id }
+            room.impostorIds = active.shuffled(Random.Default).take(numImpostors).map { it.id }.toSet()
+            val ids = active.map { it.id }.toMutableList()
+            ids.shuffle(Random.Default)
+            room.turnOrder = ids.toList()
             room.currentTurnIndex = 0
             room.roundNumber = 1
             room.playedThisRound = emptySet()
             room.wantVoteResponses = emptyMap()
             room.votes = emptyMap()
             room.endGameResponses = emptyMap()
+            println("[startGame] room=${room.code} turnOrder=${room.turnOrder} impostors=${room.impostorIds}")
 
             room.state = RoomState.IN_GAME
 

@@ -129,7 +129,8 @@ object Strings {
             "impostor_guessing_input" to "Tu adivinanza",
             "impostor_guessing_results" to "Resultados de adivinanzas",
             "impostor_guessed_correct" to "✓ Sí ha encontrado la palabra",
-            "impostor_guessed_wrong" to "✗ No sabía la palabra"
+            "impostor_guessed_wrong" to "✗ No sabía la palabra",
+            "impostor_guess_after_continue_hint" to "Tras continuar adivinarás la palabra"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -254,7 +255,8 @@ object Strings {
             "impostor_guessing_input" to "Your guess",
             "impostor_guessing_results" to "Guessing results",
             "impostor_guessed_correct" to "✓ Found the word",
-            "impostor_guessed_wrong" to "✗ Didn't know the word"
+            "impostor_guessed_wrong" to "✗ Didn't know the word",
+            "impostor_guess_after_continue_hint" to "After continuing you will guess the word"
         )
     )
 }
