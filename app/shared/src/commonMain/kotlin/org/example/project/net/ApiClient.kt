@@ -39,6 +39,12 @@ data class NewPackCategory(val name: String, val words: List<String>)
 @Serializable
 data class NewPack(val name: String, val language: String, val categories: List<NewPackCategory>)
 
+@Serializable
+data class PackDto(val id: Int, val name: String, val language: String)
+
+@Serializable
+data class UserPacksResponse(val packs: List<PackDto>)
+
 sealed class AuthResult {
     data class Success(val token: String) : AuthResult()
     data class Failure(val message: String) : AuthResult()
@@ -126,6 +132,17 @@ class ApiClient(private val baseUrl: String) {
         val pack = NewPack(name, language, listOf(NewPackCategory(name, words)))
         val json = ProtocolJson.json.encodeToString(NewPack.serializer(), pack)
         return importPack(json)
+    }
+
+    suspend fun getMyPacks(): List<PackDto> = try {
+        if (authToken == null) return emptyList()
+        val resText = client.get("$baseUrl/packs/my-packs") {
+            header("Authorization", "Bearer $authToken")
+        }.body<String>()
+        val response = ProtocolJson.json.decodeFromString<UserPacksResponse>(resText)
+        response.packs
+    } catch (e: Exception) {
+        emptyList()
     }
 
     fun logout() {

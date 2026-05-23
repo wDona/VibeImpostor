@@ -201,6 +201,29 @@ fun RoomConfigPanel(
                     Text(Strings.get("lobby_categories_all", language))
                     val currentLang = config.language
                     val filteredCategories = categories.filter { it.language == currentLang }
+                    val allSelected = filteredCategories.isNotEmpty() && filteredCategories.all { it.id in config.selectedCategoryIds }
+
+                    Button(
+                        onClick = {
+                            val newIds = if (allSelected) {
+                                config.selectedCategoryIds.filter { id ->
+                                    id !in filteredCategories.map { it.id }
+                                }
+                            } else {
+                                config.selectedCategoryIds + filteredCategories.map { it.id }
+                            }
+                            apply(config.copy(selectedCategoryIds = newIds))
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            if (allSelected)
+                                Strings.get("lobby_deselect_all_categories", language)
+                            else
+                                Strings.get("lobby_select_all_categories", language)
+                        )
+                    }
+
                     filteredCategories.forEach { category ->
                         val selected = category.id in config.selectedCategoryIds
                         Row(

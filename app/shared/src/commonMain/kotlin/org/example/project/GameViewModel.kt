@@ -56,6 +56,7 @@ data class GameState(
     val authMessage: String? = null
     ,
     val availableCategories: List<CategoryResponse> = emptyList(),
+    val userPacks: List<org.example.project.net.PackDto> = emptyList(),
     val impostorGuesses: Map<String, ImpostorGuessResult> = emptyMap(),
     val impostorGuessingNext: Boolean = false
 )
@@ -261,6 +262,23 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             val categories = apiClient.getCategories()
             _state.value = _state.value.copy(availableCategories = categories)
+        }
+    }
+
+    fun loadUserPacks() {
+        viewModelScope.launch {
+            val packs = apiClient.getMyPacks()
+            _state.value = _state.value.copy(userPacks = packs)
+        }
+    }
+
+    fun deletePack(packId: Int, onDone: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val deleted = apiClient.deletePack(packId)
+            if (deleted) {
+                loadUserPacks()
+            }
+            onDone(deleted)
         }
     }
 

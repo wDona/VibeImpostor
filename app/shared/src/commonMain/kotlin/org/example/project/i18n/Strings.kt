@@ -109,6 +109,9 @@ object Strings {
             "packs_import" to "Importar",
             "packs_ok" to "Guardado correctamente",
             "packs_fail" to "No se pudo guardar",
+            "packs_my_packs" to "Mis paquetes",
+            "packs_delete" to "Eliminar",
+            "packs_deleted" to "Paquete eliminado",
             "lobby_categories" to "Temas de palabras",
             "lobby_categories_all" to "Si no eliges ninguno, se usan todos los temas base",
             "lobby_leave_confirm_title" to "¿Salir de la sala?",
@@ -132,7 +135,9 @@ object Strings {
             "impostor_guessed_wrong" to "✗ No sabía la palabra",
             "impostor_guess_after_continue_hint" to "Tras continuar adivinarás la palabra",
             "lobby_impostor_no_chance" to "Hay ~5% de probabilidad de que no haya impostores",
-            "lobby_max_impostors" to "Máx. Impostores"
+            "lobby_max_impostors" to "Máx. Impostores",
+            "lobby_select_all_categories" to "Seleccionar todos",
+            "lobby_deselect_all_categories" to "Deseleccionar todo"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -237,6 +242,9 @@ object Strings {
             "packs_import" to "Import",
             "packs_ok" to "Saved successfully",
             "packs_fail" to "Could not save",
+            "packs_my_packs" to "My packs",
+            "packs_delete" to "Delete",
+            "packs_deleted" to "Pack deleted",
             "lobby_categories" to "Word topics",
             "lobby_categories_all" to "If you pick none, all base topics are used",
             "lobby_leave_confirm_title" to "Leave the room?",
@@ -260,7 +268,9 @@ object Strings {
             "impostor_guessed_wrong" to "✗ Didn't know the word",
             "impostor_guess_after_continue_hint" to "After continuing you will guess the word",
             "lobby_impostor_no_chance" to "There is ~5% chance of having no impostors",
-            "lobby_max_impostors" to "Max Impostors"
+            "lobby_max_impostors" to "Max Impostors",
+            "lobby_select_all_categories" to "Select all",
+            "lobby_deselect_all_categories" to "Deselect all"
         )
     )
 }

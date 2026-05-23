@@ -99,4 +99,15 @@ object WordRepository {
         pack.delete()
         true
     }
+
+    fun listUserPacks(userId: Int): List<CategoryDto> = transaction {
+        val userPackIds = WordPacks.select(WordPacks.id).where {
+            (WordPacks.ownerUserId eq userId) and (WordPacks.isBuiltIn eq false)
+        }
+        val userPacks = WordPackEntity.find { WordPacks.id inSubQuery userPackIds }
+
+        userPacks.map { pack ->
+            CategoryDto(pack.id.value, pack.name, pack.language)
+        }
+    }
 }

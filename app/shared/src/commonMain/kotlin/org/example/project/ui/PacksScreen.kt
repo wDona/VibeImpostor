@@ -2,6 +2,7 @@ package org.example.project.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,12 @@ fun PacksScreen(viewModel: GameViewModel) {
     val loggedIn = state.value.authUsername != null
 
     var statusMsg by remember { mutableStateOf("") }
+
+    LaunchedEffect(loggedIn) {
+        if (loggedIn) {
+            viewModel.loadUserPacks()
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()),
@@ -107,6 +115,43 @@ fun PacksScreen(viewModel: GameViewModel) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(Strings.get("packs_import", language))
+                    }
+                }
+            }
+
+            if (state.value.userPacks.isNotEmpty()) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(Strings.get("packs_my_packs", language), fontWeight = FontWeight.Bold)
+                        state.value.userPacks.forEach { pack ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(12.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(pack.name, fontWeight = FontWeight.Bold)
+                                        Text(pack.language, fontSize = 12.sp)
+                                    }
+                                    OutlinedButton(
+                                        onClick = {
+                                            viewModel.deletePack(pack.id) { ok ->
+                                                statusMsg = if (ok) Strings.get("packs_deleted", language)
+                                                    else Strings.get("packs_fail", language)
+                                            }
+                                        }
+                                    ) {
+                                        Text(Strings.get("packs_delete", language))
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

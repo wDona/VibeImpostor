@@ -32,7 +32,34 @@ data class ImportPackResponse(
     val packId: Int
 )
 
+@Serializable
+data class PackDto(
+    val id: Int,
+    val name: String,
+    val language: String
+)
+
+@Serializable
+data class UserPacksResponse(
+    val packs: List<PackDto>
+)
+
 fun Route.packRoutes() {
+    get("/packs/my-packs") {
+        val token = call.request.headers["Authorization"]
+            ?.removePrefix("Bearer ")
+            .orEmpty()
+
+        val userId = if (token.isNotEmpty()) AuthService.userIdForToken(token) else null
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, mapOf("error" to "Unauthorized"))
+            return@get
+        }
+
+        val packs = WordRepository.listUserPacks(userId)
+        call.respond(UserPacksResponse(packs.map { PackDto(it.id, it.name, it.language) }))
+    }
+
     get("/packs/categories") {
         val token = call.request.headers["Authorization"]
             ?.removePrefix("Bearer ")
