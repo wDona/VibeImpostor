@@ -78,6 +78,11 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             val settings = SettingsStorage.load()
             _state.value = _state.value.copy(settings = settings)
+            val saved = org.example.project.storage.AuthStorage.load()
+            if (saved != null) {
+                apiClient.authToken = saved.first
+                _state.value = _state.value.copy(authUsername = saved.second)
+            }
         }
         refreshCategories()
     }
@@ -292,15 +297,19 @@ class GameViewModel : ViewModel() {
     fun register(username: String, password: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(authBusy = true, authMessage = null)
-            val token = apiClient.register(username, password)
-            _state.value = if (token != null) {
-                refreshCategories()
-                _state.value.copy(authUsername = username, authBusy = false, authMessage = null)
-            } else {
-                _state.value.copy(
-                    authBusy = false,
-                    authMessage = "No se pudo registrar (¿usuario ya existe?)"
-                )
+            val result = apiClient.register(username, password)
+            _state.value = when (result) {
+                is org.example.project.net.AuthResult.Success -> {
+                    org.example.project.storage.AuthStorage.save(result.token, username)
+                    refreshCategories()
+                    _state.value.copy(
+                        authUsername = username,
+                        authBusy = false,
+                        authMessage = null
+                    )
+                }
+                is org.example.project.net.AuthResult.Failure ->
+                    _state.value.copy(authBusy = false, authMessage = result.message)
             }
         }
     }
@@ -308,21 +317,26 @@ class GameViewModel : ViewModel() {
     fun login(username: String, password: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(authBusy = true, authMessage = null)
-            val token = apiClient.login(username, password)
-            _state.value = if (token != null) {
-                refreshCategories()
-                _state.value.copy(authUsername = username, authBusy = false, authMessage = null)
-            } else {
-                _state.value.copy(
-                    authBusy = false,
-                    authMessage = "Usuario o contraseña incorrectos"
-                )
+            val result = apiClient.login(username, password)
+            _state.value = when (result) {
+                is org.example.project.net.AuthResult.Success -> {
+                    org.example.project.storage.AuthStorage.save(result.token, username)
+                    refreshCategories()
+                    _state.value.copy(
+                        authUsername = username,
+                        authBusy = false,
+                        authMessage = null
+                    )
+                }
+                is org.example.project.net.AuthResult.Failure ->
+                    _state.value.copy(authBusy = false, authMessage = result.message)
             }
         }
     }
 
     fun logout() {
         apiClient.logout()
+        org.example.project.storage.AuthStorage.clear()
         _state.value = _state.value.copy(authUsername = null)
     }
 

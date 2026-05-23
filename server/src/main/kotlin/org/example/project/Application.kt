@@ -66,7 +66,11 @@ fun Application.module() {
         allowMethod(io.ktor.http.HttpMethod.Post)
         allowMethod(io.ktor.http.HttpMethod.Put)
         allowMethod(io.ktor.http.HttpMethod.Delete)
-        allowHeader("*")
+        allowHeader(io.ktor.http.HttpHeaders.ContentType)
+        allowHeader(io.ktor.http.HttpHeaders.Authorization)
+        allowHeader(io.ktor.http.HttpHeaders.Accept)
+        allowHeadersPrefixed("x-")
+        allowCredentials = true
         anyHost()
     }
 
