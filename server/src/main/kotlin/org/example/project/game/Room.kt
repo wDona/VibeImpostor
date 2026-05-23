@@ -29,6 +29,7 @@ class Room(
     var lastRoundVotes: Map<String, String> = emptyMap()
     var endGameResponses: Map<String, Boolean> = emptyMap()
     var impostorGuesses: Map<String, Boolean> = emptyMap()
+    var continueResponses: Set<String> = emptySet()
     var rematchJob: Job? = null
     var voteTimerJob: Job? = null
 

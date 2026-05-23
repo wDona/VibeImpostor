@@ -186,6 +186,12 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun continueRound() {
+        viewModelScope.launch {
+            sendGameMessage(ClientMessage.ContinueRound)
+        }
+    }
+
     fun leaveRoom() {
         viewModelScope.launch {
             sendGameMessage(ClientMessage.LeaveRoom)

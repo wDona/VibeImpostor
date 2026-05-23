@@ -173,6 +173,26 @@ fun Route.gameServer() {
                         }
                     }
 
+                    is ClientMessage.ContinueRound -> {
+                        if (room != null && player != null && !player.isSpectator) {
+                            val allContinued = GameEngine.registerContinue(room, player.id)
+                            if (allContinued) {
+                                GameEngine.resetContinueResponses(room)
+                                room.voteTimerJob?.cancel()
+                                room.resetForNewRound()
+                                room.state = RoomState.IN_GAME
+                                val current = room.currentTurnPlayer()
+                                if (current != null) {
+                                    broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+                                } else {
+                                    broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                                }
+                            } else {
+                                broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
+                            }
+                        }
+                    }
+
                     is ClientMessage.BackToLobby -> {
                         val r = room
                         if (r != null && player != null) {

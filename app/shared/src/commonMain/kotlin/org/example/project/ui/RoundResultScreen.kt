@@ -1,9 +1,11 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +31,9 @@ fun RoundResultScreen(viewModel: GameViewModel) {
     val language = state.value.settings.language
 
     var secondsLeft by remember { mutableStateOf(12) }
+    var userContinued by remember { mutableStateOf(false) }
+    val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
+
     LaunchedEffect(Unit) {
         secondsLeft = 12
         while (secondsLeft > 0) {
@@ -39,9 +45,18 @@ fun RoundResultScreen(viewModel: GameViewModel) {
         }
     }
 
+    val bgColor = if (room.config.winOnFirstEjection) {
+        state.value.votingResult?.let { (_, wasImpostor) ->
+            if (wasImpostor) Color(0xFFFFCDD2) else Color(0xFFBBDEFB)
+        } ?: Color.Transparent
+    } else {
+        Color.Transparent
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(bgColor)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -82,6 +97,26 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             fontSize = 16.sp,
             modifier = Modifier.padding(top = 24.dp)
         )
+
+        if (!amSpectator) {
+            if (!userContinued) {
+                Button(
+                    onClick = {
+                        userContinued = true
+                        viewModel.continueRound()
+                    },
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    Text(Strings.get("common_continue", language))
+                }
+            } else {
+                Text(
+                    text = Strings.get("waiting_others_continue", language),
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+        }
 
         LeaveGameButton(viewModel, language)
     }

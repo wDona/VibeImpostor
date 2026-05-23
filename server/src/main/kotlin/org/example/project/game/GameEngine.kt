@@ -308,4 +308,24 @@ object GameEngine {
             room.mutex.unlock()
         }
     }
+
+    suspend fun registerContinue(room: Room, playerId: String): Boolean {
+        room.mutex.lock()
+        try {
+            room.continueResponses = room.continueResponses + playerId
+            val active = room.activePlayers().map { it.id }.toSet()
+            return room.continueResponses == active
+        } finally {
+            room.mutex.unlock()
+        }
+    }
+
+    suspend fun resetContinueResponses(room: Room) {
+        room.mutex.lock()
+        try {
+            room.continueResponses = emptySet()
+        } finally {
+            room.mutex.unlock()
+        }
+    }
 }

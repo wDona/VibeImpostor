@@ -65,6 +65,9 @@ sealed interface ClientMessage {
     data class SubmitImpostorGuess(
         val word: String
     ) : ClientMessage
+
+    @Serializable
+    data object ContinueRound : ClientMessage
 }
 
 @Serializable
