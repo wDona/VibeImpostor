@@ -87,5 +87,8 @@ class Room(
             if (player != null && player.connected && !player.isSpectator) break
             currentTurnIndex++
         }
+        if (currentTurnIndex >= turnOrder.size) {
+            currentTurnIndex = 0
+        }
     }
 }

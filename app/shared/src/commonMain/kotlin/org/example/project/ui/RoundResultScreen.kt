@@ -75,7 +75,7 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             }
         }
 
-        VoteReveal(room, state.value.lastRoundVotes, language)
+        VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes)
 
         Text(
             text = "${Strings.get("round_result_continues", language)} $secondsLeft",

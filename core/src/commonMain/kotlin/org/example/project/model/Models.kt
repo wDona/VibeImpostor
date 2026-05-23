@@ -55,7 +55,8 @@ data class RoomConfig(
     val voteTimeLimitSeconds: Int = 60,
     val selectedCategoryIds: List<Int> = emptyList(),
     val language: String = "es",
-    val winOnFirstEjection: Boolean = false
+    val winOnFirstEjection: Boolean = false,
+    val anonymousVotes: Boolean = false
 )
 
 @Serializable

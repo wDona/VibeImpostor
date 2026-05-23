@@ -19,7 +19,7 @@ data class AuthRequest(val username: String, val password: String)
 data class AuthResponse(val token: String)
 
 @Serializable
-data class CategoryResponse(val id: Int, val name: String)
+data class CategoryResponse(val id: Int, val name: String, val language: String = "es")
 
 @Serializable
 data class CategoriesResponse(val categories: List<CategoryResponse>)

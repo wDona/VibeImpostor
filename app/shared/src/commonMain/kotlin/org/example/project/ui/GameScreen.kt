@@ -196,8 +196,6 @@ fun GameScreen(viewModel: GameViewModel) {
         }
 
         // Bottom buttons
-        LeaveGameButton(viewModel, language)
-
         if (!amSpectator) {
             androidx.compose.material3.OutlinedButton(
                 onClick = { viewModel.proposeEndGame() },
@@ -206,6 +204,8 @@ fun GameScreen(viewModel: GameViewModel) {
                 Text(Strings.get("game_propose_end", language))
             }
         }
+
+        LeaveGameButton(viewModel, language)
 
         if (state.value.showEndGameDialog) {
             androidx.compose.material3.AlertDialog(

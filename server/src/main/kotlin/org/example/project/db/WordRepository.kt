@@ -6,7 +6,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 data class CategoryDto(
     val id: Int,
-    val name: String
+    val name: String,
+    val language: String
 )
 
 object WordRepository {
@@ -25,7 +26,10 @@ object WordRepository {
             emptyList()
         }
 
-        (baseCategories + userCategories).map { CategoryDto(it.id.value, it.name) }
+        (baseCategories + userCategories).map { cat ->
+            val pack = WordPackEntity.findById(cat.packId)
+            CategoryDto(cat.id.value, cat.name, pack?.language ?: "es")
+        }
     }
 
     fun randomWordFrom(categoryIds: List<Int>, language: String): Pair<String, String>? = transaction {

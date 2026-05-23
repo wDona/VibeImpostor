@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.example.project.i18n.Strings
 import org.example.project.model.RoomSnapshot
 
@@ -27,7 +28,7 @@ private val voteColors = listOf(
 )
 
 @Composable
-fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String) {
+fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String, anonymousVotes: Boolean = false) {
     if (votes.isEmpty()) return
 
     fun nameOf(id: String): String = room.players.find { it.id == id }?.name ?: "?"
@@ -41,7 +42,7 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String)
         Text(Strings.get("votes_title", language), fontWeight = FontWeight.Bold)
 
         targets.forEach { targetId ->
-            val voters = votes.filter { it.value == targetId }.keys.map { nameOf(it) }
+            val voters = votes.filter { it.value == targetId }.keys
             val voteCount = voters.size
 
             Card(
@@ -49,10 +50,20 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String)
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF424242).copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
-                    Text(
-                        text = "${nameOf(targetId)} (${voteCount})",
-                        fontWeight = FontWeight.Bold
-                    )
+                    if (anonymousVotes) {
+                        Text(
+                            text = voteCount.toString(),
+                            fontWeight = FontWeight.Bold
+                        )
+                    } else {
+                        Text(
+                            text = "${nameOf(targetId)} (${voteCount})",
+                            fontWeight = FontWeight.Bold
+                        )
+                        voters.forEach { voterId ->
+                            Text(nameOf(voterId), fontSize = 12.sp)
+                        }
+                    }
                 }
             }
         }

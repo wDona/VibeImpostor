@@ -402,7 +402,7 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.VotingStarted -> {
-                _state.value = _state.value.copy(screen = Screen.VOTING)
+                _state.value = _state.value.copy(screen = Screen.VOTING, voteDeadlineMs = msg.deadlineEpochMs)
             }
 
             is ServerMessage.VotingResult -> {

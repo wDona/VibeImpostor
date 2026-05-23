@@ -101,7 +101,12 @@ object GameEngine {
                     if (player != null) player.score++
                 }
                 room.resetForNewRound()
-                room.state = RoomState.IN_GAME
+                val newActive = room.activePlayers()
+                if (newActive.isEmpty()) {
+                    room.state = RoomState.FINISHED
+                } else {
+                    room.state = RoomState.IN_GAME
+                }
             }
 
             return shouldVote
@@ -129,7 +134,8 @@ object GameEngine {
             if (force && voted.isEmpty() && active.isNotEmpty()) {
                 room.lastRoundVotes = emptyMap()
                 room.resetForNewRound()
-                room.state = RoomState.IN_GAME
+                val newActive = room.activePlayers()
+                room.state = if (newActive.isEmpty()) RoomState.FINISHED else RoomState.IN_GAME
                 return Pair(null, false)
             }
 

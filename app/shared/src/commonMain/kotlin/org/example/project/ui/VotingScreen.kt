@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 
@@ -26,6 +28,14 @@ fun VotingScreen(viewModel: GameViewModel) {
     val state = viewModel.state.collectAsState()
     val room = state.value.room ?: return
     val language = state.value.settings.language
+
+    val secondsLeft = remember { mutableStateOf(60) }
+    LaunchedEffect(Unit) {
+        while (secondsLeft.value > 0) {
+            delay(1000)
+            secondsLeft.value--
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -39,6 +49,13 @@ fun VotingScreen(viewModel: GameViewModel) {
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(16.dp)
+        )
+
+        Text(
+            text = "${secondsLeft.value}s",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(8.dp)
         )
 
         val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true

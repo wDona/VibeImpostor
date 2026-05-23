@@ -18,7 +18,8 @@ data class CategoriesResponse(
 @Serializable
 data class CategoryResponse(
     val id: Int,
-    val name: String
+    val name: String,
+    val language: String = "es"
 )
 
 @Serializable
@@ -40,7 +41,7 @@ fun Route.packRoutes() {
 
         val categories = WordRepository.listCategories(userId)
         call.respond(CategoriesResponse(
-            categories.map { CategoryResponse(it.id, it.name) }
+            categories.map { CategoryResponse(it.id, it.name, it.language) }
         ))
     }
 

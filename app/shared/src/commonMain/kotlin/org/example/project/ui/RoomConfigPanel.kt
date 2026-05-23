@@ -1,5 +1,6 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -138,7 +139,9 @@ fun RoomConfigPanel(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(Strings.get("lobby_categories_all", language))
-                    categories.forEach { category ->
+                    val currentLang = config.language
+                    val filteredCategories = categories.filter { it.language == currentLang }
+                    filteredCategories.forEach { category ->
                         val selected = category.id in config.selectedCategoryIds
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -169,7 +172,10 @@ fun RoomConfigPanel(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { apply(config.copy(winOnFirstEjection = !config.winOnFirstEjection)) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -178,6 +184,23 @@ fun RoomConfigPanel(
             checked = config.winOnFirstEjection,
             onCheckedChange = { checked ->
                 apply(config.copy(winOnFirstEjection = checked))
+            }
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { apply(config.copy(anonymousVotes = !config.anonymousVotes)) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(Strings.get("lobby_anonymous_votes", language))
+        Checkbox(
+            checked = config.anonymousVotes,
+            onCheckedChange = { checked ->
+                apply(config.copy(anonymousVotes = checked))
             }
         )
     }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,7 +20,7 @@ import org.example.project.i18n.Strings
 fun LeaveGameButton(viewModel: GameViewModel, language: String) {
     var showConfirm by remember { mutableStateOf(false) }
 
-    OutlinedButton(
+    TextButton(
         onClick = { showConfirm = true },
         modifier = Modifier
             .fillMaxWidth()

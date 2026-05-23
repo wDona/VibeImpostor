@@ -28,7 +28,8 @@
       "Read(//tmp/**)",
       "Bash(curl -s --max-time 40 https://impostor.wdona.dev/KotlinProject-app-webApp.wasm -o /tmp/app.wasm)",
       "Bash(git check-ignore *)",
-      "Bash(grep -E \"\\\\.kt$\")"
+      "Bash(grep -E \"\\\\.kt$\")",
+      "Bash(gradle build *)"
     ]
   }
 }
