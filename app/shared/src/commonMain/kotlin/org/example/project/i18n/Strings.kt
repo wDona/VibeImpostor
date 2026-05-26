@@ -142,7 +142,10 @@ object Strings {
             "lobby_word_packs_all" to "todos",
             "lobby_enabled" to "Activado",
             "ask_vote_waiting" to "Esperando decisión de los demás...",
-            "voting_progress" to "Votos"
+            "voting_progress" to "Votos",
+            "voting_nobody" to "Nadie es el impostor",
+            "voting_nobody_wrong" to "¡Había impostores! Los inocentes pierden.",
+            "voting_nobody_correct" to "¡Correcto! No había impostores. Ganan los inocentes."
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -280,7 +283,10 @@ object Strings {
             "lobby_word_packs_all" to "all",
             "lobby_enabled" to "Enabled",
             "ask_vote_waiting" to "Waiting for others to decide...",
-            "voting_progress" to "Votes"
+            "voting_progress" to "Votes",
+            "voting_nobody" to "Nobody is the impostor",
+            "voting_nobody_wrong" to "There were impostors! Innocents lose.",
+            "voting_nobody_correct" to "Correct! There were no impostors. Innocents win."
         )
     )
 }

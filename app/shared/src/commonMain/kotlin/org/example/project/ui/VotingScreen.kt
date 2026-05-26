@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
+import org.example.project.protocol.NOBODY_VOTE_ID
 
 @Composable
 fun VotingScreen(viewModel: GameViewModel) {
@@ -183,6 +185,24 @@ fun VotingScreen(viewModel: GameViewModel) {
                             Text(player.name, fontSize = 16.sp)
                         }
                     }
+
+                if (room.config.numImpostors >= 2) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            viewModel.castVote(NOBODY_VOTE_ID)
+                            voted.value = true
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF616161)
+                        )
+                    ) {
+                        Text(Strings.get("voting_nobody", language), fontSize = 16.sp)
+                    }
+                }
             }
         }
 

@@ -172,6 +172,8 @@ sealed interface ServerMessage {
     data class VoteCast(val voterId: String) : ServerMessage
 }
 
+const val NOBODY_VOTE_ID = "__nobody__"
+
 object ProtocolJson {
     val json = Json {
         classDiscriminator = "type"

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
+import org.example.project.protocol.NOBODY_VOTE_ID
 
 @Composable
 fun RoundResultScreen(viewModel: GameViewModel) {
@@ -98,7 +99,19 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if (ejectedId == null) {
+                    if (ejectedId == NOBODY_VOTE_ID) {
+                        Text(
+                            text = Strings.get("voting_nobody", language),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if (wasImpostor) Strings.get("voting_nobody_wrong", language)
+                                   else Strings.get("voting_nobody_correct", language),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    } else if (ejectedId == null) {
                         Text(
                             text = Strings.get("voting_tie", language),
                             fontSize = 18.sp,

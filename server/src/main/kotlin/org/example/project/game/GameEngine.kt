@@ -4,6 +4,7 @@ import org.example.project.db.WordRepository
 import org.example.project.model.Role
 import org.example.project.model.RoomState
 import org.example.project.model.MIN_PLAYERS
+import org.example.project.protocol.NOBODY_VOTE_ID
 import kotlin.random.Random
 
 object GameEngine {
@@ -151,6 +152,24 @@ object GameEngine {
             val ejected = if (tied.size == 1) tied.first() else null
 
             room.lastRoundVotes = room.votes.toMap()
+
+            // Nobody vote wins → instant game end
+            if (ejected == NOBODY_VOTE_ID) {
+                val impostorsExist = room.impostorIds.isNotEmpty()
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
+                if (impostorsExist) {
+                    room.impostorIds.forEach { id -> room.players.find { it.id == id }?.score++ }
+                    room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
+                    return Pair(NOBODY_VOTE_ID, true)
+                } else {
+                    val innocents = room.players.filterNot { it.id in room.impostorIds }
+                    innocents.forEach { it.score++ }
+                    room.lastWinners = innocents.map { it.id }
+                    return Pair(NOBODY_VOTE_ID, false)
+                }
+            }
 
             if (ejected != null) {
                 val wasImpostor = ejected in room.impostorIds
