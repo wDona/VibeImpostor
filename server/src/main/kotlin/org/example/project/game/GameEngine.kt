@@ -180,14 +180,14 @@ object GameEngine {
                 room.state = RoomState.FINISHED
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
+                val nobodyVoters = room.votes.entries.filter { it.value == NOBODY_VOTE_ID }.map { it.key }
                 if (impostorsExist) {
                     room.impostorIds.forEach { id -> room.players.find { it.id == id }?.score++ }
                     room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
                     return Pair(NOBODY_VOTE_ID, true)
                 } else {
-                    val innocents = room.players.filterNot { it.id in room.impostorIds }
-                    innocents.forEach { it.score++ }
-                    room.lastWinners = innocents.map { it.id }
+                    nobodyVoters.forEach { id -> room.players.find { it.id == id }?.score++ }
+                    room.lastWinners = nobodyVoters
                     return Pair(NOBODY_VOTE_ID, false)
                 }
             }

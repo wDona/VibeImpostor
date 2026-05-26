@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.project.i18n.Strings
 import org.example.project.model.RoomSnapshot
+import org.example.project.protocol.NOBODY_VOTE_ID
 
 private val voteColors = listOf(
     Color(0xFF1565C0),
@@ -31,7 +32,10 @@ private val voteColors = listOf(
 fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String, anonymousVotes: Boolean = false) {
     if (votes.isEmpty()) return
 
-    fun nameOf(id: String): String = room.players.find { it.id == id }?.name ?: "?"
+    fun nameOf(id: String): String = when (id) {
+        NOBODY_VOTE_ID -> Strings.get("voting_nobody_name", language)
+        else -> room.players.find { it.id == id }?.name ?: "?"
+    }
 
     val targets = votes.values.distinct().sortedBy { nameOf(it) }
 

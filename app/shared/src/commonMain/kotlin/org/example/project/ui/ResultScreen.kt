@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import org.example.project.protocol.NOBODY_VOTE_ID
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,7 +58,10 @@ fun ResultScreen(viewModel: GameViewModel) {
         )
 
         state.value.votingResult?.let { (ejectedId, wasImpostor) ->
-            val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "Unknown"
+            val ejectedName = when (ejectedId) {
+                NOBODY_VOTE_ID -> Strings.get("voting_nobody_name", language)
+                else -> room.players.find { it.id == ejectedId }?.name ?: "?"
+            }
             val impostorsWon = room.lastWinners.isNotEmpty() && room.lastWinners.all { it in room.impostorIds }
 
             Card(
