@@ -170,17 +170,17 @@ object GameEngine {
                 // Win on first ejection mode
                 if (room.config.winOnFirstEjection) {
                     if (wasImpostor) {
-                        val winners = room.players.filterNot { it.id in room.impostorIds }
-                        winners.forEach { it.score++ }
-                        room.state = RoomState.FINISHED
-                        room.players.forEach { it.isSpectator = false }
-                        room.roundNumber = 1
+                        room.pendingGuessImpostorId = ejected
+                        room.impostorGuesses = emptyMap()
+                        room.state = RoomState.IMPOSTORS_GUESSING
+                        println("[checkVotingEnd] winOnFirstEjection IMPOSTOR EJECTED pending=$ejected state=${room.state}")
                         return Pair(ejected, true)
                     } else {
                         room.impostorIds.forEach { id ->
                             val player = room.players.find { it.id == id }
                             if (player != null) player.score++
                         }
+                        room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
                         room.state = RoomState.FINISHED
                         room.players.forEach { it.isSpectator = false }
                         room.roundNumber = 1

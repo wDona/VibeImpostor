@@ -57,7 +57,7 @@ fun ResultScreen(viewModel: GameViewModel) {
 
         state.value.votingResult?.let { (ejectedId, wasImpostor) ->
             val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "Unknown"
-            val impostorsWon = room.lastWinners.all { it in room.impostorIds }
+            val impostorsWon = room.lastWinners.isNotEmpty() && room.lastWinners.all { it in room.impostorIds }
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,8 +96,11 @@ fun ResultScreen(viewModel: GameViewModel) {
 
         val sortedPlayers = room.players.sortedByDescending { it.score }
         val topScore = sortedPlayers.firstOrNull()?.score ?: 0
+        val highlightIds = if (room.lastWinners.isNotEmpty()) room.lastWinners.toSet()
+                           else if (topScore > 0) sortedPlayers.filter { it.score == topScore }.map { it.id }.toSet()
+                           else emptySet()
         sortedPlayers.forEach { player ->
-            val isWinner = player.score == topScore && topScore > 0
+            val isWinner = player.id in highlightIds
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = if (isWinner)
