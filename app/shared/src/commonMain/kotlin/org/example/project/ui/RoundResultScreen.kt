@@ -3,9 +3,12 @@ package org.example.project.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -23,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.project.GameViewModel
@@ -160,51 +162,74 @@ fun RoundResultScreen(viewModel: GameViewModel) {
 
         VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes)
 
-        if (mustContinue) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        // Continue progress card (always visible)
+        val continuedIds = room.continueResponses
+        val requiredToContnue = room.players
+            .filter { !it.isSpectator || it.id == room.pendingGuessImpostorId }
+        val doneCount = continuedIds.size
+        val totalCount = requiredToContnue.size
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    if (!userContinued.value) {
-                        Button(
-                            onClick = {
-                                userContinued.value = true
-                                viewModel.continueRound()
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("${Strings.get("common_continue", language)} (${secondsLeft.value}s)")
-                        }
-                        if (isPendingImpostor) {
-                            Text(
-                                text = Strings.get("impostor_guess_after_continue_hint", language),
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    } else {
+                Text(
+                    text = "${Strings.get("common_continue", language)}: $doneCount/$totalCount",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                requiredToContnue.forEach { player ->
+                    val hasContinued = player.id in continuedIds
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
-                            text = Strings.get("waiting_others_continue", language),
+                            text = player.name,
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
+                            color = if (hasContinued)
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            else
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = if (hasContinued) "✓" else "...",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (hasContinued) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                        )
+                    }
+                }
+
+                if (mustContinue && !userContinued.value) {
+                    Button(
+                        onClick = {
+                            userContinued.value = true
+                            viewModel.continueRound()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("${Strings.get("common_continue", language)} (${secondsLeft.value}s)")
+                    }
+                    if (isPendingImpostor) {
+                        Text(
+                            text = Strings.get("impostor_guess_after_continue_hint", language),
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             }
-        } else {
-            Text(
-                text = Strings.get("waiting_others_continue", language),
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 8.dp),
-                textAlign = TextAlign.Center
-            )
         }
 
         LeaveGameButton(viewModel, language)

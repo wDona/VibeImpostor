@@ -125,7 +125,7 @@ object GameEngine {
         room.mutex.lock()
         try {
             val active = room.activePlayers()
-            if (active.size < 2) return null
+            if (active.size < 2 || room.config.numImpostors < 2) return null
             val others = active.filter { it.id != voterId }
             val allOthersAreImpostors = others.all { it.id in room.impostorIds }
 

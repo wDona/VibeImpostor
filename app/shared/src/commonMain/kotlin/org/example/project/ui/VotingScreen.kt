@@ -199,20 +199,16 @@ fun VotingScreen(viewModel: GameViewModel) {
                     ) {
                         Text(Strings.get("voting_nobody", language), fontSize = 15.sp)
                     }
-                }
-
-                if (activePlayers.size >= 2) {
-                    if (room.config.numImpostors < 2) {
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-                    }
-                    OutlinedButton(
-                        onClick = {
-                            viewModel.castVote(BOTH_IMPOSTORS_ID)
-                            // Don't set voted=true: wrong guess eliminates voter, correct guess ends game
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(Strings.get("voting_both_impostors", language), fontSize = 15.sp)
+                    if (activePlayers.size >= 2) {
+                        OutlinedButton(
+                            onClick = {
+                                viewModel.castVote(BOTH_IMPOSTORS_ID)
+                                // Don't set voted=true: wrong guess eliminates voter, correct guess ends game
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(Strings.get("voting_both_impostors", language), fontSize = 15.sp)
+                        }
                     }
                 }
             }

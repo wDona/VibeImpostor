@@ -423,7 +423,8 @@ private fun Room.getRoomSnapshot(): RoomSnapshot {
         impostorIds = this.impostorIds,
         impostorGuesses = this.impostorGuesses,
         pendingGuessImpostorId = this.pendingGuessImpostorId,
-        lastWinners = this.lastWinners
+        lastWinners = this.lastWinners,
+        continueResponses = this.continueResponses
     )
 }
 
