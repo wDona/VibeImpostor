@@ -187,12 +187,12 @@ fun VotingScreen(viewModel: GameViewModel) {
                         }
                     }
 
-                if (activePlayers.size == 3) {
+                if (activePlayers.size >= 2) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = {
                             viewModel.castVote(BOTH_IMPOSTORS_ID)
-                            // Don't set voted=true: if wrong guess, server ignores and player can re-vote
+                            // Don't set voted=true: wrong guess eliminates voter, correct guess ends game
                         },
                         modifier = Modifier
                             .fillMaxWidth()

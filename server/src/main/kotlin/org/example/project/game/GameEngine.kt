@@ -124,17 +124,41 @@ object GameEngine {
         room.mutex.lock()
         try {
             val active = room.activePlayers()
-            if (active.size != 3) return null
-            if (voterId in room.impostorIds) return null
+            if (active.size < 2) return null
             val others = active.filter { it.id != voterId }
-            if (!others.all { it.id in room.impostorIds }) return null
-            // Innocent correctly identified both impostors
-            room.players.find { it.id == voterId }?.score += 5
-            room.lastWinners = listOf(voterId)
-            room.state = RoomState.FINISHED
-            room.players.forEach { it.isSpectator = false }
-            room.roundNumber = 1
-            return Pair(BOTH_IMPOSTORS_ID, false)
+            val allOthersAreImpostors = others.all { it.id in room.impostorIds }
+
+            if (allOthersAreImpostors) {
+                room.players.find { it.id == voterId }?.score += 5
+                room.lastWinners = listOf(voterId)
+                room.state = RoomState.FINISHED
+                room.players.forEach { it.isSpectator = false }
+                room.roundNumber = 1
+                return Pair(BOTH_IMPOSTORS_ID, false)
+            } else {
+                val voterWasImpostor = voterId in room.impostorIds
+                room.players.find { it.id == voterId }?.isSpectator = true
+                room.lastRoundVotes = emptyMap()
+
+                val activeNow = room.activePlayers()
+                if (activeNow.size < MIN_PLAYERS) {
+                    val activeImpostors = activeNow.filter { it.id in room.impostorIds }
+                    if (activeImpostors.isNotEmpty()) {
+                        activeImpostors.forEach { it.score += 5 }
+                        room.lastWinners = activeImpostors.map { it.id }
+                    } else {
+                        activeNow.forEach { it.score += 5 }
+                        room.lastWinners = activeNow.map { it.id }
+                    }
+                    room.state = RoomState.FINISHED
+                    room.players.forEach { it.isSpectator = false }
+                    room.roundNumber = 1
+                } else {
+                    room.resetForNewRound()
+                    room.state = RoomState.IN_GAME
+                }
+                return Pair(voterId, voterWasImpostor)
+            }
         } finally {
             room.mutex.unlock()
         }
