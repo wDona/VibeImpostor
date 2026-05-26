@@ -14,9 +14,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,10 +36,22 @@ fun RoundResultScreen(viewModel: GameViewModel) {
     val language = state.value.settings.language
 
     var userContinued = remember { mutableStateOf(false) }
+    val secondsLeft = remember { mutableStateOf(30) }
     val yourId = state.value.yourPlayerId
     val amSpectator = room.players.find { it.id == yourId }?.isSpectator == true
     val isPendingImpostor = yourId != null && yourId == room.pendingGuessImpostorId
     val mustContinue = !amSpectator || isPendingImpostor
+
+    LaunchedEffect(Unit) {
+        while (secondsLeft.value > 0 && !userContinued.value) {
+            delay(1000)
+            secondsLeft.value--
+        }
+        if (!userContinued.value && mustContinue) {
+            userContinued.value = true
+            viewModel.continueRound()
+        }
+    }
 
     val bgColor = if (room.config.winOnFirstEjection) {
         state.value.votingResult?.let { (_, wasImpostor) ->
@@ -129,7 +143,7 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(Strings.get("common_continue", language))
+                            Text("${Strings.get("common_continue", language)} (${secondsLeft.value}s)")
                         }
                         if (isPendingImpostor) {
                             Text(

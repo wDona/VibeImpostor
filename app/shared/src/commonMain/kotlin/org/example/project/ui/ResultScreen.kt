@@ -14,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -101,23 +102,42 @@ fun ResultScreen(viewModel: GameViewModel) {
                            else emptySet()
         sortedPlayers.forEach { player ->
             val isWinner = player.id in highlightIds
+            val isLivingImpostor = player.id in room.impostorIds && !player.isSpectator
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = if (isWinner)
-                    CardDefaults.cardColors(containerColor = Color(0xFFFDD835).copy(alpha = 0.3f))
+                    CardDefaults.cardColors(containerColor = Color(0xFF2E7D32).copy(alpha = 0.18f))
                 else
                     CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
-                Text(
-                    text = if (isWinner) {
-                        "${player.name}: ${player.score} pts  - ${Strings.get("result_winner", language)}"
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                ) {
+                    if (isWinner) {
+                        Text(
+                            text = "🏆 ${player.name}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1B5E20)
+                        )
+                        Text(
+                            text = "${player.score} pts · ${Strings.get("result_winner", language)}",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF2E7D32)
+                        )
                     } else {
-                        "${player.name}: ${player.score} pts"
-                    },
-                    modifier = Modifier.padding(12.dp),
-                    fontSize = 16.sp,
-                    fontWeight = if (isWinner) FontWeight.Bold else FontWeight.Normal
-                )
+                        Text(
+                            text = "${player.name}: ${player.score} pts",
+                            fontSize = 16.sp,
+                            fontWeight = if (isLivingImpostor) FontWeight.Bold else FontWeight.Normal,
+                            color = if (isLivingImpostor) Color(0xFFD32F2F)
+                            else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
         }
 
@@ -132,7 +152,7 @@ fun ResultScreen(viewModel: GameViewModel) {
             Text(Strings.get("result_play_again", language))
         }
 
-        Button(
+        OutlinedButton(
             onClick = { viewModel.backToLobby() },
             modifier = Modifier
                 .fillMaxWidth()
