@@ -121,7 +121,7 @@ fun ResultScreen(viewModel: GameViewModel) {
                 ) {
                     if (isWinner) {
                         Text(
-                            text = "🏆 ${player.name}",
+                            text = player.name,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF1B5E20)

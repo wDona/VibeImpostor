@@ -103,7 +103,7 @@ object GameEngine {
             } else {
                 room.impostorIds.forEach { id ->
                     val player = room.players.find { it.id == id }
-                    if (player != null) player.score++
+                    if (player != null) player.score += 5
                 }
                 room.resetForNewRound()
                 val newActive = room.activePlayers()
@@ -129,7 +129,7 @@ object GameEngine {
             val others = active.filter { it.id != voterId }
             if (!others.all { it.id in room.impostorIds }) return null
             // Innocent correctly identified both impostors
-            room.players.find { it.id == voterId }?.score++
+            room.players.find { it.id == voterId }?.score += 5
             room.lastWinners = listOf(voterId)
             room.state = RoomState.FINISHED
             room.players.forEach { it.isSpectator = false }
@@ -182,11 +182,11 @@ object GameEngine {
                 room.roundNumber = 1
                 val nobodyVoters = room.votes.entries.filter { it.value == NOBODY_VOTE_ID }.map { it.key }
                 if (impostorsExist) {
-                    room.impostorIds.forEach { id -> room.players.find { it.id == id }?.score++ }
+                    room.impostorIds.forEach { id -> room.players.find { it.id == id }?.score += 5 }
                     room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
                     return Pair(NOBODY_VOTE_ID, true)
                 } else {
-                    nobodyVoters.forEach { id -> room.players.find { it.id == id }?.score++ }
+                    nobodyVoters.forEach { id -> room.players.find { it.id == id }?.score += 5 }
                     room.lastWinners = nobodyVoters
                     return Pair(NOBODY_VOTE_ID, false)
                 }
@@ -209,7 +209,7 @@ object GameEngine {
                     } else {
                         room.impostorIds.forEach { id ->
                             val player = room.players.find { it.id == id }
-                            if (player != null) player.score++
+                            if (player != null) player.score += 5
                         }
                         room.lastWinners = room.players.filter { it.id in room.impostorIds }.map { it.id }
                         room.state = RoomState.FINISHED
@@ -229,14 +229,14 @@ object GameEngine {
 
                 room.impostorIds.forEach { id ->
                     val player = room.players.find { it.id == id }
-                    if (player != null) player.score++
+                    if (player != null) player.score += 5
                 }
 
                 val activeNow = room.activePlayers()
                 val activeImpostors = activeNow.count { it.id in room.impostorIds }
 
                 if (activeNow.size <= 2) {
-                    activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
+                    activeNow.filter { it.id in room.impostorIds }.forEach { it.score += 5 }
                     room.state = RoomState.FINISHED
                     room.players.forEach { it.isSpectator = false }
                     room.roundNumber = 1
@@ -295,7 +295,7 @@ object GameEngine {
             room.pendingGuessImpostorId = null
 
             if (guessedCorrect) {
-                room.players.filter { it.id in room.impostorIds }.forEach { it.score++ }
+                room.players.filter { it.id in room.impostorIds }.forEach { it.score += 5 }
                 room.state = RoomState.FINISHED
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
@@ -309,7 +309,7 @@ object GameEngine {
 
             if (activeImpostors == 0) {
                 val winners = room.players.filterNot { it.id in room.impostorIds }
-                winners.forEach { it.score++ }
+                winners.forEach { it.score += 5 }
                 room.state = RoomState.FINISHED
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
@@ -319,7 +319,7 @@ object GameEngine {
             }
 
             if (activeNow.size <= 2) {
-                activeNow.filter { it.id in room.impostorIds }.forEach { it.score++ }
+                activeNow.filter { it.id in room.impostorIds }.forEach { it.score += 5 }
                 room.state = RoomState.FINISHED
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1

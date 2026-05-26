@@ -192,7 +192,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                     Button(
                         onClick = {
                             viewModel.castVote(BOTH_IMPOSTORS_ID)
-                            voted.value = true
+                            // Don't set voted=true: if wrong guess, server ignores and player can re-vote
                         },
                         modifier = Modifier
                             .fillMaxWidth()
