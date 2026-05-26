@@ -14,6 +14,7 @@ import org.example.project.model.RoomSnapshot
 import org.example.project.model.RoomState
 import org.example.project.model.MAX_PLAYERS
 import org.example.project.model.MIN_PLAYERS
+import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ProtocolJson
 import org.example.project.protocol.ServerMessage
@@ -152,11 +153,19 @@ fun Route.gameServer() {
 
                     is ClientMessage.CastVote -> {
                         if (room != null && player != null && !player.isSpectator) {
-                            GameEngine.castVote(room, player.id, message.targetPlayerId)
-                            broadcastServerMessage(room, ServerMessage.VoteCast(player.id))
-                            val result = GameEngine.checkVotingEnd(room)
-                            if (result != null) {
-                                afterVotingResolved(room, result)
+                            if (message.targetPlayerId == BOTH_IMPOSTORS_ID) {
+                                val result = GameEngine.checkBothImpostorsVote(room, player.id)
+                                if (result != null) {
+                                    afterVotingResolved(room, result)
+                                }
+                                // If null (wrong guess), vote is silently ignored — game continues
+                            } else {
+                                GameEngine.castVote(room, player.id, message.targetPlayerId)
+                                broadcastServerMessage(room, ServerMessage.VoteCast(player.id))
+                                val result = GameEngine.checkVotingEnd(room)
+                                if (result != null) {
+                                    afterVotingResolved(room, result)
+                                }
                             }
                         }
                     }

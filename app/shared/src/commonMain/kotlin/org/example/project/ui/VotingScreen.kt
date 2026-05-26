@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
+import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
 
 @Composable
@@ -185,6 +186,24 @@ fun VotingScreen(viewModel: GameViewModel) {
                             Text(player.name, fontSize = 16.sp)
                         }
                     }
+
+                if (activePlayers.size == 3) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            viewModel.castVote(BOTH_IMPOSTORS_ID)
+                            voted.value = true
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF1565C0)
+                        )
+                    ) {
+                        Text(Strings.get("voting_both_impostors", language), fontSize = 16.sp)
+                    }
+                }
 
                 if (room.config.numImpostors >= 2) {
                     Spacer(modifier = Modifier.height(8.dp))

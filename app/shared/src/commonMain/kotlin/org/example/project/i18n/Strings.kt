@@ -145,7 +145,9 @@ object Strings {
             "voting_progress" to "Votos",
             "voting_nobody" to "Nadie es el impostor",
             "voting_nobody_wrong" to "¡Había impostores! Los inocentes pierden.",
-            "voting_nobody_correct" to "¡Correcto! No había impostores. Ganan los inocentes."
+            "voting_nobody_correct" to "¡Correcto! No había impostores. Ganan los inocentes.",
+            "voting_both_impostors" to "Los otros dos son impostores",
+            "voting_both_correct" to "¡El inocente ha acertado! Los dos eran impostores."
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -286,7 +288,9 @@ object Strings {
             "voting_progress" to "Votes",
             "voting_nobody" to "Nobody is the impostor",
             "voting_nobody_wrong" to "There were impostors! Innocents lose.",
-            "voting_nobody_correct" to "Correct! There were no impostors. Innocents win."
+            "voting_nobody_correct" to "Correct! There were no impostors. Innocents win.",
+            "voting_both_impostors" to "The other two are impostors",
+            "voting_both_correct" to "The innocent was right! Both were impostors."
         )
     )
 }

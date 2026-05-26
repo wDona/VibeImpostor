@@ -4,6 +4,7 @@ import org.example.project.db.WordRepository
 import org.example.project.model.Role
 import org.example.project.model.RoomState
 import org.example.project.model.MIN_PLAYERS
+import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
 import kotlin.random.Random
 
@@ -114,6 +115,26 @@ object GameEngine {
             }
 
             return shouldVote
+        } finally {
+            room.mutex.unlock()
+        }
+    }
+
+    suspend fun checkBothImpostorsVote(room: Room, voterId: String): Pair<String?, Boolean>? {
+        room.mutex.lock()
+        try {
+            val active = room.activePlayers()
+            if (active.size != 3) return null
+            if (voterId in room.impostorIds) return null
+            val others = active.filter { it.id != voterId }
+            if (!others.all { it.id in room.impostorIds }) return null
+            // Innocent correctly identified both impostors
+            room.players.find { it.id == voterId }?.score++
+            room.lastWinners = listOf(voterId)
+            room.state = RoomState.FINISHED
+            room.players.forEach { it.isSpectator = false }
+            room.roundNumber = 1
+            return Pair(BOTH_IMPOSTORS_ID, false)
         } finally {
             room.mutex.unlock()
         }
