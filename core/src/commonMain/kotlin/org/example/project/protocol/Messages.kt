@@ -174,6 +174,7 @@ sealed interface ServerMessage {
 
 const val NOBODY_VOTE_ID = "__nobody__"
 const val BOTH_IMPOSTORS_ID = "__both__"
+const val WRONG_CLAIM_PREFIX = "__wrongclaim__"
 
 object ProtocolJson {
     val json = Json {

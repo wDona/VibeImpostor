@@ -30,6 +30,7 @@ import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
+import org.example.project.protocol.WRONG_CLAIM_PREFIX
 
 @Composable
 fun RoundResultScreen(viewModel: GameViewModel) {
@@ -130,6 +131,15 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                             text = Strings.get("voting_tie", language),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
+                        )
+                    } else if (ejectedId != null && ejectedId.startsWith(WRONG_CLAIM_PREFIX)) {
+                        val actualId = ejectedId.removePrefix(WRONG_CLAIM_PREFIX)
+                        val claimerName = room.players.find { it.id == actualId }?.name ?: "?"
+                        Text(
+                            text = Strings.get("voting_wrong_claim", language).replace("{name}", claimerName),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
                         )
                     } else {
                         val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "?"

@@ -149,7 +149,8 @@ object Strings {
             "voting_both_impostors" to "Los demás son todos impostores",
             "voting_both_correct" to "¡Acertó! Los demás eran impostores.",
             "voting_both_wrong" to "Equivocado. Queda eliminado.",
-            "voting_nobody_name" to "Nadie"
+            "voting_nobody_name" to "Nadie",
+            "voting_wrong_claim" to "¡{name} se creyó que era el único inocente!"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -294,7 +295,8 @@ object Strings {
             "voting_both_impostors" to "All others are impostors",
             "voting_both_correct" to "Correct! All others were impostors.",
             "voting_both_wrong" to "Wrong. You are eliminated.",
-            "voting_nobody_name" to "Nobody"
+            "voting_nobody_name" to "Nobody",
+            "voting_wrong_claim" to "{name} thought they were the last innocent!"
         )
     )
 }

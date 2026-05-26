@@ -6,6 +6,7 @@ import org.example.project.model.RoomState
 import org.example.project.model.MIN_PLAYERS
 import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
+import org.example.project.protocol.WRONG_CLAIM_PREFIX
 import kotlin.random.Random
 
 object GameEngine {
@@ -157,7 +158,7 @@ object GameEngine {
                     room.resetForNewRound()
                     room.state = RoomState.IN_GAME
                 }
-                return Pair(voterId, voterWasImpostor)
+                return Pair(WRONG_CLAIM_PREFIX + voterId, voterWasImpostor)
             }
         } finally {
             room.mutex.unlock()
