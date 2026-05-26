@@ -51,6 +51,7 @@ fun AppRoot() {
                     Screen.HOME -> HomeScreen(viewModel)
                     Screen.LOBBY -> LobbyScreen(viewModel)
                     Screen.GAME -> GameScreen(viewModel)
+                    Screen.ASK_VOTE -> AskVoteScreen(viewModel)
                     Screen.VOTING -> VotingScreen(viewModel)
                     Screen.ROUND_RESULT -> RoundResultScreen(viewModel)
                     Screen.IMPOSTOR_GUESSING -> ImpostorGuessingScreen(viewModel)

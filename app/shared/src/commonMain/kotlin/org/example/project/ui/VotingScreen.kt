@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,12 +46,19 @@ fun VotingScreen(viewModel: GameViewModel) {
         }
     }
 
+    val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
+    val voted = remember { mutableStateOf(false) }
+    val activePlayers = room.players.filter { !it.isSpectator }
+    val votedPlayerIds = state.value.votedPlayerIds
+    val votedCount = votedPlayerIds.size
+    val totalVoters = activePlayers.size
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -62,7 +71,7 @@ fun VotingScreen(viewModel: GameViewModel) {
             )
             Card(
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = 8.dp)
                     .align(Alignment.CenterHorizontally),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
             ) {
@@ -76,8 +85,44 @@ fun VotingScreen(viewModel: GameViewModel) {
             }
         }
 
-        val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
-        val voted = remember { mutableStateOf(false) }
+        // Vote progress card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(
+                    text = "${Strings.get("voting_progress", language)}: $votedCount/$totalVoters",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+                activePlayers.forEach { player ->
+                    val hasVoted = player.id in votedPlayerIds
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = player.name,
+                            fontSize = 14.sp,
+                            color = if (hasVoted)
+                                MaterialTheme.colorScheme.onSurface
+                            else
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        )
+                        Text(
+                            text = if (hasVoted) "✓" else "...",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (hasVoted) Color(0xFF4CAF50)
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                        )
+                    }
+                }
+            }
+        }
 
         if (amSpectator) {
             Card(
@@ -139,6 +184,7 @@ fun VotingScreen(viewModel: GameViewModel) {
             }
         }
 
+        Spacer(modifier = Modifier.height(4.dp))
         LeaveGameButton(viewModel, language)
     }
 }

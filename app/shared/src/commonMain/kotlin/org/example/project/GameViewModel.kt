@@ -21,9 +21,11 @@ import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ServerMessage
 import org.example.project.settings.SettingsStorage
 import org.example.project.settings.UserSettings
+import org.example.project.sound.AppSound
+import org.example.project.sound.SoundPlayer
 
 enum class Screen {
-    HOME, LOBBY, GAME, VOTING, ROUND_RESULT, IMPOSTOR_GUESSING, IMPOSTOR_GUESSING_RESULT, RESULT, SETTINGS, PACKS
+    HOME, LOBBY, GAME, ASK_VOTE, VOTING, ROUND_RESULT, IMPOSTOR_GUESSING, IMPOSTOR_GUESSING_RESULT, RESULT, SETTINGS, PACKS
 }
 
 data class GameState(
@@ -40,7 +42,9 @@ data class GameState(
     val lastRoundVotes: Map<String, String> = emptyMap(),
     val settings: UserSettings = UserSettings(),
     val askingForVote: Boolean = false,
-    val voteDeadlineMs: Long = 0L
+    val answeredAskVote: Boolean = false,
+    val voteDeadlineMs: Long = 0L,
+    val votedPlayerIds: Set<String> = emptySet()
     ,
     val debugMessages: List<String> = emptyList(),
     val connecting: Boolean = false,
@@ -287,7 +291,7 @@ class GameViewModel : ViewModel() {
     }
 
     fun respondVote(wants: Boolean) {
-        _state.value = _state.value.copy(askingForVote = false)
+        _state.value = _state.value.copy(askingForVote = false, answeredAskVote = true)
         viewModelScope.launch { sendGameMessage(ClientMessage.AnswerWantVote(wants)) }
     }
 
@@ -390,6 +394,7 @@ class GameViewModel : ViewModel() {
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.ROUND_RESULT -> Screen.RESULT
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.GAME -> Screen.RESULT
                     msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.VOTING -> Screen.RESULT
+                    msg.room.state == RoomState.FINISHED && _state.value.screen == Screen.ASK_VOTE -> Screen.RESULT
                     msg.room.state == RoomState.IN_GAME && _state.value.screen == Screen.IMPOSTOR_GUESSING -> Screen.GAME
                     else -> _state.value.screen
                 }
@@ -415,12 +420,17 @@ class GameViewModel : ViewModel() {
                     votingResult = null,
                     lastRoundVotes = emptyMap(),
                     askingForVote = false,
+                    answeredAskVote = false,
                     voteDeadlineMs = 0L,
+                    votedPlayerIds = emptySet(),
                     showEndGameDialog = false
                 )
             }
 
             is ServerMessage.TurnChanged -> {
+                if (msg.currentTurnPlayerId == _state.value.yourPlayerId) {
+                    SoundPlayer.play(AppSound.YOUR_TURN, _state.value.settings.soundEnabled)
+                }
                 _state.value = _state.value.copy(
                     room = _state.value.room?.copy(
                         currentTurnPlayerId = msg.currentTurnPlayerId,
@@ -436,14 +446,27 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.AskWantVote -> {
+                SoundPlayer.play(AppSound.VOTE_STARTED, _state.value.settings.soundEnabled)
                 _state.value = _state.value.copy(
                     askingForVote = true,
-                    voteDeadlineMs = msg.deadlineEpochMs
+                    answeredAskVote = false,
+                    voteDeadlineMs = msg.deadlineEpochMs,
+                    screen = Screen.ASK_VOTE
                 )
             }
 
             is ServerMessage.VotingStarted -> {
-                _state.value = _state.value.copy(screen = Screen.VOTING, voteDeadlineMs = msg.deadlineEpochMs)
+                _state.value = _state.value.copy(
+                    screen = Screen.VOTING,
+                    voteDeadlineMs = msg.deadlineEpochMs,
+                    votedPlayerIds = emptySet()
+                )
+            }
+
+            is ServerMessage.VoteCast -> {
+                _state.value = _state.value.copy(
+                    votedPlayerIds = _state.value.votedPlayerIds + msg.voterId
+                )
             }
 
             is ServerMessage.VotingResult -> {
@@ -490,6 +513,7 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.RematchStarted -> {
+                SoundPlayer.play(AppSound.REMATCH, _state.value.settings.soundEnabled)
                 _state.value = _state.value.copy(
                     screen = Screen.RESULT,
                     room = msg.room,

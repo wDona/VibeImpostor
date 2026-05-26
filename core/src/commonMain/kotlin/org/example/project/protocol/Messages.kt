@@ -167,6 +167,9 @@ sealed interface ServerMessage {
 
     @Serializable
     data object EndGameCancelled : ServerMessage
+
+    @Serializable
+    data class VoteCast(val voterId: String) : ServerMessage
 }
 
 object ProtocolJson {

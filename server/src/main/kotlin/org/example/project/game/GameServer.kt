@@ -153,6 +153,7 @@ fun Route.gameServer() {
                     is ClientMessage.CastVote -> {
                         if (room != null && player != null && !player.isSpectator) {
                             GameEngine.castVote(room, player.id, message.targetPlayerId)
+                            broadcastServerMessage(room, ServerMessage.VoteCast(player.id))
                             val result = GameEngine.checkVotingEnd(room)
                             if (result != null) {
                                 afterVotingResolved(room, result)

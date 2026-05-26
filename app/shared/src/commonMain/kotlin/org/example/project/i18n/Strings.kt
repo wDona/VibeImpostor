@@ -140,7 +140,9 @@ object Strings {
             "lobby_deselect_all_categories" to "Deseleccionar todo",
             "lobby_word_packs_selected" to "Paquetes de palabras",
             "lobby_word_packs_all" to "todos",
-            "lobby_enabled" to "Activado"
+            "lobby_enabled" to "Activado",
+            "ask_vote_waiting" to "Esperando decisión de los demás...",
+            "voting_progress" to "Votos"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -276,7 +278,9 @@ object Strings {
             "lobby_deselect_all_categories" to "Deselect all",
             "lobby_word_packs_selected" to "Word packs",
             "lobby_word_packs_all" to "all",
-            "lobby_enabled" to "Enabled"
+            "lobby_enabled" to "Enabled",
+            "ask_vote_waiting" to "Waiting for others to decide...",
+            "voting_progress" to "Votes"
         )
     )
 }

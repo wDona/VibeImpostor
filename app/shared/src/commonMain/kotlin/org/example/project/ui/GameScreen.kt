@@ -255,22 +255,5 @@ fun GameScreen(viewModel: GameViewModel) {
             )
         }
 
-        if (state.value.askingForVote && !amSpectator) {
-            androidx.compose.material3.AlertDialog(
-                onDismissRequest = { viewModel.respondVote(false) },
-                title = { Text(Strings.get("game_ask_vote_title", language)) },
-                text = { Text(Strings.get("game_ask_vote_text", language)) },
-                confirmButton = {
-                    Button(onClick = { viewModel.respondVote(true) }) {
-                        Text(Strings.get("common_yes", language))
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = { viewModel.respondVote(false) }) {
-                        Text(Strings.get("common_no", language))
-                    }
-                }
-            )
-        }
     }
 }
