@@ -142,16 +142,7 @@ object GameEngine {
                 return Pair(null, false)
             }
 
-            val nonVoters = active.filterNot { it in voted }
             val finalVotes = room.votes.toMutableMap()
-
-            if (nonVoters.isNotEmpty()) {
-                val voteCountByTarget = room.votes.values.groupingBy { it }.eachCount()
-                val maxTarget = voteCountByTarget.maxByOrNull { it.value }?.key
-                if (maxTarget != null) {
-                    nonVoters.forEach { finalVotes[it] = maxTarget }
-                }
-            }
 
             val voteCountByTarget = finalVotes.values.groupingBy { it }.eachCount()
             val maxCount = voteCountByTarget.maxOf { it.value }

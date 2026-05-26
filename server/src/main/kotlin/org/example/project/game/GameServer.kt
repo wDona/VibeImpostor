@@ -112,7 +112,7 @@ fun Route.gameServer() {
                         if (room != null && player != null) {
                             val newState = GameEngine.endTurn(room, player.id)
                             if (newState == RoomState.ASK_VOTE) {
-                                val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
+                                val deadline = System.currentTimeMillis() + ASK_VOTE_TIMEOUT_MS
                                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
                                 startVoteTimer(room)
                             } else if (newState == RoomState.IN_GAME) {
@@ -130,7 +130,7 @@ fun Route.gameServer() {
                             broadcastServerMessage(room, ServerMessage.WordPlayed(player.id, message.text))
 
                             if (newState == RoomState.ASK_VOTE) {
-                                val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
+                                val deadline = System.currentTimeMillis() + ASK_VOTE_TIMEOUT_MS
                                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
                                 startVoteTimer(room)
                             } else if (newState == RoomState.IN_GAME) {
@@ -569,11 +569,15 @@ private suspend fun handleAnswerEndGame(room: Room, player: Player, agrees: Bool
     }
 }
 
+private const val ASK_VOTE_TIMEOUT_MS = 30_000L
+
 private suspend fun startVoteTimer(room: Room) {
     room.voteTimerJob?.cancel()
     val phase = room.state
+    val delayMs = if (phase == RoomState.ASK_VOTE) ASK_VOTE_TIMEOUT_MS
+                  else room.config.voteTimeLimitSeconds * 1000L
     room.voteTimerJob = RoomManager.scope.launch {
-        delay(room.config.voteTimeLimitSeconds * 1000L)
+        delay(delayMs)
         if (room.state != phase) return@launch
         when (phase) {
             RoomState.ASK_VOTE -> {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,7 +39,7 @@ fun VotingScreen(viewModel: GameViewModel) {
     val room = state.value.room ?: return
     val language = state.value.settings.language
 
-    val secondsLeft = remember { mutableStateOf(60) }
+    val secondsLeft = remember { mutableStateOf(room.config.voteTimeLimitSeconds) }
     LaunchedEffect(Unit) {
         while (secondsLeft.value > 0) {
             delay(1000)
@@ -101,7 +102,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                     val hasVoted = player.id in votedPlayerIds
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -112,6 +113,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                             else
                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = if (hasVoted) "✓" else "...",
                             fontSize = 14.sp,

@@ -39,7 +39,7 @@ fun AskVoteScreen(viewModel: GameViewModel) {
     val language = state.value.settings.language
     val answered = state.value.answeredAskVote
 
-    val secondsLeft = remember { mutableStateOf(room.config.voteTimeLimitSeconds) }
+    val secondsLeft = remember { mutableStateOf(30) }
     LaunchedEffect(Unit) {
         while (secondsLeft.value > 0) {
             delay(1000)
