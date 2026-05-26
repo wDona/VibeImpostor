@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,6 +64,7 @@ fun VotingScreen(viewModel: GameViewModel) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // Title + timer
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -74,9 +75,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                 fontWeight = FontWeight.Bold
             )
             Card(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.padding(top = 8.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
             ) {
                 Text(
@@ -89,17 +88,17 @@ fun VotingScreen(viewModel: GameViewModel) {
             }
         }
 
-        // Vote progress card
+        // Vote progress
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-            shape = RoundedCornerShape(12.dp)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
                     text = "${Strings.get("voting_progress", language)}: $votedCount/$totalVoters",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 activePlayers.forEach { player ->
                     val hasVoted = player.id in votedPlayerIds
@@ -112,23 +111,24 @@ fun VotingScreen(viewModel: GameViewModel) {
                             text = player.name,
                             fontSize = 14.sp,
                             color = if (hasVoted)
-                                MaterialTheme.colorScheme.onSurface
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             else
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = if (hasVoted) "✓" else "...",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (hasVoted) Color(0xFF4CAF50)
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                            color = if (hasVoted) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
                         )
                     }
                 }
             }
         }
 
+        // Main content
         if (amSpectator) {
             Card(
                 modifier = Modifier
@@ -143,7 +143,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(Strings.get("voting_spectator", language), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    Text(Strings.get("voting_spectator", language), fontSize = 16.sp)
                 }
             }
         } else if (voted.value) {
@@ -160,7 +160,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(Strings.get("voting_voted", language), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    Text(Strings.get("voting_voted", language), fontSize = 16.sp)
                 }
             }
         } else {
@@ -171,6 +171,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // Regular player buttons
                 room.players
                     .filter { it.id != state.value.yourPlayerId && !it.isSpectator }
                     .forEach { player ->
@@ -181,51 +182,42 @@ fun VotingScreen(viewModel: GameViewModel) {
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp)
+                                .padding(vertical = 2.dp)
                         ) {
                             Text(player.name, fontSize = 16.sp)
                         }
                     }
 
-                if (activePlayers.size >= 2) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            viewModel.castVote(BOTH_IMPOSTORS_ID)
-                            // Don't set voted=true: wrong guess eliminates voter, correct guess ends game
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF1565C0)
-                        )
-                    ) {
-                        Text(Strings.get("voting_both_impostors", language), fontSize = 16.sp)
-                    }
-                }
-
                 if (room.config.numImpostors >= 2) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                    OutlinedButton(
                         onClick = {
                             viewModel.castVote(NOBODY_VOTE_ID)
                             voted.value = true
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF616161)
-                        )
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(Strings.get("voting_nobody", language), fontSize = 16.sp)
+                        Text(Strings.get("voting_nobody", language), fontSize = 15.sp)
+                    }
+                }
+
+                if (activePlayers.size >= 2) {
+                    if (room.config.numImpostors < 2) {
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.castVote(BOTH_IMPOSTORS_ID)
+                            // Don't set voted=true: wrong guess eliminates voter, correct guess ends game
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(Strings.get("voting_both_impostors", language), fontSize = 15.sp)
                     }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(4.dp))
         LeaveGameButton(viewModel, language)
     }
 }

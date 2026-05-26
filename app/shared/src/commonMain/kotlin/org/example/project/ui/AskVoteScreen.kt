@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -59,14 +57,14 @@ fun AskVoteScreen(viewModel: GameViewModel) {
 
         Text(
             text = Strings.get("game_ask_vote_title", language),
-            fontSize = 36.sp,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
 
         Text(
             text = Strings.get("game_ask_vote_text", language),
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
         )
@@ -90,13 +88,11 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                 onClick = { viewModel.respondVote(true) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF388E3C))
+                    .height(56.dp)
             ) {
                 Text(
                     text = Strings.get("common_yes", language),
-                    fontSize = 22.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -105,8 +101,7 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                 onClick = { viewModel.respondVote(false) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(16.dp)
+                    .height(56.dp)
             ) {
                 Text(
                     text = Strings.get("common_no", language),
@@ -116,8 +111,7 @@ fun AskVoteScreen(viewModel: GameViewModel) {
         } else {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                shape = RoundedCornerShape(16.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Text(
                     text = Strings.get("ask_vote_waiting", language),

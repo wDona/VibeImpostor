@@ -57,7 +57,8 @@ fun RoundResultScreen(viewModel: GameViewModel) {
 
     val bgColor = if (room.config.winOnFirstEjection) {
         state.value.votingResult?.let { (_, wasImpostor) ->
-            if (wasImpostor) Color(0xFFFFCDD2) else Color(0xFFBBDEFB)
+            if (wasImpostor) Color(0xFFD32F2F).copy(alpha = 0.08f)
+            else Color(0xFF1976D2).copy(alpha = 0.08f)
         } ?: Color.Transparent
     } else {
         Color.Transparent
@@ -87,7 +88,8 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
                     containerColor = if (ejectedId != null) {
-                        if (wasImpostor) Color(0xFFFFCDD2) else Color(0xFFBBDEFB)
+                        if (wasImpostor) Color(0xFFD32F2F).copy(alpha = 0.12f)
+                        else Color(0xFF1976D2).copy(alpha = 0.12f)
                     } else {
                         MaterialTheme.colorScheme.surfaceVariant
                     }
