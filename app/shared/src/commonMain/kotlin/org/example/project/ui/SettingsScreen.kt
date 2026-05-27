@@ -7,18 +7,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.runtime.Composable
@@ -47,30 +48,30 @@ fun SettingsScreen(viewModel: GameViewModel) {
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = Strings.get("settings_title", language),
             fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
+            fontWeight = FontWeight.Black,
+            letterSpacing = 1.sp,
+            modifier = Modifier.padding(bottom = 4.dp, top = 4.dp)
         )
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Language
+        GameCard(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = Strings.get("settings_language", language),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 )
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            viewModel.updateSettings(settings.copy(language = "es"))
-                        }
-                        .padding(8.dp),
+                        .clickable { viewModel.updateSettings(settings.copy(language = "es")) }
+                        .padding(vertical = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -84,10 +85,8 @@ fun SettingsScreen(viewModel: GameViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            viewModel.updateSettings(settings.copy(language = "en"))
-                        }
-                        .padding(8.dp),
+                        .clickable { viewModel.updateSettings(settings.copy(language = "en")) }
+                        .padding(vertical = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -100,35 +99,47 @@ fun SettingsScreen(viewModel: GameViewModel) {
             }
         }
 
-        Card(modifier = Modifier.fillMaxWidth()) {
+        // Account
+        GameCard(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
                     text = Strings.get("settings_account", language),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 )
 
                 val authUser = state.value.authUsername
                 if (authUser != null) {
                     Text("${Strings.get("auth_logged_as", language)}: $authUser")
-                    OutlinedButton(onClick = { viewModel.logout() }) {
+                    OutlinedButton(
+                        onClick = { viewModel.logout() },
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
                         Text(Strings.get("auth_logout", language))
                     }
-                    OutlinedButton(onClick = { viewModel.openPacks() }) {
+                    OutlinedButton(
+                        onClick = { viewModel.openPacks() },
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
                         Text(Strings.get("settings_packs", language))
                     }
                 } else {
                     val username = remember { mutableStateOf("") }
                     val password = remember { mutableStateOf("") }
                     val showPassword = remember { mutableStateOf(false) }
-                    Text(Strings.get("auth_guest", language))
-                    TextField(
+                    Text(
+                        Strings.get("auth_guest", language),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        fontSize = 14.sp
+                    )
+                    OutlinedTextField(
                         value = username.value,
                         onValueChange = { username.value = it },
                         label = { Text(Strings.get("auth_username", language)) },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp)
                     )
-                    TextField(
+                    OutlinedTextField(
                         value = password.value,
                         onValueChange = { password.value = it },
                         label = { Text(Strings.get("auth_password", language)) },
@@ -147,25 +158,32 @@ fun SettingsScreen(viewModel: GameViewModel) {
                                 )
                             }
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp)
                     )
                     val authMessage = state.value.authMessage
                     if (authMessage != null) {
-                        Text(authMessage, color = MaterialTheme.colorScheme.error)
+                        Text(authMessage, color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
                     }
                     if (state.value.authBusy) {
-                        Text(Strings.get("auth_loading", language))
+                        Text(
+                            Strings.get("auth_loading", language),
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            fontSize = 13.sp
+                        )
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(
                             onClick = { viewModel.login(username.value, password.value) },
-                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy
+                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy,
+                            shape = RoundedCornerShape(10.dp)
                         ) {
                             Text(Strings.get("auth_login", language))
                         }
                         OutlinedButton(
                             onClick = { viewModel.register(username.value, password.value) },
-                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy
+                            enabled = username.value.isNotBlank() && password.value.isNotBlank() && !state.value.authBusy,
+                            shape = RoundedCornerShape(10.dp)
                         ) {
                             Text(Strings.get("auth_register", language))
                         }
@@ -174,21 +192,22 @@ fun SettingsScreen(viewModel: GameViewModel) {
             }
         }
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Theme
+        GameCard(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = Strings.get("settings_theme", language),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 )
-
                 ThemeOption("light", Strings.get("settings_light", language), settings, language, viewModel)
                 ThemeOption("dark", Strings.get("settings_dark", language), settings, language, viewModel)
                 ThemeOption("system", Strings.get("settings_system", language), settings, language, viewModel)
             }
         }
 
-        Card(modifier = Modifier.fillMaxWidth()) {
+        // Sound
+        GameCard(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -199,7 +218,7 @@ fun SettingsScreen(viewModel: GameViewModel) {
                 Text(
                     text = Strings.get("settings_sound", language),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 )
                 Switch(
                     checked = settings.soundEnabled,
@@ -214,9 +233,15 @@ fun SettingsScreen(viewModel: GameViewModel) {
             onClick = { viewModel.closeSettings() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .height(52.dp)
+                .padding(top = 8.dp),
+            shape = RoundedCornerShape(12.dp)
         ) {
-            Text(Strings.get("settings_back", language))
+            Text(
+                Strings.get("settings_back", language),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
         }
     }
 }
@@ -238,10 +263,8 @@ private fun ThemeOption(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                viewModel.updateSettings(settings.copy(theme = theme))
-            }
-            .padding(8.dp),
+            .clickable { viewModel.updateSettings(settings.copy(theme = theme)) }
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

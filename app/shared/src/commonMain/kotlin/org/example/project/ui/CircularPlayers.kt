@@ -53,7 +53,7 @@ fun CircularPlayers(
                     containerColor = if (isCurrent)
                         MaterialTheme.colorScheme.tertiary
                     else
-                        MaterialTheme.colorScheme.surfaceVariant
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                 )
             ) {
                 Column(

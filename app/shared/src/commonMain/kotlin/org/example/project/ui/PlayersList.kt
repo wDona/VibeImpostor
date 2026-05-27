@@ -1,10 +1,13 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +33,7 @@ fun PlayersList(
     val eliminatedPlayers = players.filter { it.isSpectator }
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (activePlayers.isNotEmpty()) {
@@ -52,8 +55,10 @@ fun PlayersList(
         if (eliminatedPlayers.isNotEmpty()) {
             Text(
                 "Eliminados",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 11.sp,
+                letterSpacing = 1.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 modifier = Modifier.padding(top = 8.dp)
             )
             FlowRow(
@@ -79,27 +84,32 @@ fun PlayerCard(
     isCurrent: Boolean,
     lastWord: String?
 ) {
+    val containerColor = when {
+        player.isSpectator -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
+        isCurrent -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
+    }
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth(0.45f),
-        colors = CardDefaults.cardColors(
-            containerColor = when {
-                player.isSpectator -> MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
-                isCurrent -> MaterialTheme.colorScheme.tertiary
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            }
+        modifier = Modifier.fillMaxWidth(0.45f),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isCurrent) 6.dp else 1.dp
         )
     ) {
         Column(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = player.name,
-                fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
-                fontSize = 14.sp,
+                fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,
+                fontSize = 13.sp,
                 color = if (player.isSpectator)
-                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+                else if (isCurrent)
+                    MaterialTheme.colorScheme.onTertiary
                 else
                     MaterialTheme.colorScheme.onSurface,
                 maxLines = 1
@@ -108,7 +118,10 @@ fun PlayerCard(
                 Text(
                     text = "\"$lastWord\"",
                     fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = if (isCurrent)
+                        MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.75f)
+                    else
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
                     maxLines = 1
                 )
             }

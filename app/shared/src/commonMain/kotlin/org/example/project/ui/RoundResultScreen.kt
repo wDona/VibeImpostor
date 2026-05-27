@@ -1,15 +1,21 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -26,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.project.GameViewModel
@@ -58,50 +65,43 @@ fun RoundResultScreen(viewModel: GameViewModel) {
         }
     }
 
-    val bgColor = if (room.config.winOnFirstEjection) {
-        state.value.votingResult?.let { (_, wasImpostor) ->
-            if (wasImpostor) Color(0xFFD32F2F).copy(alpha = 0.08f)
-            else Color(0xFF1976D2).copy(alpha = 0.08f)
-        } ?: Color.Transparent
-    } else {
-        Color.Transparent
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(bgColor)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = Strings.get("round_result_title", language),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        Text(
+            text = Strings.get("round_result_title", language),
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Black,
+            letterSpacing = 1.sp,
+            modifier = Modifier.padding(top = 4.dp)
+        )
 
         state.value.votingResult?.let { (ejectedId, wasImpostor) ->
+            val (cardBg, cardBorder) = when {
+                ejectedId == null -> Pair(
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.07f),
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                )
+                wasImpostor -> Pair(ImpostorRed.copy(alpha = 0.1f), ImpostorRed.copy(alpha = 0.35f))
+                else -> Pair(InnocentBlue.copy(alpha = 0.1f), InnocentBlue.copy(alpha = 0.35f))
+            }
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (ejectedId != null) {
-                        if (wasImpostor) Color(0xFFD32F2F).copy(alpha = 0.12f)
-                        else Color(0xFF1976D2).copy(alpha = 0.12f)
-                    } else {
-                        MaterialTheme.colorScheme.surfaceVariant
-                    }
-                )
+                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(containerColor = cardBg),
+                border = BorderStroke(1.dp, cardBorder),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(18.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -109,12 +109,14 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                         Text(
                             text = Strings.get("voting_both_impostors", language),
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
                         )
                         Text(
                             text = Strings.get("voting_both_correct", language),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center
                         )
                     } else if (ejectedId == NOBODY_VOTE_ID) {
                         Text(
@@ -125,7 +127,7 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                         Text(
                             text = if (wasImpostor) Strings.get("voting_nobody_wrong", language)
                                    else Strings.get("voting_nobody_correct", language),
-                            fontSize = 16.sp,
+                            fontSize = 15.sp,
                             fontWeight = FontWeight.Medium
                         )
                     } else if (ejectedId == null) {
@@ -134,26 +136,28 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
-                    } else if (ejectedId != null && ejectedId.startsWith(WRONG_CLAIM_PREFIX)) {
+                    } else if (ejectedId.startsWith(WRONG_CLAIM_PREFIX)) {
                         val actualId = ejectedId.removePrefix(WRONG_CLAIM_PREFIX)
                         val claimerName = room.players.find { it.id == actualId }?.name ?: "?"
                         Text(
                             text = Strings.get("voting_wrong_claim", language).replace("{name}", claimerName),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            textAlign = TextAlign.Center
                         )
                     } else {
                         val ejectedName = room.players.find { it.id == ejectedId }?.name ?: "?"
                         Text(
-                            text = if (wasImpostor) Strings.get("round_impostor_caught", language) else Strings.get("player_ejected", language),
+                            text = if (wasImpostor) Strings.get("round_impostor_caught", language)
+                                   else Strings.get("player_ejected", language),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = ejectedName,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Black,
+                            color = if (wasImpostor) ImpostorRed else MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -162,51 +166,50 @@ fun RoundResultScreen(viewModel: GameViewModel) {
 
         VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes)
 
-        // Continue progress card (always visible)
+        // Continue progress card
         val continuedIds = room.continueResponses
-        val requiredToContnue = room.players
+        val requiredToContinue = room.players
             .filter { !it.isSpectator || it.id == room.pendingGuessImpostorId }
         val doneCount = continuedIds.size
-        val totalCount = requiredToContnue.size
+        val totalCount = requiredToContinue.size
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-        ) {
+        GameCard(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text = "${Strings.get("common_continue", language)}: $doneCount/$totalCount",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    fontSize = 13.sp,
+                    letterSpacing = 0.5.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
-                requiredToContnue.forEach { player ->
+                requiredToContinue.forEach { player ->
                     val hasContinued = player.id in continuedIds
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .background(
+                                    if (hasContinued) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                    CircleShape
+                                )
+                        )
                         Text(
                             text = player.name,
                             fontSize = 14.sp,
                             color = if (hasContinued)
-                                MaterialTheme.colorScheme.onSurfaceVariant
+                                MaterialTheme.colorScheme.onSurface
                             else
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = if (hasContinued) "✓" else "...",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = if (hasContinued) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                         )
                     }
                 }
@@ -217,15 +220,21 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                             userContinued.value = true
                             viewModel.continueRound()
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(10.dp)
                     ) {
-                        Text("${Strings.get("common_continue", language)} (${secondsLeft.value}s)")
+                        Text(
+                            "${Strings.get("common_continue", language)} (${secondsLeft.value}s)",
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                     if (isPendingImpostor) {
                         Text(
                             text = Strings.get("impostor_guess_after_continue_hint", language),
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                     }
                 }

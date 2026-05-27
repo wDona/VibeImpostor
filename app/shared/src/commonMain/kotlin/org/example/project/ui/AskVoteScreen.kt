@@ -2,15 +2,15 @@ package org.example.project.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -45,6 +45,12 @@ fun AskVoteScreen(viewModel: GameViewModel) {
         }
     }
 
+    val timerColor = when {
+        secondsLeft.value > 20 -> MaterialTheme.colorScheme.primary
+        secondsLeft.value > 10 -> Color(0xFFF59E0B)
+        else -> MaterialTheme.colorScheme.error
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,13 +59,14 @@ fun AskVoteScreen(viewModel: GameViewModel) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = Strings.get("game_ask_vote_title", language),
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Black,
+            textAlign = TextAlign.Center,
+            letterSpacing = 1.sp
         )
 
         Text(
@@ -69,15 +76,17 @@ fun AskVoteScreen(viewModel: GameViewModel) {
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
         )
 
-        Card(
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
+        Box(
+            modifier = Modifier
+                .background(timerColor.copy(alpha = 0.14f), RoundedCornerShape(14.dp))
+                .padding(horizontal = 36.dp, vertical = 12.dp),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "${secondsLeft.value}s",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp),
-                color = Color(0xFFE65100)
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Black,
+                color = timerColor
             )
         }
 
@@ -88,7 +97,8 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                 onClick = { viewModel.respondVote(true) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
                     text = Strings.get("common_yes", language),
@@ -96,12 +106,13 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             OutlinedButton(
                 onClick = { viewModel.respondVote(false) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
                     text = Strings.get("common_no", language),
@@ -109,10 +120,7 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                 )
             }
         } else {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-            ) {
+            GameCard(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = Strings.get("ask_vote_waiting", language),
                     fontSize = 16.sp,
