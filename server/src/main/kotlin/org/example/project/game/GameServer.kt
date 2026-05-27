@@ -445,7 +445,11 @@ private suspend fun broadcastGameStarted(room: Room) {
     room.players.forEach { p ->
         val isImpostor = p.id in room.impostorIds
         val role = if (isImpostor) Role.IMPOSTOR else Role.INNOCENT
-        val content = if (isImpostor) room.category!! else room.word!!
+        val content = when {
+            !isImpostor -> room.word!!
+            room.config.noCategory -> "-"
+            else -> room.category!!
+        }
         val msg = ServerMessage.GameStarted(role, !isImpostor, content, room.getRoomSnapshot())
         sendToPlayer(room, p.id, msg)
     }

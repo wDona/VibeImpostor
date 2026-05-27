@@ -58,15 +58,14 @@ fun RoomConfigPanel(
         Text("${Strings.get("lobby_word_language", language)}: $langLabel")
         Text("${Strings.get("lobby_word_packs_selected", language)}: $packsLabel")
 
-        if (config.winOnFirstEjection) {
-            Text("${Strings.get("lobby_win_first_ejection", language)}: ${Strings.get("lobby_enabled", language)}")
-        }
-        if (config.anonymousVotes) {
-            Text("${Strings.get("lobby_anonymous_votes", language)}: ${Strings.get("lobby_enabled", language)}")
-        }
-        if (config.singleWordRound) {
-            Text("Solo una ronda de palabras: ${Strings.get("lobby_enabled", language)}")
-        }
+        fun boolLabel(value: Boolean) =
+            if (value) Strings.get("lobby_enabled", language) else Strings.get("lobby_disabled", language)
+
+        Text("${Strings.get("lobby_win_first_ejection", language)}: ${boolLabel(config.winOnFirstEjection)}")
+        Text("${Strings.get("lobby_anonymous_votes", language)}: ${boolLabel(config.anonymousVotes)}")
+        Text("Solo una ronda de palabras: ${boolLabel(config.singleWordRound)}")
+        Text("Sin categoria: ${boolLabel(config.noCategory)}")
+        Text("Rol oculto: ${boolLabel(config.hiddenRole)}")
 
         Text(Strings.get("lobby_only_host", language), fontWeight = FontWeight.Bold)
         return
@@ -339,6 +338,36 @@ fun RoomConfigPanel(
                     apply(config.copy(singleWordRound = false))
                 }
             }
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { apply(config.copy(noCategory = !config.noCategory)) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Sin categoria")
+        Checkbox(
+            checked = config.noCategory,
+            onCheckedChange = { checked -> apply(config.copy(noCategory = checked)) }
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { apply(config.copy(hiddenRole = !config.hiddenRole)) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Rol oculto")
+        Checkbox(
+            checked = config.hiddenRole,
+            onCheckedChange = { checked -> apply(config.copy(hiddenRole = checked)) }
         )
     }
 }

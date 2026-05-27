@@ -57,7 +57,9 @@ data class RoomConfig(
     val language: String = "es",
     val winOnFirstEjection: Boolean = false,
     val anonymousVotes: Boolean = false,
-    val singleWordRound: Boolean = false
+    val singleWordRound: Boolean = false,
+    val noCategory: Boolean = false,
+    val hiddenRole: Boolean = false
 )
 
 @Serializable
