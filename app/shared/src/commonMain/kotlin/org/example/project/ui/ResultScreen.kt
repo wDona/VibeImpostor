@@ -19,7 +19,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
+import org.example.project.protocol.WRONG_CLAIM_PREFIX
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -64,9 +66,17 @@ fun ResultScreen(viewModel: GameViewModel) {
         )
 
         state.value.votingResult?.let { (ejectedId, wasImpostor) ->
-            val ejectedName = when (ejectedId) {
-                NOBODY_VOTE_ID -> Strings.get("voting_nobody_name", language)
-                else -> room.players.find { it.id == ejectedId }?.name ?: "?"
+            val ejectedDisplay = when {
+                ejectedId == NOBODY_VOTE_ID ->
+                    "${Strings.get("result_ejected", language)}: ${Strings.get("voting_nobody_name", language)}"
+                ejectedId == BOTH_IMPOSTORS_ID ->
+                    Strings.get("voting_both_correct", language)
+                ejectedId != null && ejectedId.startsWith(WRONG_CLAIM_PREFIX) -> {
+                    val voterId = ejectedId.removePrefix(WRONG_CLAIM_PREFIX)
+                    val voterName = room.players.find { it.id == voterId }?.name ?: "?"
+                    Strings.get("voting_wrong_claim", language).replace("{name}", voterName)
+                }
+                else -> "${Strings.get("result_ejected", language)}: ${room.players.find { it.id == ejectedId }?.name ?: "?"}"
             }
             val impostorsWon = room.lastWinners.isNotEmpty() && room.lastWinners.all { it in room.impostorIds }
 
@@ -103,9 +113,10 @@ fun ResultScreen(viewModel: GameViewModel) {
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "${Strings.get("result_ejected", language)}: $ejectedName",
+                            text = ejectedDisplay,
                             fontSize = 15.sp,
-                            color = Color.White.copy(alpha = 0.85f)
+                            color = Color.White.copy(alpha = 0.85f),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
@@ -133,13 +144,20 @@ fun ResultScreen(viewModel: GameViewModel) {
         sortedPlayers.forEachIndexed { index, player ->
             val isWinner = player.id in highlightIds
             val isLivingImpostor = player.id in room.impostorIds && !player.isSpectator
+            val isImpostor = player.id in room.impostorIds
+            val nameColor = when {
+                isWinner -> WinnerGreen
+                isLivingImpostor -> ImpostorRed
+                else -> MaterialTheme.colorScheme.onSurface
+            }
+            val roleColor = if (isImpostor) ImpostorRed else nameColor
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = when {
-                        isWinner -> WinnerGold.copy(alpha = 0.12f)
+                        isWinner -> WinnerGreen.copy(alpha = 0.12f)
                         isLivingImpostor -> ImpostorRed.copy(alpha = 0.08f)
                         else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                     }
@@ -157,31 +175,39 @@ fun ResultScreen(viewModel: GameViewModel) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        // Position number
                         Text(
                             "#${index + 1}",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (isWinner) WinnerGold
+                            color = if (isWinner) WinnerGreen
                             else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                             modifier = Modifier.padding(end = 4.dp)
                         )
                         Column {
-                            Text(
-                                text = player.name,
-                                fontSize = 16.sp,
-                                fontWeight = if (isWinner || isLivingImpostor) FontWeight.Bold else FontWeight.Normal,
-                                color = when {
-                                    isWinner -> WinnerGold
-                                    isLivingImpostor -> ImpostorRed
-                                    else -> MaterialTheme.colorScheme.onSurface
-                                }
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Text(
+                                    text = player.name,
+                                    fontSize = 16.sp,
+                                    fontWeight = if (isWinner || isLivingImpostor) FontWeight.Bold else FontWeight.Normal,
+                                    color = nameColor
+                                )
+                                Text(
+                                    text = if (isImpostor) Strings.get("role_impostor", language)
+                                           else Strings.get("role_innocent", language),
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = roleColor.copy(alpha = if (isImpostor) 0.9f else 0.6f),
+                                    letterSpacing = 0.5.sp
+                                )
+                            }
                             if (isWinner) {
                                 Text(
                                     Strings.get("result_winner", language),
                                     fontSize = 11.sp,
-                                    color = WinnerGold,
+                                    color = WinnerGreen,
                                     fontWeight = FontWeight.SemiBold,
                                     letterSpacing = 0.5.sp
                                 )
@@ -192,7 +218,7 @@ fun ResultScreen(viewModel: GameViewModel) {
                         "${player.score} pts",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (isWinner) WinnerGold
+                        color = if (isWinner) WinnerGreen
                         else MaterialTheme.colorScheme.onSurface
                     )
                 }

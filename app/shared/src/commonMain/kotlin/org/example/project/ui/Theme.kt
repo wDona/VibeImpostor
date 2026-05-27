@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 val ImpostorRed = Color(0xFFEF4444)
 val InnocentBlue = Color(0xFF3B82F6)
 val WinnerGold = Color(0xFFF59E0B)
+val WinnerGreen = Color(0xFF22C55E)
 val GamePurple = Color(0xFF8B5CF6)
 val GamePurpleLight = Color(0xFFAB8BFF)
 
