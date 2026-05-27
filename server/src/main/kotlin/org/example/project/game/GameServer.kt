@@ -116,6 +116,8 @@ fun Route.gameServer() {
                                 val deadline = System.currentTimeMillis() + ASK_VOTE_TIMEOUT_MS
                                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
                                 startVoteTimer(room)
+                            } else if (newState == RoomState.VOTING) {
+                                startVotingRound(room)
                             } else if (newState == RoomState.IN_GAME) {
                                 val current = room.currentTurnPlayer()
                                 if (current != null) {
@@ -134,6 +136,8 @@ fun Route.gameServer() {
                                 val deadline = System.currentTimeMillis() + ASK_VOTE_TIMEOUT_MS
                                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
                                 startVoteTimer(room)
+                            } else if (newState == RoomState.VOTING) {
+                                startVotingRound(room)
                             } else if (newState == RoomState.IN_GAME) {
                                 val current = room.currentTurnPlayer()
                                 if (current != null) {
@@ -190,6 +194,9 @@ fun Route.gameServer() {
                                             broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
                                         }
                                     }
+                                    RoomState.VOTING -> {
+                                        startVotingRound(room)
+                                    }
                                     else -> {}
                                 }
                             } else {
@@ -220,6 +227,10 @@ fun Route.gameServer() {
                                         }
                                         snap.pendingGuessImpostorId != null -> {
                                             broadcastServerMessage(room, ServerMessage.ProceedToGuessing(snap))
+                                        }
+                                        snap.state == RoomState.VOTING -> {
+                                            broadcastServerMessage(room, ServerMessage.RoomUpdated(snap))
+                                            startVotingRound(room)
                                         }
                                         snap.state == RoomState.IN_GAME -> {
                                             broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, snap))
@@ -350,6 +361,8 @@ private suspend fun handleGameProgressAfterLeave(room: Room) {
             if (newState == RoomState.ASK_VOTE) {
                 val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
+            } else if (newState == RoomState.VOTING) {
+                startVotingRound(room)
             } else {
                 val current = room.currentTurnPlayer()
                 if (current != null) {
@@ -580,6 +593,13 @@ private suspend fun handleAnswerEndGame(room: Room, player: Player, agrees: Bool
 }
 
 private const val ASK_VOTE_TIMEOUT_MS = 30_000L
+
+private suspend fun startVotingRound(room: Room) {
+    val deadline = System.currentTimeMillis() + (room.config.voteTimeLimitSeconds * 1000L)
+    val candidates = room.activePlayers().map { it.id }
+    broadcastToActivePlayers(room, ServerMessage.VotingStarted(candidates, deadline))
+    startVoteTimer(room)
+}
 
 private suspend fun startVoteTimer(room: Room) {
     room.voteTimerJob?.cancel()

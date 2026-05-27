@@ -45,16 +45,6 @@ import org.example.project.model.MAX_PLAYERS
 import org.example.project.model.MIN_PLAYERS
 import org.example.project.model.RoomState
 
-private val playerBadgeColors = listOf(
-    Color(0xFF8B5CF6),
-    Color(0xFFEC4899),
-    Color(0xFF3B82F6),
-    Color(0xFF10B981),
-    Color(0xFFF59E0B),
-    Color(0xFFEF4444),
-    Color(0xFF06B6D4),
-    Color(0xFFF97316),
-)
 
 @Composable
 fun LobbyScreen(viewModel: GameViewModel) {
@@ -168,8 +158,8 @@ fun LobbyScreen(viewModel: GameViewModel) {
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
                     )
-                    room.players.forEachIndexed { index, player ->
-                        val badgeColor = playerBadgeColors[index % playerBadgeColors.size]
+                    room.players.forEach { player ->
+                        val badgeColor = playerColor(player.id)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

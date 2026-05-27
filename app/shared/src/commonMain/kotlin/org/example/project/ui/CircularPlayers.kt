@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -54,7 +55,10 @@ fun CircularPlayers(
                         MaterialTheme.colorScheme.tertiary
                     else
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
-                )
+                ),
+                border = if (!player.isSpectator)
+                    BorderStroke(1.5.dp, playerColor(player.id).copy(alpha = if (isCurrent) 0.95f else 0.5f))
+                else null
             ) {
                 Column(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),

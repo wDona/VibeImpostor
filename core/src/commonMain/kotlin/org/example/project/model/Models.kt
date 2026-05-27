@@ -56,7 +56,8 @@ data class RoomConfig(
     val selectedCategoryIds: List<Int> = emptyList(),
     val language: String = "es",
     val winOnFirstEjection: Boolean = false,
-    val anonymousVotes: Boolean = false
+    val anonymousVotes: Boolean = false,
+    val singleWordRound: Boolean = false
 )
 
 @Serializable

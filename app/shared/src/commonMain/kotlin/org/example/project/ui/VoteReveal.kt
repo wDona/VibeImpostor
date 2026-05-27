@@ -10,6 +10,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String,
         targets.forEach { targetId ->
             val voters = votes.filter { it.value == targetId }.keys
             val voteCount = voters.size
+            val targetIsPlayer = room.players.any { it.id == targetId }
 
             GameCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -54,13 +56,20 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String,
                 Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = nameOf(targetId),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            if (targetIsPlayer) PlayerDot(targetId)
+                            Text(
+                                text = nameOf(targetId),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp
+                            )
+                        }
                         Text(
                             text = "$voteCount",
                             fontWeight = FontWeight.Black,
@@ -70,11 +79,19 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String,
                     }
                     if (!anonymousVotes) {
                         voters.forEach { voterId ->
-                            Text(
-                                nameOf(voterId),
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
-                            )
+                            val voterIsPlayer = room.players.any { it.id == voterId }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                modifier = Modifier.padding(top = 2.dp)
+                            ) {
+                                if (voterIsPlayer) PlayerDot(voterId)
+                                Text(
+                                    nameOf(voterId),
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
+                                )
+                            }
                         }
                     }
                 }

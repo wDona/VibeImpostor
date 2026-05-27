@@ -120,20 +120,23 @@ fun VotingScreen(viewModel: GameViewModel) {
                 ) {
                     activePlayers.forEach { player ->
                         val hasVoted = player.id in votedPlayerIds
-                        Box(
+                        Row(
                             modifier = Modifier
                                 .background(
-                                    if (hasVoted) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                                    if (hasVoted) playerColor(player.id).copy(alpha = 0.18f)
                                     else MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
                                     RoundedCornerShape(8.dp)
                                 )
-                                .padding(horizontal = 10.dp, vertical = 6.dp)
+                                .padding(horizontal = 8.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
                         ) {
+                            PlayerDot(player.id)
                             Text(
                                 text = player.name,
                                 fontSize = 12.sp,
                                 fontWeight = if (hasVoted) FontWeight.Bold else FontWeight.Normal,
-                                color = if (hasVoted) MaterialTheme.colorScheme.primary
+                                color = if (hasVoted) playerColor(player.id)
                                 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                             )
                         }
@@ -221,11 +224,17 @@ fun VotingScreen(viewModel: GameViewModel) {
                                 .height(56.dp),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(
-                                player.name,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                PlayerDot(player.id)
+                                Text(
+                                    player.name,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                         }
                     }
 

@@ -64,6 +64,9 @@ fun RoomConfigPanel(
         if (config.anonymousVotes) {
             Text("${Strings.get("lobby_anonymous_votes", language)}: ${Strings.get("lobby_enabled", language)}")
         }
+        if (config.singleWordRound) {
+            Text("Solo una ronda de palabras: ${Strings.get("lobby_enabled", language)}")
+        }
 
         Text(Strings.get("lobby_only_host", language), fontWeight = FontWeight.Bold)
         return
@@ -103,20 +106,21 @@ fun RoomConfigPanel(
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(config.numImpostors.toString(), fontWeight = FontWeight.Bold)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            val impostorLocked = config.winOnFirstEjection || config.singleWordRound
                             Button(
                                 onClick = {
-                                    if (!config.winOnFirstEjection && config.numImpostors > 1)
+                                    if (!impostorLocked && config.numImpostors > 1)
                                         apply(config.copy(numImpostors = config.numImpostors - 1))
                                 },
-                                enabled = !config.winOnFirstEjection && config.numImpostors > 1,
+                                enabled = !impostorLocked && config.numImpostors > 1,
                                 modifier = Modifier.weight(1f)
                             ) { Text("-") }
                             Button(
                                 onClick = {
-                                    if (!config.winOnFirstEjection && config.numImpostors < maxImpostors)
+                                    if (!impostorLocked && config.numImpostors < maxImpostors)
                                         apply(config.copy(numImpostors = config.numImpostors + 1))
                                 },
-                                enabled = !config.winOnFirstEjection && config.numImpostors < maxImpostors,
+                                enabled = !impostorLocked && config.numImpostors < maxImpostors,
                                 modifier = Modifier.weight(1f)
                             ) { Text("+") }
                         }
@@ -306,6 +310,34 @@ fun RoomConfigPanel(
             checked = config.anonymousVotes,
             onCheckedChange = { checked ->
                 apply(config.copy(anonymousVotes = checked))
+            }
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable {
+                val newVal = !config.singleWordRound
+                if (newVal) {
+                    apply(config.copy(singleWordRound = true, numImpostors = 1))
+                } else {
+                    apply(config.copy(singleWordRound = false))
+                }
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Solo una ronda de palabras")
+        Checkbox(
+            checked = config.singleWordRound,
+            onCheckedChange = { checked ->
+                if (checked) {
+                    apply(config.copy(singleWordRound = true, numImpostors = 1))
+                } else {
+                    apply(config.copy(singleWordRound = false))
+                }
             }
         )
     }

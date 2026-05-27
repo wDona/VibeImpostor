@@ -89,7 +89,9 @@ fun GameScreen(viewModel: GameViewModel) {
             players = room.players,
             turnOrder = room.turnOrder,
             currentTurnId = room.currentTurnPlayerId,
-            lastWordsPlayed = state.value.lastWordsPlayed
+            lastWordsPlayed = state.value.lastWordsPlayed,
+            eliminationVotes = state.value.eliminationVotes,
+            anonymousVotes = room.config.anonymousVotes
         )
 
         Spacer(modifier = Modifier.height(8.dp))

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -182,6 +184,11 @@ fun ResultScreen(viewModel: GameViewModel) {
                             color = if (isWinner) WinnerGreen
                             else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                             modifier = Modifier.padding(end = 4.dp)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .background(playerColor(player.id), CircleShape)
                         )
                         Column {
                             Row(

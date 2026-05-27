@@ -68,6 +68,11 @@ object GameEngine {
             room.playedThisRound = room.playedThisRound + playerId
 
             if (room.roundIsComplete()) {
+                if (room.config.singleWordRound) {
+                    room.state = RoomState.VOTING
+                    room.votes = emptyMap()
+                    return RoomState.VOTING
+                }
                 room.state = RoomState.ASK_VOTE
                 room.wantVoteResponses = emptyMap()
                 return RoomState.ASK_VOTE
@@ -185,7 +190,11 @@ object GameEngine {
                 room.lastRoundVotes = emptyMap()
                 room.resetForNewRound()
                 val newActive = room.activePlayers()
-                room.state = if (newActive.isEmpty()) RoomState.FINISHED else RoomState.IN_GAME
+                room.state = when {
+                    newActive.isEmpty() -> RoomState.FINISHED
+                    room.config.singleWordRound -> RoomState.VOTING
+                    else -> RoomState.IN_GAME
+                }
                 return Pair(null, false)
             }
 
@@ -271,7 +280,7 @@ object GameEngine {
             }
 
             room.resetForNewRound()
-            room.state = RoomState.IN_GAME
+            room.state = if (room.config.singleWordRound) RoomState.VOTING else RoomState.IN_GAME
             return Pair(ejected, false)
         } finally {
             room.mutex.unlock()
@@ -354,9 +363,10 @@ object GameEngine {
             }
 
             room.resetForNewRound()
-            room.state = RoomState.IN_GAME
-            println("[finalizeImpostorGuessing] returning IN_GAME (next round)")
-            return RoomState.IN_GAME
+            val nextState = if (room.config.singleWordRound) RoomState.VOTING else RoomState.IN_GAME
+            room.state = nextState
+            println("[finalizeImpostorGuessing] returning $nextState (next round)")
+            return nextState
         } finally {
             room.mutex.unlock()
         }
@@ -371,6 +381,11 @@ object GameEngine {
                 return RoomState.FINISHED
             }
             if (room.roundIsComplete()) {
+                if (room.config.singleWordRound) {
+                    room.state = RoomState.VOTING
+                    room.votes = emptyMap()
+                    return RoomState.VOTING
+                }
                 room.state = RoomState.ASK_VOTE
                 room.wantVoteResponses = emptyMap()
                 return RoomState.ASK_VOTE

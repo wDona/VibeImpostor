@@ -4,6 +4,22 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
+val playerBadgeColors = listOf(
+    Color(0xFF8B5CF6),
+    Color(0xFFEC4899),
+    Color(0xFF3B82F6),
+    Color(0xFF10B981),
+    Color(0xFFF59E0B),
+    Color(0xFFEF4444),
+    Color(0xFF06B6D4),
+    Color(0xFFF97316),
+)
+
+fun playerColor(playerId: String): Color {
+    val hash = playerId.fold(0) { acc, c -> acc * 31 + c.code }
+    return playerBadgeColors[(hash and Int.MAX_VALUE) % playerBadgeColors.size]
+}
+
 val ImpostorRed = Color(0xFFEF4444)
 val InnocentBlue = Color(0xFF3B82F6)
 val WinnerGold = Color(0xFFF59E0B)

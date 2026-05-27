@@ -19,6 +19,9 @@ import org.example.project.net.ApiClient
 import org.example.project.net.CategoryResponse
 import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ServerMessage
+import org.example.project.protocol.NOBODY_VOTE_ID
+import org.example.project.protocol.BOTH_IMPOSTORS_ID
+import org.example.project.protocol.WRONG_CLAIM_PREFIX
 import org.example.project.settings.SettingsStorage
 import org.example.project.settings.UserSettings
 import org.example.project.sound.AppSound
@@ -62,7 +65,8 @@ data class GameState(
     val availableCategories: List<CategoryResponse> = emptyList(),
     val userPacks: List<org.example.project.net.PackDto> = emptyList(),
     val impostorGuesses: Map<String, ImpostorGuessResult> = emptyMap(),
-    val impostorGuessingNext: Boolean = false
+    val impostorGuessingNext: Boolean = false,
+    val eliminationVotes: Map<String, Map<String, String>> = emptyMap()
 )
 
 data class ImpostorGuessResult(
@@ -423,7 +427,8 @@ class GameViewModel : ViewModel() {
                     answeredAskVote = false,
                     voteDeadlineMs = 0L,
                     votedPlayerIds = emptySet(),
-                    showEndGameDialog = false
+                    showEndGameDialog = false,
+                    eliminationVotes = emptyMap()
                 )
             }
 
@@ -470,6 +475,17 @@ class GameViewModel : ViewModel() {
             }
 
             is ServerMessage.VotingResult -> {
+                val ejectedId = msg.ejectedPlayerId
+                val updatedElimVotes = _state.value.eliminationVotes.toMutableMap()
+                when {
+                    ejectedId == null || ejectedId == NOBODY_VOTE_ID -> Unit
+                    ejectedId == BOTH_IMPOSTORS_ID ->
+                        msg.room.players.filter { it.id in msg.room.impostorIds && it.isSpectator }
+                            .forEach { updatedElimVotes[it.id] = msg.votes }
+                    ejectedId.startsWith(WRONG_CLAIM_PREFIX) ->
+                        updatedElimVotes[ejectedId.removePrefix(WRONG_CLAIM_PREFIX)] = msg.votes
+                    else -> updatedElimVotes[ejectedId] = msg.votes
+                }
                 _state.value = _state.value.copy(
                     screen = Screen.ROUND_RESULT,
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
@@ -477,7 +493,8 @@ class GameViewModel : ViewModel() {
                     room = msg.room,
                     players = msg.room.players,
                     impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) },
-                    impostorGuessingNext = false
+                    impostorGuessingNext = false,
+                    eliminationVotes = updatedElimVotes
                 )
             }
 
