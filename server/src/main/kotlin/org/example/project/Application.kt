@@ -71,7 +71,10 @@ fun Application.module() {
         allowHeader(io.ktor.http.HttpHeaders.Accept)
         allowHeadersPrefixed("x-")
         allowCredentials = true
-        anyHost()
+
+        allowHost("localhost:8080")
+        allowHost("127.0.0.1:8080")
+        allowHost("impostor.wdona.dev", schemes = listOf("http", "https"))
     }
 
     routing {
