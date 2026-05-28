@@ -1,0 +1,62 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Bebida",
+      "words": [
+        {"text": "agua", "hints": ["líquido", "natural", "esencial"]},
+        {"text": "café", "hints": ["caliente", "amargo", "estimulante"]},
+        {"text": "té", "hints": ["caliente", "infusión", "herbal"]},
+        {"text": "leche", "hints": ["lácteo", "líquido", "animal"]},
+        {"text": "zumo", "hints": ["fruta", "natural", "vitamínico"]},
+        {"text": "cerveza", "hints": ["alcohólica", "fermentada", "cereal"]},
+        {"text": "vino", "hints": ["alcohólico", "fermentado", "uva"]},
+        {"text": "refresco", "hints": ["azucarado", "frío", "industrial"]},
+        {"text": "limonada", "hints": ["cítrico", "frío", "natural"]},
+        {"text": "chocolate caliente", "hints": ["caliente", "dulce", "cacao"]},
+        {"text": "smoothie", "hints": ["fruta", "frío", "espeso"]},
+        {"text": "gaseosa", "hints": ["burbujas", "azucarado", "frío"]},
+        {"text": "jugo", "hints": ["fruta", "natural", "vitamínico"]},
+        {"text": "whisky", "hints": ["alcohólico", "destilado", "madurado"]},
+        {"text": "ron", "hints": ["alcohólico", "destilado", "tropical"]},
+        {"text": "vodka", "hints": ["alcohólico", "destilado", "neutro"]},
+        {"text": "champagne", "hints": ["alcohólico", "burbujas", "festivo"]},
+        {"text": "sidra", "hints": ["alcohólico", "fermentado", "manzana"]},
+        {"text": "licor", "hints": ["alcohólico", "dulce", "destilado"]}
+      ]
+    },
+    {
+      "name": "Ropa",
+      "words": [
+        {"text": "camiseta", "hints": ["prenda", "casual", "manga corta"]},
+        {"text": "camisa", "hints": ["prenda", "formal", "botones"]},
+        {"text": "pantalón", "hints": ["prenda", "piernas", "básico"]},
+        {"text": "falda", "hints": ["prenda", "femenino", "abierta"]},
+        {"text": "vestido", "hints": ["prenda", "femenino", "entera"]},
+        {"text": "abrigo", "hints": ["prenda", "exterior", "invierno"]},
+        {"text": "chaqueta", "hints": ["prenda", "exterior", "básico"]},
+        {"text": "suéter", "hints": ["prenda", "punto", "invierno"]},
+        {"text": "zapato", "hints": ["calzado", "piel", "básico"]},
+        {"text": "bota", "hints": ["calzado", "alto", "resistente"]},
+        {"text": "calcetín", "hints": ["prenda", "pie", "interior"]},
+        {"text": "gorro", "hints": ["accesorio", "cabeza", "invierno"]},
+        {"text": "bufanda", "hints": ["accesorio", "cuello", "invierno"]},
+        {"text": "sombrero", "hints": ["accesorio", "cabeza", "exterior"]},
+        {"text": "guante", "hints": ["accesorio", "mano", "invierno"]},
+        {"text": "cinturón", "hints": ["accesorio", "cintura", "cuero"]},
+        {"text": "corbata", "hints": ["accesorio", "formal", "cuello"]},
+        {"text": "bolso", "hints": ["accesorio", "transporte", "cuero"]},
+        {"text": "mochila", "hints": ["accesorio", "espalda", "transporte"]},
+        {"text": "vaquero", "hints": ["prenda", "denim", "casual"]},
+        {"text": "shorts", "hints": ["prenda", "piernas", "estival"]},
+        {"text": "blusa", "hints": ["prenda", "femenino", "ligero"]},
+        {"text": "pijama", "hints": ["prenda", "dormir", "cómodo"]},
+        {"text": "uniforme", "hints": ["prenda", "laboral", "igual"]},
+        {"text": "traje", "hints": ["prenda", "formal", "conjunto"]},
+        {"text": "sandalia", "hints": ["calzado", "abierto", "estival"]},
+        {"text": "sudadera", "hints": ["prenda", "casual", "cómodo"]}
+      ]
+    }
+  ]
+}

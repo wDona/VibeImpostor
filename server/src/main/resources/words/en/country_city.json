@@ -1,0 +1,66 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Country",
+      "words": [
+        {"text": "Spain", "hints": ["european", "iberian", "mediterranean"]},
+        {"text": "France", "hints": ["european", "western", "romance"]},
+        {"text": "Germany", "hints": ["european", "central", "germanic"]},
+        {"text": "Italy", "hints": ["european", "mediterranean", "peninsular"]},
+        {"text": "Portugal", "hints": ["european", "iberian", "atlantic"]},
+        {"text": "Russia", "hints": ["eurasian", "enormous", "slavic"]},
+        {"text": "China", "hints": ["asian", "eastern", "populous"]},
+        {"text": "Japan", "hints": ["asian", "insular", "eastern"]},
+        {"text": "India", "hints": ["asian", "peninsular", "tropical"]},
+        {"text": "Brazil", "hints": ["south american", "tropical", "large"]},
+        {"text": "Mexico", "hints": ["north american", "latin", "tropical"]},
+        {"text": "Canada", "hints": ["north american", "cold", "large"]},
+        {"text": "United States", "hints": ["north american", "western", "powerful"]},
+        {"text": "Australia", "hints": ["oceanic", "large", "insular"]},
+        {"text": "Egypt", "hints": ["african", "arabic", "ancient"]},
+        {"text": "Thailand", "hints": ["asian", "southeast", "tropical"]},
+        {"text": "Greece", "hints": ["european", "mediterranean", "ancient"]},
+        {"text": "Sweden", "hints": ["european", "nordic", "cold"]},
+        {"text": "Norway", "hints": ["european", "nordic", "cold"]},
+        {"text": "Denmark", "hints": ["european", "nordic", "small"]},
+        {"text": "Netherlands", "hints": ["european", "low", "western"]},
+        {"text": "Belgium", "hints": ["european", "central", "small"]},
+        {"text": "Switzerland", "hints": ["european", "central", "mountainous"]},
+        {"text": "Poland", "hints": ["european", "central", "slavic"]},
+        {"text": "Turkey", "hints": ["eurasian", "mediterranean", "islamic"]}
+      ]
+    },
+    {
+      "name": "City",
+      "words": [
+        {"text": "Madrid", "hints": ["european", "capital", "iberian"]},
+        {"text": "Barcelona", "hints": ["european", "mediterranean", "coastal"]},
+        {"text": "Paris", "hints": ["european", "capital", "romantic"]},
+        {"text": "London", "hints": ["european", "capital", "insular"]},
+        {"text": "Berlin", "hints": ["european", "capital", "central"]},
+        {"text": "Rome", "hints": ["european", "capital", "historical"]},
+        {"text": "New York", "hints": ["american", "coastal", "large"]},
+        {"text": "Tokyo", "hints": ["asian", "capital", "technological"]},
+        {"text": "Sydney", "hints": ["oceanic", "coastal", "large"]},
+        {"text": "Dubai", "hints": ["arabic", "modern", "desert"]},
+        {"text": "Bangkok", "hints": ["asian", "capital", "tropical"]},
+        {"text": "Istanbul", "hints": ["eurasian", "historical", "coastal"]},
+        {"text": "Prague", "hints": ["european", "central", "historical"]},
+        {"text": "Vienna", "hints": ["european", "capital", "musical"]},
+        {"text": "Stockholm", "hints": ["european", "nordic", "capital"]},
+        {"text": "Amsterdam", "hints": ["european", "canals", "capital"]},
+        {"text": "Brussels", "hints": ["european", "capital", "central"]},
+        {"text": "Zurich", "hints": ["european", "financial", "small"]},
+        {"text": "Warsaw", "hints": ["european", "capital", "slavic"]},
+        {"text": "Lisbon", "hints": ["european", "capital", "atlantic"]},
+        {"text": "Athens", "hints": ["european", "capital", "historical"]},
+        {"text": "Moscow", "hints": ["european", "capital", "cold"]},
+        {"text": "Beijing", "hints": ["asian", "capital", "ancient"]},
+        {"text": "Mumbai", "hints": ["asian", "coastal", "populous"]},
+        {"text": "Rio", "hints": ["south american", "coastal", "tropical"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Mitología",
+      "words": [
+        {"text": "dios", "hints": ["sobrenatural", "superior", "inmortal"]},
+        {"text": "diosa", "hints": ["sobrenatural", "femenino", "inmortal"]},
+        {"text": "titán", "hints": ["gigante", "antiguo", "griego"]},
+        {"text": "elfo", "hints": ["fantástico", "pequeño", "bosque"]},
+        {"text": "hada", "hints": ["fantástico", "alado", "mágico"]},
+        {"text": "mago", "hints": ["sobrenatural", "conocimiento", "poderes"]},
+        {"text": "bruja", "hints": ["sobrenatural", "femenino", "hechizo"]},
+        {"text": "dragón", "hints": ["fantástico", "reptil", "gigante"]},
+        {"text": "fénix", "hints": ["ave", "inmortal", "fuego"]},
+        {"text": "unicornio", "hints": ["caballo", "cuerno", "mágico"]},
+        {"text": "pegaso", "hints": ["caballo", "alado", "griego"]},
+        {"text": "grifo", "hints": ["híbrido", "rapaz", "cuadrúpedo"]},
+        {"text": "sirena", "hints": ["híbrido", "acuático", "femenino"]},
+        {"text": "centauro", "hints": ["híbrido", "caballo", "humano"]},
+        {"text": "demonio", "hints": ["sobrenatural", "maligno", "infierno"]},
+        {"text": "ángel", "hints": ["sobrenatural", "alado", "divino"]},
+        {"text": "vampiro", "hints": ["sobrenatural", "nocturno", "inmortal"]},
+        {"text": "hombre lobo", "hints": ["sobrenatural", "metamorfosis", "luna"]},
+        {"text": "zombi", "hints": ["sobrenatural", "muerto", "lento"]},
+        {"text": "fantasma", "hints": ["sobrenatural", "espíritu", "invisible"]},
+        {"text": "esqueleto", "hints": ["sobrenatural", "huesos", "muerto"]},
+        {"text": "momia", "hints": ["sobrenatural", "envuelto", "antiguo"]},
+        {"text": "minotauro", "hints": ["híbrido", "toro", "laberinto"]}
+      ]
+    },
+    {
+      "name": "Objeto",
+      "words": [
+        {"text": "reloj", "hints": ["medición", "temporal", "circular"]},
+        {"text": "moneda", "hints": ["circular", "metal", "intercambio"]},
+        {"text": "billete", "hints": ["papel", "valor", "intercambio"]},
+        {"text": "llave", "hints": ["metal", "apertura", "único"]},
+        {"text": "puerta", "hints": ["acceso", "madera", "apertura"]},
+        {"text": "ventana", "hints": ["cristal", "luz", "apertura"]},
+        {"text": "espejo", "hints": ["reflejo", "cristal", "pared"]},
+        {"text": "cuadro", "hints": ["decoración", "pared", "imagen"]},
+        {"text": "teléfono", "hints": ["comunicación", "electrónico", "personal"]},
+        {"text": "botella", "hints": ["recipiente", "líquido", "cristal"]},
+        {"text": "vaso", "hints": ["recipiente", "líquido", "cristal"]},
+        {"text": "taza", "hints": ["recipiente", "caliente", "asa"]},
+        {"text": "plato", "hints": ["recipiente", "comida", "circular"]},
+        {"text": "cuchara", "hints": ["cubierto", "cóncavo", "metal"]},
+        {"text": "tenedor", "hints": ["cubierto", "puntas", "metal"]},
+        {"text": "cuchillo", "hints": ["cubierto", "filo", "metal"]},
+        {"text": "sartén", "hints": ["cocina", "plano", "mango"]},
+        {"text": "olla", "hints": ["cocina", "profundo", "tapas"]},
+        {"text": "caja", "hints": ["recipiente", "angular", "almacén"]},
+        {"text": "bolsa", "hints": ["recipiente", "flexible", "transporte"]},
+        {"text": "cartera", "hints": ["plano", "bolsillo", "personal"]},
+        {"text": "mochila", "hints": ["espalda", "transporte", "almacén"]},
+        {"text": "maleta", "hints": ["viaje", "ruedas", "almacén"]},
+        {"text": "paraguas", "hints": ["lluvia", "plegable", "protección"]},
+        {"text": "linterna", "hints": ["luz", "portátil", "batería"]},
+        {"text": "calculadora", "hints": ["matemáticas", "digital", "pequeño"]}
+      ]
+    }
+  ]
+}

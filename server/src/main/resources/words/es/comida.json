@@ -1,0 +1,45 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Comida",
+      "words": [
+        {"text": "pan", "hints": ["horneado", "cereal", "básico"]},
+        {"text": "arroz", "hints": ["cereal", "asiático", "cocido"]},
+        {"text": "pasta", "hints": ["cereal", "italiano", "cocido"]},
+        {"text": "pizza", "hints": ["horneado", "italiano", "salado"]},
+        {"text": "sándwich", "hints": ["rápido", "frío", "relleno"]},
+        {"text": "hamburguesa", "hints": ["rápido", "americano", "caliente"]},
+        {"text": "pollo", "hints": ["proteína", "carne", "común"]},
+        {"text": "carne", "hints": ["proteína", "animal", "cocido"]},
+        {"text": "pescado", "hints": ["marino", "proteína", "animal"]},
+        {"text": "jamón", "hints": ["curado", "cerdo", "salado"]},
+        {"text": "queso", "hints": ["lácteo", "fermentado", "sólido"]},
+        {"text": "leche", "hints": ["lácteo", "líquido", "animal"]},
+        {"text": "huevo", "hints": ["animal", "proteína", "básico"]},
+        {"text": "mantequilla", "hints": ["lácteo", "grasa", "untable"]},
+        {"text": "yogur", "hints": ["lácteo", "fermentado", "cremoso"]},
+        {"text": "manzana", "hints": ["fruta", "otoñal", "dulce"]},
+        {"text": "plátano", "hints": ["fruta", "tropical", "dulce"]},
+        {"text": "naranja", "hints": ["fruta", "cítrico", "vitamínico"]},
+        {"text": "fresa", "hints": ["fruta", "roja", "estival"]},
+        {"text": "uva", "hints": ["fruta", "racimo", "dulce"]},
+        {"text": "melón", "hints": ["fruta", "estival", "dulce"]},
+        {"text": "sandía", "hints": ["fruta", "estival", "acuosa"]},
+        {"text": "piña", "hints": ["fruta", "tropical", "ácida"]},
+        {"text": "tomate", "hints": ["hortaliza", "rojo", "ácido"]},
+        {"text": "lechuga", "hints": ["hoja", "verde", "cruda"]},
+        {"text": "cebolla", "hints": ["hortaliza", "aromático", "básico"]},
+        {"text": "patata", "hints": ["tubérculo", "básico", "cocido"]},
+        {"text": "zanahoria", "hints": ["hortaliza", "crudo", "vitamínico"]},
+        {"text": "brócoli", "hints": ["verdura", "nutritivo", "verde"]},
+        {"text": "chocolate", "hints": ["dulce", "cacao", "procesado"]},
+        {"text": "caramelo", "hints": ["dulce", "azúcar", "golosina"]},
+        {"text": "galleta", "hints": ["horneado", "dulce", "crujiente"]},
+        {"text": "pastel", "hints": ["dulce", "horneado", "festivo"]},
+        {"text": "fruta", "hints": ["vegetal", "dulce", "natural"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Nature",
+      "words": [
+        {"text": "tree", "hints": ["plant", "woody", "perennial"]},
+        {"text": "flower", "hints": ["plant", "reproductive", "colorful"]},
+        {"text": "rose", "hints": ["flower", "aromatic", "thorns"]},
+        {"text": "tulip", "hints": ["flower", "spring", "bulb"]},
+        {"text": "sunflower", "hints": ["flower", "large", "solar"]},
+        {"text": "leaf", "hints": ["plant", "green", "photosynthesis"]},
+        {"text": "branch", "hints": ["plant", "woody", "structural"]},
+        {"text": "trunk", "hints": ["plant", "central", "woody"]},
+        {"text": "root", "hints": ["plant", "underground", "anchor"]},
+        {"text": "grass", "hints": ["plant", "low", "green"]},
+        {"text": "soil", "hints": ["mineral", "ground", "fertile"]},
+        {"text": "stone", "hints": ["mineral", "solid", "hard"]},
+        {"text": "rock", "hints": ["mineral", "large", "solid"]},
+        {"text": "mountain", "hints": ["relief", "elevated", "natural"]},
+        {"text": "river", "hints": ["water", "flowing", "natural"]},
+        {"text": "lake", "hints": ["water", "still", "natural"]},
+        {"text": "ocean", "hints": ["water", "salty", "vast"]},
+        {"text": "beach", "hints": ["coastal", "sand", "marine"]},
+        {"text": "island", "hints": ["land", "surrounded", "isolated"]},
+        {"text": "forest", "hints": ["plant", "dense", "natural"]},
+        {"text": "desert", "hints": ["arid", "hot", "dry"]},
+        {"text": "volcano", "hints": ["geological", "active", "elevated"]},
+        {"text": "cloud", "hints": ["atmospheric", "humid", "elevated"]},
+        {"text": "rain", "hints": ["atmospheric", "water", "falling"]},
+        {"text": "snow", "hints": ["atmospheric", "cold", "white"]},
+        {"text": "ice", "hints": ["water", "solid", "cold"]},
+        {"text": "rainbow", "hints": ["optical", "colorful", "atmospheric"]},
+        {"text": "sun", "hints": ["star", "energy", "central"]},
+        {"text": "moon", "hints": ["star", "nocturnal", "satellite"]},
+        {"text": "star", "hints": ["celestial", "luminous", "distant"]}
+      ]
+    },
+    {
+      "name": "Weather",
+      "words": [
+        {"text": "sun", "hints": ["heat", "radiant", "daytime"]},
+        {"text": "rain", "hints": ["water", "falling", "humid"]},
+        {"text": "snow", "hints": ["cold", "white", "solid"]},
+        {"text": "cloud", "hints": ["elevated", "humid", "grey"]},
+        {"text": "wind", "hints": ["movement", "air", "invisible"]},
+        {"text": "storm", "hints": ["electric", "intense", "dangerous"]},
+        {"text": "lightning", "hints": ["electric", "instant", "luminous"]},
+        {"text": "thunder", "hints": ["sound", "electric", "powerful"]},
+        {"text": "hail", "hints": ["solid", "falling", "frozen"]},
+        {"text": "dew", "hints": ["water", "surface", "morning"]},
+        {"text": "ice", "hints": ["cold", "solid", "slippery"]},
+        {"text": "rainbow", "hints": ["optical", "colorful", "post-rain"]},
+        {"text": "fog", "hints": ["humid", "low", "diffuse"]},
+        {"text": "frost", "hints": ["cold", "nocturnal", "damaging"]},
+        {"text": "heat", "hints": ["temperature", "high", "summer"]},
+        {"text": "cold", "hints": ["temperature", "low", "winter"]},
+        {"text": "humidity", "hints": ["water", "ambient", "sticky"]},
+        {"text": "drought", "hints": ["water", "absence", "prolonged"]},
+        {"text": "breeze", "hints": ["wind", "soft", "pleasant"]},
+        {"text": "gale", "hints": ["wind", "strong", "dangerous"]}
+      ]
+    }
+  ]
+}

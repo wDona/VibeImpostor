@@ -1,0 +1,59 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Transport",
+      "words": [
+        {"text": "car", "hints": ["terrestrial", "motorized", "personal"]},
+        {"text": "bicycle", "hints": ["terrestrial", "manual", "ecological"]},
+        {"text": "motorcycle", "hints": ["terrestrial", "motorized", "two wheels"]},
+        {"text": "bus", "hints": ["terrestrial", "collective", "public"]},
+        {"text": "train", "hints": ["terrestrial", "collective", "rails"]},
+        {"text": "airplane", "hints": ["aerial", "motorized", "fast"]},
+        {"text": "boat", "hints": ["aquatic", "floating", "large"]},
+        {"text": "taxi", "hints": ["terrestrial", "motorized", "service"]},
+        {"text": "truck", "hints": ["terrestrial", "motorized", "cargo"]},
+        {"text": "metro", "hints": ["underground", "collective", "urban"]},
+        {"text": "helicopter", "hints": ["aerial", "motorized", "vertical"]},
+        {"text": "tractor", "hints": ["terrestrial", "agricultural", "powerful"]},
+        {"text": "cart", "hints": ["terrestrial", "animal", "old"]},
+        {"text": "sleigh", "hints": ["terrestrial", "snow", "sliding"]},
+        {"text": "skateboard", "hints": ["terrestrial", "manual", "urban"]},
+        {"text": "scooter", "hints": ["terrestrial", "motorized", "urban"]},
+        {"text": "streetcar", "hints": ["terrestrial", "electric", "urban"]},
+        {"text": "cruise ship", "hints": ["aquatic", "tourist", "large"]},
+        {"text": "yacht", "hints": ["aquatic", "private", "luxury"]}
+      ]
+    },
+    {
+      "name": "Technology",
+      "words": [
+        {"text": "computer", "hints": ["digital", "processor", "screen"]},
+        {"text": "laptop", "hints": ["digital", "mobile", "personal"]},
+        {"text": "phone", "hints": ["communication", "personal", "digital"]},
+        {"text": "tablet", "hints": ["digital", "screen", "touchable"]},
+        {"text": "television", "hints": ["screen", "entertainment", "electric"]},
+        {"text": "radio", "hints": ["wave", "audio", "electric"]},
+        {"text": "camera", "hints": ["optical", "image", "digital"]},
+        {"text": "smartwatch", "hints": ["wearable", "digital", "personal"]},
+        {"text": "headphones", "hints": ["audio", "personal", "wired"]},
+        {"text": "microphone", "hints": ["audio", "capture", "electric"]},
+        {"text": "speaker", "hints": ["audio", "emitter", "electric"]},
+        {"text": "keyboard", "hints": ["input", "digital", "manual"]},
+        {"text": "mouse", "hints": ["input", "digital", "manual"]},
+        {"text": "monitor", "hints": ["screen", "digital", "visual"]},
+        {"text": "printer", "hints": ["output", "physical", "paper"]},
+        {"text": "router", "hints": ["network", "connection", "digital"]},
+        {"text": "cable", "hints": ["conductor", "physical", "connection"]},
+        {"text": "charger", "hints": ["energy", "electric", "accessory"]},
+        {"text": "battery", "hints": ["energy", "storage", "portable"]},
+        {"text": "screen", "hints": ["visual", "digital", "emitter"]},
+        {"text": "hard drive", "hints": ["storage", "digital", "internal"]},
+        {"text": "processor", "hints": ["digital", "central", "internal"]},
+        {"text": "memory", "hints": ["storage", "digital", "fast"]},
+        {"text": "sensor", "hints": ["detector", "digital", "small"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Construcción",
+      "words": [
+        {"text": "pared", "hints": ["vertical", "separador", "sólido"]},
+        {"text": "suelo", "hints": ["horizontal", "inferior", "base"]},
+        {"text": "techo", "hints": ["horizontal", "superior", "protector"]},
+        {"text": "puerta", "hints": ["acceso", "móvil", "madera"]},
+        {"text": "ventana", "hints": ["apertura", "cristal", "luz"]},
+        {"text": "escalera", "hints": ["vertical", "acceso", "escalonado"]},
+        {"text": "balcón", "hints": ["exterior", "elevado", "saliente"]},
+        {"text": "terraza", "hints": ["exterior", "plano", "elevado"]},
+        {"text": "chimenea", "hints": ["humo", "vertical", "calor"]},
+        {"text": "tejado", "hints": ["inclinado", "superior", "protector"]},
+        {"text": "cimiento", "hints": ["subterráneo", "base", "soporte"]},
+        {"text": "ladrillo", "hints": ["cerámico", "rectangular", "apilable"]},
+        {"text": "cemento", "hints": ["polvo", "aglomerante", "gris"]},
+        {"text": "acero", "hints": ["metal", "resistente", "estructural"]},
+        {"text": "madera", "hints": ["natural", "orgánico", "estructural"]},
+        {"text": "vidrio", "hints": ["transparente", "frágil", "mineral"]},
+        {"text": "tubo", "hints": ["hueco", "cilíndrico", "conductor"]},
+        {"text": "escalón", "hints": ["horizontal", "acceso", "individual"]},
+        {"text": "barandilla", "hints": ["protección", "lateral", "vertical"]},
+        {"text": "columna", "hints": ["vertical", "soporte", "cilíndrico"]},
+        {"text": "viga", "hints": ["horizontal", "soporte", "resistente"]},
+        {"text": "estructura", "hints": ["soporte", "esqueleto", "base"]},
+        {"text": "andamio", "hints": ["temporal", "exterior", "elevado"]},
+        {"text": "grúa", "hints": ["elevación", "mecánico", "grande"]},
+        {"text": "obra", "hints": ["proceso", "temporal", "construcción"]}
+      ]
+    }
+  ]
+}

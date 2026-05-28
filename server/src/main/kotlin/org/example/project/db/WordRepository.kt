@@ -32,7 +32,7 @@ object WordRepository {
         }
     }
 
-    fun randomWordFrom(categoryIds: List<Int>, language: String): Pair<String, String>? = transaction {
+    fun randomWordFrom(categoryIds: List<Int>, language: String): Triple<String, String, List<String>>? = transaction {
         val categoriesToUse = if (categoryIds.isEmpty()) {
             val basePackIds = WordPacks.select(WordPacks.id).where {
                 (WordPacks.isBuiltIn eq true) and (WordPacks.language eq language)
@@ -56,7 +56,12 @@ object WordRepository {
         val category = CategoryEntity.findById(randomWord.categoryId)
             ?: return@transaction null
 
-        Pair(randomWord.text, category.name)
+        val hints = randomWord.hints
+            ?.split("||")
+            ?.filter { it.isNotBlank() }
+            ?: emptyList()
+
+        Triple(randomWord.text, category.name, hints)
     }
 
     fun importPack(ownerUserId: Int, jsonString: String): Int = transaction {
@@ -78,10 +83,13 @@ object WordRepository {
                 name = catJson.name
             }
 
-            for (wordText in catJson.words) {
+            for (wordElement in catJson.words) {
+                val parsed = wordElement.toWord()
+                if (parsed.text.isBlank()) continue
                 WordEntity.new {
                     categoryId = cat.id
-                    text = wordText
+                    text = parsed.text
+                    hints = if (parsed.hints.isEmpty()) null else parsed.hints.joinToString("||")
                 }
             }
         }

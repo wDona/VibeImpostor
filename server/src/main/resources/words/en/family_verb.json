@@ -1,0 +1,69 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Family",
+      "words": [
+        {"text": "father", "hints": ["male", "parent", "adult"]},
+        {"text": "mother", "hints": ["female", "parent", "adult"]},
+        {"text": "son", "hints": ["male", "descendant", "young"]},
+        {"text": "daughter", "hints": ["female", "descendant", "young"]},
+        {"text": "brother", "hints": ["male", "lateral", "same level"]},
+        {"text": "sister", "hints": ["female", "lateral", "same level"]},
+        {"text": "grandfather", "hints": ["male", "ancestor", "elder"]},
+        {"text": "grandmother", "hints": ["female", "ancestor", "elder"]},
+        {"text": "uncle", "hints": ["male", "collateral", "relative"]},
+        {"text": "aunt", "hints": ["female", "collateral", "relative"]},
+        {"text": "cousin", "hints": ["collateral", "distant", "relative"]},
+        {"text": "husband", "hints": ["male", "partner", "adult"]},
+        {"text": "wife", "hints": ["female", "partner", "adult"]},
+        {"text": "boyfriend", "hints": ["male", "partner", "informal"]},
+        {"text": "girlfriend", "hints": ["female", "partner", "informal"]},
+        {"text": "baby", "hints": ["infant", "dependent", "recent"]},
+        {"text": "child", "hints": ["young", "dependent", "growing"]},
+        {"text": "teenager", "hints": ["young", "intermediate", "growing"]},
+        {"text": "adult", "hints": ["mature", "independent", "responsible"]},
+        {"text": "godfather", "hints": ["male", "symbolic", "reference"]},
+        {"text": "godmother", "hints": ["female", "symbolic", "reference"]},
+        {"text": "great grandfather", "hints": ["male", "ancestor", "distant"]},
+        {"text": "great grandmother", "hints": ["female", "ancestor", "distant"]}
+      ]
+    },
+    {
+      "name": "Verb",
+      "words": [
+        {"text": "run", "hints": ["movement", "fast", "physical"]},
+        {"text": "walk", "hints": ["movement", "slow", "physical"]},
+        {"text": "jump", "hints": ["movement", "vertical", "physical"]},
+        {"text": "swim", "hints": ["movement", "aquatic", "physical"]},
+        {"text": "fly", "hints": ["movement", "aerial", "physical"]},
+        {"text": "dance", "hints": ["movement", "rhythmic", "artistic"]},
+        {"text": "sing", "hints": ["vocal", "artistic", "sound"]},
+        {"text": "laugh", "hints": ["emotional", "sound", "positive"]},
+        {"text": "cry", "hints": ["emotional", "liquid", "negative"]},
+        {"text": "sleep", "hints": ["physical", "passive", "necessary"]},
+        {"text": "wake up", "hints": ["physical", "active", "start"]},
+        {"text": "eat", "hints": ["physical", "necessary", "oral"]},
+        {"text": "drink", "hints": ["physical", "necessary", "liquid"]},
+        {"text": "talk", "hints": ["communication", "oral", "social"]},
+        {"text": "listen", "hints": ["sensory", "auditory", "passive"]},
+        {"text": "look", "hints": ["sensory", "visual", "active"]},
+        {"text": "see", "hints": ["sensory", "visual", "passive"]},
+        {"text": "hear", "hints": ["sensory", "auditory", "passive"]},
+        {"text": "smell", "hints": ["sensory", "olfactory", "nose"]},
+        {"text": "touch", "hints": ["sensory", "tactile", "manual"]},
+        {"text": "think", "hints": ["cognitive", "internal", "mental"]},
+        {"text": "believe", "hints": ["cognitive", "internal", "faith"]},
+        {"text": "know", "hints": ["cognitive", "stored", "certain"]},
+        {"text": "learn", "hints": ["cognitive", "progressive", "active"]},
+        {"text": "play", "hints": ["leisure", "entertainment", "active"]},
+        {"text": "work", "hints": ["productive", "effort", "responsible"]},
+        {"text": "rest", "hints": ["physical", "passive", "recovery"]},
+        {"text": "write", "hints": ["communication", "manual", "record"]},
+        {"text": "read", "hints": ["cognitive", "visual", "text"]},
+        {"text": "draw", "hints": ["artistic", "manual", "visual"]}
+      ]
+    }
+  ]
+}

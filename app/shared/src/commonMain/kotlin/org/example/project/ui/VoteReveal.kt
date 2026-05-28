@@ -20,7 +20,13 @@ import org.example.project.model.RoomSnapshot
 import org.example.project.protocol.NOBODY_VOTE_ID
 
 @Composable
-fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String, anonymousVotes: Boolean = false) {
+fun VoteReveal(
+    room: RoomSnapshot,
+    votes: Map<String, String>,
+    language: String,
+    anonymousVotes: Boolean = false,
+    voteTypes: Map<String, Boolean> = emptyMap()
+) {
     if (votes.isEmpty()) return
 
     fun nameOf(id: String): String = when (id) {
@@ -80,6 +86,7 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String,
                     if (!anonymousVotes) {
                         voters.forEach { voterId ->
                             val voterIsPlayer = room.players.any { it.id == voterId }
+                            val isHard = voteTypes[voterId] ?: true
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -91,6 +98,12 @@ fun VoteReveal(room: RoomSnapshot, votes: Map<String, String>, language: String,
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
                                 )
+                                if (voteTypes.isNotEmpty()) {
+                                    Text(
+                                        text = if (isHard) "🔴" else "🟡",
+                                        fontSize = 11.sp
+                                    )
+                                }
                             }
                         }
                     }

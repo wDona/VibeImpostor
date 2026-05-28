@@ -1,0 +1,45 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Food",
+      "words": [
+        {"text": "bread", "hints": ["baked", "grain", "staple"]},
+        {"text": "rice", "hints": ["grain", "asian", "cooked"]},
+        {"text": "pasta", "hints": ["grain", "italian", "boiled"]},
+        {"text": "pizza", "hints": ["baked", "italian", "savory"]},
+        {"text": "sandwich", "hints": ["quick", "cold", "filled"]},
+        {"text": "hamburger", "hints": ["quick", "american", "hot"]},
+        {"text": "chicken", "hints": ["protein", "meat", "common"]},
+        {"text": "meat", "hints": ["protein", "animal", "cooked"]},
+        {"text": "fish", "hints": ["marine", "protein", "animal"]},
+        {"text": "ham", "hints": ["cured", "pork", "salty"]},
+        {"text": "cheese", "hints": ["dairy", "fermented", "solid"]},
+        {"text": "milk", "hints": ["dairy", "liquid", "animal"]},
+        {"text": "egg", "hints": ["animal", "protein", "staple"]},
+        {"text": "butter", "hints": ["dairy", "fat", "spreadable"]},
+        {"text": "yogurt", "hints": ["dairy", "fermented", "creamy"]},
+        {"text": "apple", "hints": ["fruit", "autumn", "sweet"]},
+        {"text": "banana", "hints": ["fruit", "tropical", "sweet"]},
+        {"text": "orange", "hints": ["fruit", "citrus", "vitamins"]},
+        {"text": "strawberry", "hints": ["fruit", "red", "summer"]},
+        {"text": "grape", "hints": ["fruit", "cluster", "sweet"]},
+        {"text": "melon", "hints": ["fruit", "summer", "sweet"]},
+        {"text": "watermelon", "hints": ["fruit", "summer", "watery"]},
+        {"text": "pineapple", "hints": ["fruit", "tropical", "sour"]},
+        {"text": "tomato", "hints": ["vegetable", "red", "acidic"]},
+        {"text": "lettuce", "hints": ["leaf", "green", "raw"]},
+        {"text": "onion", "hints": ["vegetable", "aromatic", "staple"]},
+        {"text": "potato", "hints": ["tuber", "staple", "cooked"]},
+        {"text": "carrot", "hints": ["vegetable", "raw", "vitamin"]},
+        {"text": "broccoli", "hints": ["vegetable", "nutritious", "green"]},
+        {"text": "chocolate", "hints": ["sweet", "cacao", "processed"]},
+        {"text": "candy", "hints": ["sweet", "sugar", "snack"]},
+        {"text": "cookie", "hints": ["baked", "sweet", "crunchy"]},
+        {"text": "cake", "hints": ["sweet", "baked", "festive"]},
+        {"text": "fruit", "hints": ["plant", "sweet", "natural"]}
+      ]
+    }
+  ]
+}

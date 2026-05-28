@@ -1,0 +1,57 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Color",
+      "words": [
+        {"text": "red", "hints": ["warm", "primary", "intense"]},
+        {"text": "blue", "hints": ["cool", "primary", "calm"]},
+        {"text": "green", "hints": ["natural", "primary", "fresh"]},
+        {"text": "yellow", "hints": ["warm", "primary", "luminous"]},
+        {"text": "orange", "hints": ["warm", "secondary", "vivid"]},
+        {"text": "purple", "hints": ["cool", "secondary", "dark"]},
+        {"text": "pink", "hints": ["soft", "warm", "light"]},
+        {"text": "black", "hints": ["dark", "absorbs light", "neutral"]},
+        {"text": "white", "hints": ["light", "reflects light", "neutral"]},
+        {"text": "gray", "hints": ["neutral", "intermediate", "dull"]},
+        {"text": "brown", "hints": ["earthy", "natural", "dark"]},
+        {"text": "gold", "hints": ["metallic", "shiny", "warm"]},
+        {"text": "silver", "hints": ["metallic", "shiny", "cool"]},
+        {"text": "turquoise", "hints": ["cool", "bluish", "tropical"]},
+        {"text": "violet", "hints": ["cool", "soft", "dark"]},
+        {"text": "indigo", "hints": ["cool", "deep", "dark"]},
+        {"text": "cyan", "hints": ["cool", "bright", "secondary"]},
+        {"text": "beige", "hints": ["neutral", "light", "warm"]},
+        {"text": "magenta", "hints": ["vivid", "secondary", "pinkish"]},
+        {"text": "scarlet", "hints": ["intense red", "warm", "bright"]},
+        {"text": "crimson", "hints": ["dark red", "intense", "warm"]}
+      ]
+    },
+    {
+      "name": "Shape",
+      "words": [
+        {"text": "circle", "hints": ["curved", "symmetric", "no angles"]},
+        {"text": "square", "hints": ["four sides", "equal", "straight"]},
+        {"text": "rectangle", "hints": ["four sides", "elongated", "straight"]},
+        {"text": "triangle", "hints": ["three sides", "angular", "basic"]},
+        {"text": "oval", "hints": ["curved", "elongated", "symmetric"]},
+        {"text": "diamond", "hints": ["four sides", "tilted", "angular"]},
+        {"text": "line", "hints": ["simple", "elongated", "one-dimensional"]},
+        {"text": "point", "hints": ["minimal", "central", "small"]},
+        {"text": "ray", "hints": ["linear", "angular", "irregular"]},
+        {"text": "cube", "hints": ["three-dimensional", "six faces", "regular"]},
+        {"text": "sphere", "hints": ["three-dimensional", "curved", "symmetric"]},
+        {"text": "cylinder", "hints": ["three-dimensional", "circular", "regular"]},
+        {"text": "cone", "hints": ["three-dimensional", "pointy", "circular"]},
+        {"text": "pyramid", "hints": ["three-dimensional", "angular", "pointy"]},
+        {"text": "cross", "hints": ["symmetric", "four arms", "simple"]},
+        {"text": "star", "hints": ["pointy", "symmetric", "radiant"]},
+        {"text": "spiral", "hints": ["curved", "continuous", "rotating"]},
+        {"text": "zigzag", "hints": ["angular", "alternating", "irregular"]},
+        {"text": "wave", "hints": ["curved", "continuous", "undulating"]},
+        {"text": "heart", "hints": ["curved", "symmetric", "symbolic"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Game",
+      "words": [
+        {"text": "chess", "hints": ["board", "strategy", "pieces"]},
+        {"text": "checkers", "hints": ["board", "pieces", "capture"]},
+        {"text": "poker", "hints": ["cards", "betting", "bluffing"]},
+        {"text": "video game", "hints": ["digital", "screen", "interactive"]},
+        {"text": "cards", "hints": ["paper", "deck", "chance"]},
+        {"text": "dice", "hints": ["chance", "cubic", "numbers"]},
+        {"text": "dominoes", "hints": ["tiles", "numbers", "chain"]},
+        {"text": "console", "hints": ["digital", "entertainment", "electronic"]},
+        {"text": "bingo", "hints": ["chance", "numbers", "collective"]},
+        {"text": "lottery", "hints": ["chance", "numbers", "prize"]},
+        {"text": "crossword", "hints": ["words", "letters", "grid"]},
+        {"text": "puzzle", "hints": ["pieces", "image", "fit"]},
+        {"text": "board game", "hints": ["board", "collective", "turn"]},
+        {"text": "racing", "hints": ["speed", "competition", "turn"]},
+        {"text": "football", "hints": ["collective", "outdoor", "ball"]},
+        {"text": "tennis", "hints": ["individual", "racket", "net"]},
+        {"text": "billiards", "hints": ["table", "cue", "balls"]},
+        {"text": "bowling", "hints": ["pins", "lane", "impact"]},
+        {"text": "darts", "hints": ["aim", "target", "wall"]}
+      ]
+    },
+    {
+      "name": "Movie",
+      "words": [
+        {"text": "comedy", "hints": ["laughter", "light", "entertainment"]},
+        {"text": "drama", "hints": ["emotional", "intense", "serious"]},
+        {"text": "action", "hints": ["violent", "fast", "chases"]},
+        {"text": "horror", "hints": ["fear", "dark", "fright"]},
+        {"text": "science fiction", "hints": ["future", "technological", "imaginary"]},
+        {"text": "fantasy", "hints": ["imaginary", "magic", "worlds"]},
+        {"text": "adventure", "hints": ["exploration", "journey", "risk"]},
+        {"text": "romance", "hints": ["love", "emotional", "couple"]},
+        {"text": "thriller", "hints": ["tension", "suspense", "intrigue"]},
+        {"text": "animation", "hints": ["drawn", "digital", "colorful"]},
+        {"text": "documentary", "hints": ["real", "informative", "narrated"]},
+        {"text": "western", "hints": ["cowboy", "desert", "american"]},
+        {"text": "superhero", "hints": ["powers", "fictional", "popular"]},
+        {"text": "musical", "hints": ["songs", "dance", "entertainment"]},
+        {"text": "children", "hints": ["kids", "colorful", "educational"]},
+        {"text": "crime", "hints": ["offense", "investigation", "dark"]},
+        {"text": "mystery", "hints": ["enigma", "investigation", "hidden"]},
+        {"text": "suspense", "hints": ["tension", "uncertainty", "twist"]},
+        {"text": "historical", "hints": ["past", "real", "period"]}
+      ]
+    },
+    {
+      "name": "Art",
+      "words": [
+        {"text": "painting", "hints": ["color", "canvas", "visual"]},
+        {"text": "sculpture", "hints": ["three-dimensional", "material", "tactile"]},
+        {"text": "photography", "hints": ["image", "light", "instant"]},
+        {"text": "canvas", "hints": ["support", "fabric", "painting"]},
+        {"text": "brush", "hints": ["tool", "hair", "painting"]},
+        {"text": "palette", "hints": ["mix", "color", "tool"]},
+        {"text": "statue", "hints": ["three-dimensional", "material", "figure"]},
+        {"text": "portrait", "hints": ["figurative", "person", "realistic"]},
+        {"text": "landscape", "hints": ["natural", "visual", "scene"]},
+        {"text": "mural", "hints": ["large format", "wall", "public"]},
+        {"text": "pottery", "hints": ["clay", "baked", "manual"]},
+        {"text": "enamel", "hints": ["glass", "color", "fired"]},
+        {"text": "glass", "hints": ["transparent", "fragile", "molded"]},
+        {"text": "mosaic", "hints": ["fragments", "colors", "decorative"]},
+        {"text": "fresco", "hints": ["wall", "wet", "ancient"]},
+        {"text": "caricature", "hints": ["exaggerated", "humorous", "portrait"]},
+        {"text": "comic", "hints": ["panels", "narrative", "illustrated"]},
+        {"text": "engraving", "hints": ["print", "plate", "reproducible"]},
+        {"text": "lithograph", "hints": ["print", "stone", "reproducible"]},
+        {"text": "print", "hints": ["print", "screen", "repeatable"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Mythology",
+      "words": [
+        {"text": "god", "hints": ["supernatural", "superior", "immortal"]},
+        {"text": "goddess", "hints": ["supernatural", "female", "immortal"]},
+        {"text": "titan", "hints": ["giant", "ancient", "greek"]},
+        {"text": "elf", "hints": ["fantastic", "small", "forest"]},
+        {"text": "fairy", "hints": ["fantastic", "winged", "magical"]},
+        {"text": "wizard", "hints": ["supernatural", "knowledge", "powers"]},
+        {"text": "witch", "hints": ["supernatural", "female", "spell"]},
+        {"text": "dragon", "hints": ["fantastic", "reptile", "giant"]},
+        {"text": "phoenix", "hints": ["bird", "immortal", "fire"]},
+        {"text": "unicorn", "hints": ["horse", "horn", "magical"]},
+        {"text": "pegasus", "hints": ["horse", "winged", "greek"]},
+        {"text": "griffin", "hints": ["hybrid", "raptor", "quadruped"]},
+        {"text": "mermaid", "hints": ["hybrid", "aquatic", "female"]},
+        {"text": "centaur", "hints": ["hybrid", "horse", "human"]},
+        {"text": "demon", "hints": ["supernatural", "evil", "underworld"]},
+        {"text": "angel", "hints": ["supernatural", "winged", "divine"]},
+        {"text": "vampire", "hints": ["supernatural", "nocturnal", "immortal"]},
+        {"text": "werewolf", "hints": ["supernatural", "metamorphosis", "lunar"]},
+        {"text": "zombie", "hints": ["supernatural", "dead", "slow"]},
+        {"text": "ghost", "hints": ["supernatural", "spirit", "invisible"]},
+        {"text": "skeleton", "hints": ["supernatural", "bones", "dead"]},
+        {"text": "mummy", "hints": ["supernatural", "wrapped", "ancient"]},
+        {"text": "minotaur", "hints": ["hybrid", "bull", "labyrinth"]}
+      ]
+    },
+    {
+      "name": "Object",
+      "words": [
+        {"text": "watch", "hints": ["measurement", "temporal", "circular"]},
+        {"text": "coin", "hints": ["circular", "metal", "exchange"]},
+        {"text": "bill", "hints": ["paper", "value", "exchange"]},
+        {"text": "key", "hints": ["metal", "opening", "unique"]},
+        {"text": "door", "hints": ["access", "wood", "opening"]},
+        {"text": "window", "hints": ["glass", "light", "opening"]},
+        {"text": "mirror", "hints": ["reflective", "glass", "wall"]},
+        {"text": "picture", "hints": ["decoration", "wall", "image"]},
+        {"text": "phone", "hints": ["communication", "electronic", "personal"]},
+        {"text": "bottle", "hints": ["container", "liquid", "glass"]},
+        {"text": "glass", "hints": ["container", "liquid", "transparent"]},
+        {"text": "cup", "hints": ["container", "hot", "handle"]},
+        {"text": "plate", "hints": ["container", "food", "circular"]},
+        {"text": "spoon", "hints": ["utensil", "concave", "metal"]},
+        {"text": "fork", "hints": ["utensil", "prongs", "metal"]},
+        {"text": "knife", "hints": ["utensil", "blade", "metal"]},
+        {"text": "pan", "hints": ["kitchen", "flat", "handle"]},
+        {"text": "pot", "hints": ["kitchen", "deep", "lid"]},
+        {"text": "box", "hints": ["container", "angular", "storage"]},
+        {"text": "bag", "hints": ["container", "flexible", "transport"]},
+        {"text": "wallet", "hints": ["flat", "pocket", "personal"]},
+        {"text": "backpack", "hints": ["back", "transport", "storage"]},
+        {"text": "suitcase", "hints": ["travel", "wheels", "storage"]},
+        {"text": "umbrella", "hints": ["rain", "foldable", "protection"]},
+        {"text": "flashlight", "hints": ["light", "portable", "battery"]}
+      ]
+    }
+  ]
+}

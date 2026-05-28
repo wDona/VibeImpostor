@@ -1,0 +1,59 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Drink",
+      "words": [
+        {"text": "water", "hints": ["liquid", "natural", "essential"]},
+        {"text": "coffee", "hints": ["hot", "bitter", "stimulant"]},
+        {"text": "tea", "hints": ["hot", "infusion", "herbal"]},
+        {"text": "milk", "hints": ["dairy", "liquid", "animal"]},
+        {"text": "juice", "hints": ["fruit", "natural", "vitamin"]},
+        {"text": "beer", "hints": ["alcoholic", "fermented", "grain"]},
+        {"text": "wine", "hints": ["alcoholic", "fermented", "grape"]},
+        {"text": "soda", "hints": ["sugary", "cold", "industrial"]},
+        {"text": "lemonade", "hints": ["citrus", "cold", "natural"]},
+        {"text": "hot chocolate", "hints": ["hot", "sweet", "cacao"]},
+        {"text": "smoothie", "hints": ["fruit", "cold", "thick"]},
+        {"text": "cola", "hints": ["bubbly", "sugary", "cold"]},
+        {"text": "whiskey", "hints": ["alcoholic", "distilled", "aged"]},
+        {"text": "rum", "hints": ["alcoholic", "distilled", "tropical"]},
+        {"text": "vodka", "hints": ["alcoholic", "distilled", "neutral"]},
+        {"text": "champagne", "hints": ["alcoholic", "bubbly", "festive"]},
+        {"text": "cider", "hints": ["alcoholic", "fermented", "apple"]},
+        {"text": "liquor", "hints": ["alcoholic", "sweet", "distilled"]}
+      ]
+    },
+    {
+      "name": "Clothes",
+      "words": [
+        {"text": "shirt", "hints": ["garment", "formal", "buttons"]},
+        {"text": "t-shirt", "hints": ["garment", "casual", "short sleeve"]},
+        {"text": "pants", "hints": ["garment", "legs", "basic"]},
+        {"text": "skirt", "hints": ["garment", "feminine", "open"]},
+        {"text": "dress", "hints": ["garment", "feminine", "full"]},
+        {"text": "coat", "hints": ["garment", "outer", "winter"]},
+        {"text": "jacket", "hints": ["garment", "outer", "basic"]},
+        {"text": "sweater", "hints": ["garment", "knit", "winter"]},
+        {"text": "sock", "hints": ["footwear", "foot", "inner"]},
+        {"text": "shoe", "hints": ["footwear", "leather", "basic"]},
+        {"text": "boot", "hints": ["footwear", "tall", "resistant"]},
+        {"text": "cap", "hints": ["accessory", "head", "sport"]},
+        {"text": "scarf", "hints": ["accessory", "neck", "winter"]},
+        {"text": "hat", "hints": ["accessory", "head", "outdoor"]},
+        {"text": "glove", "hints": ["accessory", "hand", "winter"]},
+        {"text": "belt", "hints": ["accessory", "waist", "leather"]},
+        {"text": "tie", "hints": ["accessory", "formal", "neck"]},
+        {"text": "blouse", "hints": ["garment", "feminine", "light"]},
+        {"text": "jeans", "hints": ["garment", "denim", "casual"]},
+        {"text": "shorts", "hints": ["garment", "legs", "summer"]},
+        {"text": "pyjamas", "hints": ["garment", "sleep", "comfortable"]},
+        {"text": "uniform", "hints": ["garment", "institutional", "equal"]},
+        {"text": "suit", "hints": ["garment", "formal", "set"]},
+        {"text": "sandal", "hints": ["footwear", "open", "summer"]},
+        {"text": "hoodie", "hints": ["garment", "casual", "comfortable"]}
+      ]
+    }
+  ]
+}

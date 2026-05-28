@@ -21,6 +21,7 @@ import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ServerMessage
 import org.example.project.protocol.NOBODY_VOTE_ID
 import org.example.project.protocol.BOTH_IMPOSTORS_ID
+import org.example.project.protocol.PUNISHMENT_PREFIX
 import org.example.project.protocol.WRONG_CLAIM_PREFIX
 import org.example.project.settings.SettingsStorage
 import org.example.project.settings.UserSettings
@@ -38,6 +39,7 @@ data class GameState(
     val yourRole: Role? = null,
     val yourContent: String? = null,
     val contentIsWord: Boolean = true,
+    val yourHintList: List<String> = emptyList(),
     val players: List<PublicPlayer> = emptyList(),
     val error: String? = null,
     val lastWordsPlayed: Map<String, String> = emptyMap(),
@@ -66,7 +68,10 @@ data class GameState(
     val userPacks: List<org.example.project.net.PackDto> = emptyList(),
     val impostorGuesses: Map<String, ImpostorGuessResult> = emptyMap(),
     val impostorGuessingNext: Boolean = false,
-    val eliminationVotes: Map<String, Map<String, String>> = emptyMap()
+    val eliminationVotes: Map<String, Map<String, String>> = emptyMap(),
+    val gameStartedAtMs: Long = 0L,
+    val punishmentPlayerId: String? = null,
+    val lastVoteTypes: Map<String, Boolean> = emptyMap()
 )
 
 data class ImpostorGuessResult(
@@ -193,9 +198,9 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun castVote(targetPlayerId: String) {
+    fun castVote(targetPlayerId: String, voteIsHard: Boolean = true) {
         viewModelScope.launch {
-            val msg = ClientMessage.CastVote(targetPlayerId)
+            val msg = ClientMessage.CastVote(targetPlayerId, voteIsHard)
             sendGameMessage(msg)
         }
     }
@@ -312,6 +317,10 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch { sendGameMessage(ClientMessage.SubmitImpostorGuess(word)) }
     }
 
+    fun kickPlayer(targetPlayerId: String) {
+        viewModelScope.launch { sendGameMessage(ClientMessage.KickPlayer(targetPlayerId)) }
+    }
+
     fun continueToResults() {
         _state.value = _state.value.copy(screen = Screen.RESULT)
     }
@@ -417,6 +426,7 @@ class GameViewModel : ViewModel() {
                     yourRole = msg.yourRole,
                     yourContent = msg.content,
                     contentIsWord = msg.contentIsWord,
+                    yourHintList = msg.hintList,
                     room = msg.room,
                     players = msg.room.players,
                     showRematchPopup = false,
@@ -428,7 +438,10 @@ class GameViewModel : ViewModel() {
                     voteDeadlineMs = 0L,
                     votedPlayerIds = emptySet(),
                     showEndGameDialog = false,
-                    eliminationVotes = emptyMap()
+                    eliminationVotes = emptyMap(),
+                    gameStartedAtMs = currentTimeMillis(),
+                    punishmentPlayerId = null,
+                    lastVoteTypes = emptyMap()
                 )
             }
 
@@ -476,9 +489,10 @@ class GameViewModel : ViewModel() {
 
             is ServerMessage.VotingResult -> {
                 val ejectedId = msg.ejectedPlayerId
+                val isPunishment = ejectedId?.startsWith(PUNISHMENT_PREFIX) == true
                 val updatedElimVotes = _state.value.eliminationVotes.toMutableMap()
                 when {
-                    ejectedId == null || ejectedId == NOBODY_VOTE_ID -> Unit
+                    ejectedId == null || ejectedId == NOBODY_VOTE_ID || isPunishment -> Unit
                     ejectedId == BOTH_IMPOSTORS_ID ->
                         msg.room.players.filter { it.id in msg.room.impostorIds && it.isSpectator }
                             .forEach { updatedElimVotes[it.id] = msg.votes }
@@ -490,6 +504,8 @@ class GameViewModel : ViewModel() {
                     screen = Screen.ROUND_RESULT,
                     votingResult = Pair(msg.ejectedPlayerId, msg.wasImpostor),
                     lastRoundVotes = msg.votes,
+                    lastVoteTypes = msg.voteTypes,
+                    punishmentPlayerId = msg.punishmentPlayerId,
                     room = msg.room,
                     players = msg.room.players,
                     impostorGuesses = msg.room.impostorGuesses.mapValues { ImpostorGuessResult(it.value) },

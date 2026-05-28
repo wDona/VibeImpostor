@@ -1,0 +1,66 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "País",
+      "words": [
+        {"text": "España", "hints": ["europeo", "ibérico", "mediterráneo"]},
+        {"text": "Francia", "hints": ["europeo", "occidental", "románico"]},
+        {"text": "Alemania", "hints": ["europeo", "central", "germánico"]},
+        {"text": "Italia", "hints": ["europeo", "mediterráneo", "peninsular"]},
+        {"text": "Portugal", "hints": ["europeo", "ibérico", "atlántico"]},
+        {"text": "Rusia", "hints": ["europeo asiático", "enorme", "eslavo"]},
+        {"text": "China", "hints": ["asiático", "oriental", "poblado"]},
+        {"text": "Japón", "hints": ["asiático", "insular", "oriental"]},
+        {"text": "India", "hints": ["asiático", "peninsular", "tropical"]},
+        {"text": "Brasil", "hints": ["sudamericano", "tropical", "grande"]},
+        {"text": "México", "hints": ["norteamericano", "latinoamericano", "tropical"]},
+        {"text": "Canadá", "hints": ["norteamericano", "frío", "grande"]},
+        {"text": "Estados Unidos", "hints": ["norteamericano", "occidental", "poderoso"]},
+        {"text": "Australia", "hints": ["oceánico", "grande", "insular"]},
+        {"text": "Egipto", "hints": ["africano", "árabe", "antiguo"]},
+        {"text": "Tailandia", "hints": ["asiático", "sudeste", "tropical"]},
+        {"text": "Grecia", "hints": ["europeo", "mediterráneo", "antiguo"]},
+        {"text": "Suecia", "hints": ["europeo", "nórdico", "frío"]},
+        {"text": "Noruega", "hints": ["europeo", "nórdico", "frío"]},
+        {"text": "Dinamarca", "hints": ["europeo", "nórdico", "pequeño"]},
+        {"text": "Holanda", "hints": ["europeo", "bajo", "occidental"]},
+        {"text": "Bélgica", "hints": ["europeo", "central", "pequeño"]},
+        {"text": "Suiza", "hints": ["europeo", "central", "montañoso"]},
+        {"text": "Polonia", "hints": ["europeo", "central", "eslavo"]},
+        {"text": "Turquía", "hints": ["euroasiático", "mediterráneo", "islámico"]}
+      ]
+    },
+    {
+      "name": "Ciudad",
+      "words": [
+        {"text": "Madrid", "hints": ["europea", "capital", "ibérica"]},
+        {"text": "Barcelona", "hints": ["europea", "mediterránea", "costera"]},
+        {"text": "París", "hints": ["europea", "capital", "romántica"]},
+        {"text": "Londres", "hints": ["europea", "capital", "insular"]},
+        {"text": "Berlín", "hints": ["europea", "capital", "central"]},
+        {"text": "Roma", "hints": ["europea", "capital", "histórica"]},
+        {"text": "Nueva York", "hints": ["americana", "costera", "grande"]},
+        {"text": "Tokio", "hints": ["asiática", "capital", "tecnológica"]},
+        {"text": "Sídney", "hints": ["oceánica", "costera", "grande"]},
+        {"text": "Dubai", "hints": ["árabe", "moderna", "desértica"]},
+        {"text": "Bangkok", "hints": ["asiática", "capital", "tropical"]},
+        {"text": "Estambul", "hints": ["euroasiática", "histórica", "costera"]},
+        {"text": "Praga", "hints": ["europea", "central", "histórica"]},
+        {"text": "Viena", "hints": ["europea", "capital", "musical"]},
+        {"text": "Estocolmo", "hints": ["europea", "nórdica", "capital"]},
+        {"text": "Ámsterdam", "hints": ["europea", "canales", "capital"]},
+        {"text": "Bruselas", "hints": ["europea", "capital", "central"]},
+        {"text": "Zurich", "hints": ["europea", "financiera", "pequeña"]},
+        {"text": "Varsovia", "hints": ["europea", "capital", "eslava"]},
+        {"text": "Lisboa", "hints": ["europea", "capital", "atlántica"]},
+        {"text": "Atenas", "hints": ["europea", "capital", "histórica"]},
+        {"text": "Moscú", "hints": ["europea", "capital", "fría"]},
+        {"text": "Pekín", "hints": ["asiática", "capital", "antigua"]},
+        {"text": "Bombay", "hints": ["asiática", "costera", "populosa"]},
+        {"text": "Río de Janeiro", "hints": ["sudamericana", "costera", "tropical"]}
+      ]
+    }
+  ]
+}

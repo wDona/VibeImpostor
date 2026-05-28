@@ -19,6 +19,7 @@ class Room(
 
     var word: String? = null
     var category: String? = null
+    var wordHints: List<String> = emptyList()
     var impostorIds: Set<String> = emptySet()
     var turnOrder: List<String> = emptyList()
     var currentTurnIndex: Int = 0
@@ -34,6 +35,9 @@ class Room(
     var lastWinners: List<String> = emptyList()
     var rematchJob: Job? = null
     var voteTimerJob: Job? = null
+    var isInPunishmentRound: Boolean = false
+    var punishmentPlayerId: String? = null
+    var voteTypes: Map<String, Boolean> = emptyMap()
 
     fun getPublicPlayers() = players.map {
         org.example.project.model.PublicPlayer(
@@ -87,6 +91,9 @@ class Room(
         continueResponses = emptySet()
         pendingGuessImpostorId = null
         impostorGuesses = emptyMap()
+        isInPunishmentRound = false
+        punishmentPlayerId = null
+        voteTypes = emptyMap()
 
         while (currentTurnIndex < turnOrder.size) {
             val player = players.find { it.id == turnOrder[currentTurnIndex] }

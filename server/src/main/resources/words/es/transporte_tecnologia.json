@@ -1,0 +1,61 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Transporte",
+      "words": [
+        {"text": "coche", "hints": ["terrestre", "motorizado", "personal"]},
+        {"text": "bicicleta", "hints": ["terrestre", "manual", "ecológico"]},
+        {"text": "moto", "hints": ["terrestre", "motorizado", "dos ruedas"]},
+        {"text": "autobús", "hints": ["terrestre", "colectivo", "público"]},
+        {"text": "tren", "hints": ["terrestre", "colectivo", "raíles"]},
+        {"text": "avión", "hints": ["aéreo", "motorizado", "rápido"]},
+        {"text": "barco", "hints": ["acuático", "flotante", "grande"]},
+        {"text": "taxi", "hints": ["terrestre", "motorizado", "servicio"]},
+        {"text": "camión", "hints": ["terrestre", "motorizado", "carga"]},
+        {"text": "metro", "hints": ["subterráneo", "colectivo", "urbano"]},
+        {"text": "helicóptero", "hints": ["aéreo", "motorizado", "vertical"]},
+        {"text": "tractor", "hints": ["terrestre", "agrícola", "potente"]},
+        {"text": "carreta", "hints": ["terrestre", "animal", "antiguo"]},
+        {"text": "trineo", "hints": ["terrestre", "nieve", "deslizante"]},
+        {"text": "patineta", "hints": ["terrestre", "manual", "urbano"]},
+        {"text": "scooter", "hints": ["terrestre", "motorizado", "urbano"]},
+        {"text": "tranvía", "hints": ["terrestre", "eléctrico", "urbano"]},
+        {"text": "crucero", "hints": ["acuático", "turístico", "grande"]},
+        {"text": "yate", "hints": ["acuático", "privado", "lujo"]},
+        {"text": "caravana", "hints": ["terrestre", "habitable", "motorizado"]}
+      ]
+    },
+    {
+      "name": "Tecnología",
+      "words": [
+        {"text": "ordenador", "hints": ["digital", "procesador", "pantalla"]},
+        {"text": "portátil", "hints": ["digital", "móvil", "personal"]},
+        {"text": "teléfono", "hints": ["comunicación", "personal", "digital"]},
+        {"text": "tablet", "hints": ["digital", "pantalla", "táctil"]},
+        {"text": "televisor", "hints": ["pantalla", "entretenimiento", "eléctrico"]},
+        {"text": "radio", "hints": ["onda", "audio", "eléctrico"]},
+        {"text": "cámara", "hints": ["óptico", "imagen", "digital"]},
+        {"text": "reloj inteligente", "hints": ["wearable", "digital", "personal"]},
+        {"text": "auriculares", "hints": ["audio", "personal", "alámbrico"]},
+        {"text": "micrófono", "hints": ["audio", "captura", "eléctrico"]},
+        {"text": "altavoz", "hints": ["audio", "emisor", "eléctrico"]},
+        {"text": "teclado", "hints": ["entrada", "digital", "manual"]},
+        {"text": "ratón", "hints": ["entrada", "digital", "manual"]},
+        {"text": "monitor", "hints": ["pantalla", "digital", "visual"]},
+        {"text": "impresora", "hints": ["salida", "físico", "papel"]},
+        {"text": "router", "hints": ["red", "conexión", "digital"]},
+        {"text": "cable", "hints": ["conductor", "físico", "conexión"]},
+        {"text": "cargador", "hints": ["energía", "eléctrico", "accesorio"]},
+        {"text": "batería", "hints": ["energía", "almacenamiento", "portátil"]},
+        {"text": "pantalla", "hints": ["visual", "digital", "emisor"]},
+        {"text": "disco duro", "hints": ["almacenamiento", "digital", "interno"]},
+        {"text": "procesador", "hints": ["digital", "central", "interno"]},
+        {"text": "memoria", "hints": ["almacenamiento", "digital", "rápido"]},
+        {"text": "sensor", "hints": ["detector", "digital", "pequeño"]},
+        {"text": "antena", "hints": ["señal", "receptor", "exterior"]}
+      ]
+    }
+  ]
+}

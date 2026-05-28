@@ -1,0 +1,64 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Fruit",
+      "words": [
+        {"text": "apple", "hints": ["autumn", "tree", "temperate"]},
+        {"text": "banana", "hints": ["tropical", "cluster", "sweet"]},
+        {"text": "orange", "hints": ["citrus", "tree", "juice"]},
+        {"text": "strawberry", "hints": ["summer", "ground", "red"]},
+        {"text": "lemon", "hints": ["citrus", "tree", "sour"]},
+        {"text": "peach", "hints": ["summer", "tree", "fuzzy"]},
+        {"text": "pear", "hints": ["autumn", "tree", "soft"]},
+        {"text": "grape", "hints": ["autumn", "vine", "cluster"]},
+        {"text": "pineapple", "hints": ["tropical", "spiky", "crown"]},
+        {"text": "melon", "hints": ["summer", "ground", "large"]},
+        {"text": "watermelon", "hints": ["summer", "ground", "watery"]},
+        {"text": "cherry", "hints": ["spring", "tree", "pair"]},
+        {"text": "plum", "hints": ["summer", "tree", "purple"]},
+        {"text": "kiwi", "hints": ["tropical", "brown skin", "green inside"]},
+        {"text": "mango", "hints": ["tropical", "tree", "sweet"]},
+        {"text": "papaya", "hints": ["tropical", "tree", "orange"]},
+        {"text": "coconut", "hints": ["tropical", "palm", "hard"]},
+        {"text": "grapefruit", "hints": ["citrus", "tree", "bitter"]},
+        {"text": "raspberry", "hints": ["wild", "bush", "red"]},
+        {"text": "blueberry", "hints": ["wild", "bush", "small"]},
+        {"text": "fig", "hints": ["mediterranean", "tree", "sweet"]},
+        {"text": "date", "hints": ["desert", "palm", "sweet"]},
+        {"text": "tamarind", "hints": ["tropical", "tree", "sour"]},
+        {"text": "passion fruit", "hints": ["tropical", "vine", "sour"]}
+      ]
+    },
+    {
+      "name": "Vegetable",
+      "words": [
+        {"text": "tomato", "hints": ["red", "plant", "acidic"]},
+        {"text": "lettuce", "hints": ["leaf", "raw", "green"]},
+        {"text": "onion", "hints": ["bulb", "aromatic", "layers"]},
+        {"text": "potato", "hints": ["tuber", "underground", "starchy"]},
+        {"text": "carrot", "hints": ["root", "underground", "orange"]},
+        {"text": "broccoli", "hints": ["cabbage", "green", "tree-like"]},
+        {"text": "cauliflower", "hints": ["cabbage", "white", "tree-like"]},
+        {"text": "spinach", "hints": ["leaf", "dark green", "iron"]},
+        {"text": "cucumber", "hints": ["elongated", "green", "watery"]},
+        {"text": "radish", "hints": ["root", "spicy", "small"]},
+        {"text": "garlic", "hints": ["bulb", "aromatic", "medicinal"]},
+        {"text": "leek", "hints": ["bulb", "elongated", "aromatic"]},
+        {"text": "celery", "hints": ["stem", "green", "crunchy"]},
+        {"text": "squash", "hints": ["large", "orange", "ground"]},
+        {"text": "mushroom", "hints": ["fungus", "cap", "terrestrial"]},
+        {"text": "pepper", "hints": ["hollow", "colorful", "crunchy"]},
+        {"text": "eggplant", "hints": ["purple", "elongated", "soft"]},
+        {"text": "bean", "hints": ["pod", "seed", "elongated"]},
+        {"text": "corn", "hints": ["grain", "yellow", "cob"]},
+        {"text": "pea", "hints": ["seed", "round", "green"]},
+        {"text": "turnip", "hints": ["root", "white", "round"]},
+        {"text": "beet", "hints": ["root", "red", "sweet"]},
+        {"text": "artichoke", "hints": ["flower", "leaves", "mediterranean"]},
+        {"text": "cabbage", "hints": ["cabbage", "leaf", "large"]}
+      ]
+    }
+  ]
+}

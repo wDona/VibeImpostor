@@ -17,9 +17,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
+import org.example.project.currentTimeMillis
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,8 +37,13 @@ import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.model.GameMode
 import org.example.project.model.Role
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.graphics.Color
 
 @Composable
@@ -42,7 +53,18 @@ fun GameScreen(viewModel: GameViewModel) {
     val wordInput = remember { mutableStateOf("") }
     val language = state.value.settings.language
     val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
+    val isHost = room.hostId == state.value.yourPlayerId
+    var showKickDialog by remember { mutableStateOf(false) }
+    var kickTargetId by remember { mutableStateOf<String?>(null) }
 
+    val gameStartedAt = state.value.gameStartedAtMs
+    val elapsedSeconds = remember { mutableLongStateOf(0L) }
+    LaunchedEffect(gameStartedAt) {
+        while (true) {
+            elapsedSeconds.longValue = if (gameStartedAt > 0) (currentTimeMillis() - gameStartedAt) / 1000 else 0
+            delay(1000)
+        }
+    }
     val hiddenRole = room.config.hiddenRole
     val isImpostor = state.value.yourRole == Role.IMPOSTOR
     val roleCardGradient = when {
@@ -66,13 +88,29 @@ fun GameScreen(viewModel: GameViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
-        Text(
-            "${Strings.get("game_round", language)} ${room.roundNumber}",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            letterSpacing = 1.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "${Strings.get("game_round", language)} ${room.roundNumber}",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+            val elapsed = elapsedSeconds.longValue
+            val mm = elapsed / 60
+            val ss = elapsed % 60
+            Text(
+                text = "${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+            )
+        }
 
         if (amSpectator) {
             Text(
@@ -142,6 +180,28 @@ fun GameScreen(viewModel: GameViewModel) {
                             color = contentColor.copy(alpha = 0.7f),
                             letterSpacing = 1.sp
                         )
+                    }
+                    // Hints for impostors
+                    if (isImpostor && !state.value.contentIsWord && state.value.yourHintList.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        if (room.config.progressiveHints) {
+                            val visibleHints = state.value.yourHintList.take(room.roundNumber)
+                            visibleHints.forEachIndexed { idx, hint ->
+                                Text(
+                                    text = "${Strings.get("game_hint", language)} ${idx + 1}: $hint",
+                                    fontSize = 13.sp,
+                                    color = contentColor.copy(alpha = 0.85f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        } else {
+                            Text(
+                                text = "${Strings.get("game_hint", language)}: ${state.value.yourHintList[0]}",
+                                fontSize = 13.sp,
+                                color = contentColor.copy(alpha = 0.85f),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
@@ -275,7 +335,7 @@ fun GameScreen(viewModel: GameViewModel) {
         Spacer(modifier = Modifier.height(8.dp))
 
         if (!amSpectator) {
-            androidx.compose.material3.OutlinedButton(
+            OutlinedButton(
                 onClick = { viewModel.proposeEndGame() },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp)
@@ -284,10 +344,21 @@ fun GameScreen(viewModel: GameViewModel) {
             }
         }
 
+        if (isHost) {
+            OutlinedButton(
+                onClick = { showKickDialog = true },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = ImpostorRed)
+            ) {
+                Text(Strings.get("game_kick_title", language))
+            }
+        }
+
         LeaveGameButton(viewModel, language)
 
         if (state.value.showEndGameDialog) {
-            androidx.compose.material3.AlertDialog(
+            AlertDialog(
                 onDismissRequest = { viewModel.answerEndGame(false) },
                 title = { Text(Strings.get("end_game_title", language)) },
                 text = {
@@ -304,6 +375,61 @@ fun GameScreen(viewModel: GameViewModel) {
                 dismissButton = {
                     Button(onClick = { viewModel.answerEndGame(false) }) {
                         Text(Strings.get("common_no", language))
+                    }
+                }
+            )
+        }
+
+        if (showKickDialog) {
+            val kickablePlayers = room.players.filter { it.id != state.value.yourPlayerId }
+            AlertDialog(
+                onDismissRequest = { showKickDialog = false },
+                title = { Text(Strings.get("game_kick_title", language)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(Strings.get("game_kick_select", language))
+                        kickablePlayers.forEach { player ->
+                            OutlinedButton(
+                                onClick = {
+                                    kickTargetId = player.id
+                                    showKickDialog = false
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(player.name)
+                            }
+                        }
+                    }
+                },
+                confirmButton = {},
+                dismissButton = {
+                    TextButton(onClick = { showKickDialog = false }) {
+                        Text(Strings.get("common_cancel", language))
+                    }
+                }
+            )
+        }
+
+        kickTargetId?.let { targetId ->
+            val targetName = room.players.find { it.id == targetId }?.name ?: "?"
+            AlertDialog(
+                onDismissRequest = { kickTargetId = null },
+                title = { Text(Strings.get("kick_confirm_title", language).replace("{name}", targetName)) },
+                text = { Text(Strings.get("kick_confirm_text", language)) },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            viewModel.kickPlayer(targetId)
+                            kickTargetId = null
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = ImpostorRed)
+                    ) {
+                        Text(Strings.get("kick_player", language))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { kickTargetId = null }) {
+                        Text(Strings.get("common_cancel", language))
                     }
                 }
             )

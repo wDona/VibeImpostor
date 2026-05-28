@@ -1,0 +1,64 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "School",
+      "words": [
+        {"text": "book", "hints": ["paper", "written", "knowledge"]},
+        {"text": "pencil", "hints": ["writing", "wood", "erasable"]},
+        {"text": "pen", "hints": ["writing", "ink", "tip"]},
+        {"text": "notebook", "hints": ["paper", "writing", "bound"]},
+        {"text": "backpack", "hints": ["transport", "back", "storage"]},
+        {"text": "blackboard", "hints": ["writing", "erasable", "vertical"]},
+        {"text": "desk", "hints": ["furniture", "horizontal", "work"]},
+        {"text": "chair", "hints": ["furniture", "seat", "individual"]},
+        {"text": "teacher", "hints": ["person", "teaching", "adult"]},
+        {"text": "student", "hints": ["person", "learning", "young"]},
+        {"text": "class", "hints": ["room", "collective", "teaching"]},
+        {"text": "exam", "hints": ["evaluation", "written", "formal"]},
+        {"text": "homework", "hints": ["work", "individual", "home"]},
+        {"text": "grade", "hints": ["evaluation", "numeric", "result"]},
+        {"text": "library", "hints": ["books", "silence", "consultation"]},
+        {"text": "classroom", "hints": ["room", "teaching", "collective"]},
+        {"text": "uniform", "hints": ["clothing", "equal", "institution"]},
+        {"text": "eraser", "hints": ["correction", "erasable", "small"]},
+        {"text": "ruler", "hints": ["measurement", "straight", "plastic"]},
+        {"text": "marker", "hints": ["writing", "color", "thick"]},
+        {"text": "ballpoint pen", "hints": ["writing", "ink", "plastic"]},
+        {"text": "sharpener", "hints": ["tool", "pencil", "small"]},
+        {"text": "textbook", "hints": ["paper", "study", "subject"]}
+      ]
+    },
+    {
+      "name": "Job",
+      "words": [
+        {"text": "doctor", "hints": ["health", "graduate", "service"]},
+        {"text": "nurse", "hints": ["health", "care", "service"]},
+        {"text": "teacher", "hints": ["education", "graduate", "service"]},
+        {"text": "engineer", "hints": ["technical", "graduate", "construction"]},
+        {"text": "lawyer", "hints": ["legal", "graduate", "service"]},
+        {"text": "architect", "hints": ["design", "graduate", "construction"]},
+        {"text": "chef", "hints": ["food", "service", "manual"]},
+        {"text": "police officer", "hints": ["security", "uniform", "service"]},
+        {"text": "firefighter", "hints": ["emergency", "uniform", "service"]},
+        {"text": "pilot", "hints": ["transport", "aerial", "graduate"]},
+        {"text": "mechanic", "hints": ["technical", "manual", "repair"]},
+        {"text": "electrician", "hints": ["technical", "manual", "energy"]},
+        {"text": "plumber", "hints": ["technical", "manual", "water"]},
+        {"text": "carpenter", "hints": ["craftsman", "wood", "manual"]},
+        {"text": "painter", "hints": ["craftsman", "color", "creative"]},
+        {"text": "musician", "hints": ["artistic", "creative", "sound"]},
+        {"text": "actor", "hints": ["artistic", "performance", "creative"]},
+        {"text": "journalist", "hints": ["communication", "written", "service"]},
+        {"text": "farmer", "hints": ["agricultural", "rural", "production"]},
+        {"text": "salesman", "hints": ["commerce", "service", "communication"]},
+        {"text": "secretary", "hints": ["administration", "organization", "office"]},
+        {"text": "accountant", "hints": ["finance", "graduate", "office"]},
+        {"text": "gardener", "hints": ["nature", "manual", "outdoor"]},
+        {"text": "tailor", "hints": ["craftsman", "fabric", "manual"]},
+        {"text": "cobbler", "hints": ["craftsman", "footwear", "manual"]}
+      ]
+    }
+  ]
+}

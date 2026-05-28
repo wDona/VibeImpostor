@@ -39,6 +39,7 @@ import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
 import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
+import org.example.project.protocol.PUNISHMENT_PREFIX
 import org.example.project.protocol.WRONG_CLAIM_PREFIX
 
 @Composable
@@ -136,6 +137,27 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
+                    } else if (ejectedId.startsWith(PUNISHMENT_PREFIX)) {
+                        val punishedId = ejectedId.removePrefix(PUNISHMENT_PREFIX)
+                        val punishedName = room.players.find { it.id == punishedId }?.name ?: "?"
+                        Text(
+                            text = Strings.get("punishment_warning_title", language),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = punishedName,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Black,
+                            color = Color(0xFFF59E0B)
+                        )
+                        Text(
+                            text = Strings.get("punishment_warning_desc", language),
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        )
                     } else if (ejectedId.startsWith(WRONG_CLAIM_PREFIX)) {
                         val actualId = ejectedId.removePrefix(WRONG_CLAIM_PREFIX)
                         val claimerName = room.players.find { it.id == actualId }?.name ?: "?"
@@ -164,7 +186,7 @@ fun RoundResultScreen(viewModel: GameViewModel) {
             }
         }
 
-        VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes)
+        VoteReveal(room, state.value.lastRoundVotes, language, room.config.anonymousVotes, state.value.lastVoteTypes)
 
         // Continue progress card
         val continuedIds = room.continueResponses

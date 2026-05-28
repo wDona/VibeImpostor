@@ -1,0 +1,87 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Sports",
+      "words": [
+        {"text": "football", "hints": ["collective", "ball", "popular"]},
+        {"text": "tennis", "hints": ["individual", "racket", "competitive"]},
+        {"text": "basketball", "hints": ["collective", "basket", "indoor"]},
+        {"text": "baseball", "hints": ["collective", "bat", "american"]},
+        {"text": "volleyball", "hints": ["collective", "net", "ball"]},
+        {"text": "swimming", "hints": ["individual", "aquatic", "endurance"]},
+        {"text": "athletics", "hints": ["individual", "track", "speed"]},
+        {"text": "cycling", "hints": ["individual", "wheels", "endurance"]},
+        {"text": "skiing", "hints": ["winter", "sliding", "mountain"]},
+        {"text": "skating", "hints": ["sliding", "smooth", "artistic"]},
+        {"text": "boxing", "hints": ["combat", "fists", "individual"]},
+        {"text": "golf", "hints": ["individual", "outdoor", "quiet"]},
+        {"text": "ping pong", "hints": ["individual", "racket", "indoor"]},
+        {"text": "rugby", "hints": ["collective", "contact", "oval"]},
+        {"text": "hockey", "hints": ["collective", "stick", "puck"]},
+        {"text": "surfing", "hints": ["aquatic", "wave", "individual"]},
+        {"text": "diving", "hints": ["aquatic", "deep", "individual"]},
+        {"text": "climbing", "hints": ["vertical", "endurance", "individual"]},
+        {"text": "hiking", "hints": ["terrestrial", "mountain", "endurance"]},
+        {"text": "horse riding", "hints": ["animal", "outdoor", "equestrian"]},
+        {"text": "gymnastics", "hints": ["artistic", "agility", "individual"]},
+        {"text": "wrestling", "hints": ["combat", "contact", "individual"]},
+        {"text": "badminton", "hints": ["racket", "shuttlecock", "individual"]}
+      ]
+    },
+    {
+      "name": "Instrument",
+      "words": [
+        {"text": "guitar", "hints": ["string", "plucked", "popular"]},
+        {"text": "piano", "hints": ["keyboard", "percussion", "classical"]},
+        {"text": "violin", "hints": ["string", "bowed", "orchestra"]},
+        {"text": "flute", "hints": ["wind", "wood", "breath"]},
+        {"text": "drum", "hints": ["percussion", "membrane", "rhythm"]},
+        {"text": "trumpet", "hints": ["wind", "metal", "bright"]},
+        {"text": "saxophone", "hints": ["wind", "metal", "jazz"]},
+        {"text": "clarinet", "hints": ["wind", "wood", "orchestra"]},
+        {"text": "harp", "hints": ["string", "plucked", "large"]},
+        {"text": "accordion", "hints": ["wind", "keys", "folk"]},
+        {"text": "harmonica", "hints": ["wind", "breath", "small"]},
+        {"text": "xylophone", "hints": ["percussion", "wood", "melodic"]},
+        {"text": "cello", "hints": ["string", "bowed", "large"]},
+        {"text": "mandolin", "hints": ["string", "plucked", "folk"]},
+        {"text": "ukulele", "hints": ["string", "small", "tropical"]},
+        {"text": "banjo", "hints": ["string", "plucked", "folk"]},
+        {"text": "organ", "hints": ["keyboard", "wind", "large"]},
+        {"text": "tambourine", "hints": ["percussion", "manual", "folk"]},
+        {"text": "triangle", "hints": ["percussion", "metal", "small"]},
+        {"text": "bell", "hints": ["percussion", "metal", "tonal"]},
+        {"text": "cymbal", "hints": ["percussion", "metal", "clash"]},
+        {"text": "castanets", "hints": ["percussion", "folk", "manual"]},
+        {"text": "timpani", "hints": ["percussion", "membrane", "orchestra"]}
+      ]
+    },
+    {
+      "name": "Sport",
+      "words": [
+        {"text": "ball", "hints": ["round", "game", "bounce"]},
+        {"text": "racket", "hints": ["striking", "oval", "sport"]},
+        {"text": "net", "hints": ["division", "mesh", "barrier"]},
+        {"text": "basket", "hints": ["goal", "elevated", "circular"]},
+        {"text": "goal", "hints": ["goal", "rectangular", "defense"]},
+        {"text": "pool", "hints": ["aquatic", "artificial", "rectangular"]},
+        {"text": "court", "hints": ["surface", "sport", "specific"]},
+        {"text": "stadium", "hints": ["venue", "spectator", "large"]},
+        {"text": "gymnastics", "hints": ["artistic", "agility", "mat"]},
+        {"text": "boxing", "hints": ["combat", "ring", "gloves"]},
+        {"text": "wrestling", "hints": ["combat", "body", "contact"]},
+        {"text": "jump", "hints": ["height", "distance", "impulse"]},
+        {"text": "throw", "hints": ["force", "distance", "projectile"]},
+        {"text": "race", "hints": ["speed", "track", "distance"]},
+        {"text": "swim", "hints": ["aquatic", "technique", "stroke"]},
+        {"text": "skating", "hints": ["sliding", "blades", "smooth"]},
+        {"text": "skiing", "hints": ["snow", "sliding", "mountain"]},
+        {"text": "climbing", "hints": ["vertical", "grip", "effort"]},
+        {"text": "cycling", "hints": ["wheels", "pedals", "endurance"]},
+        {"text": "horse riding", "hints": ["animal", "saddle", "outdoor"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Número",
+      "words": [
+        {"text": "uno", "hints": ["primero", "unidad", "solitario"]},
+        {"text": "dos", "hints": ["par", "doble", "segundo"]},
+        {"text": "tres", "hints": ["impar", "tercero", "trío"]},
+        {"text": "cuatro", "hints": ["par", "cuarto", "cuadrado"]},
+        {"text": "cinco", "hints": ["impar", "quinto", "dedos"]},
+        {"text": "seis", "hints": ["par", "sexto", "cara de dado"]},
+        {"text": "siete", "hints": ["impar", "séptimo", "suerte"]},
+        {"text": "ocho", "hints": ["par", "octavo", "simétrico"]},
+        {"text": "nueve", "hints": ["impar", "noveno", "cuadrado"]},
+        {"text": "diez", "hints": ["par", "décimo", "base decimal"]},
+        {"text": "once", "hints": ["impar", "undécimo", "equipo"]},
+        {"text": "doce", "hints": ["par", "docena", "horas"]},
+        {"text": "trece", "hints": ["impar", "decimotercero", "superstición"]},
+        {"text": "catorce", "hints": ["par", "decimocuarto", "día"]},
+        {"text": "quince", "hints": ["impar", "decimoquinto", "lunar"]},
+        {"text": "veinte", "hints": ["par", "vigésimo", "dedos"]},
+        {"text": "treinta", "hints": ["par", "trigésimo", "días"]},
+        {"text": "cuarenta", "hints": ["par", "cuadragésimo", "días"]},
+        {"text": "cincuenta", "hints": ["par", "quincuagésimo", "mitad"]},
+        {"text": "cien", "hints": ["redondo", "centenar", "porcentaje"]},
+        {"text": "mil", "hints": ["grande", "millar", "milenio"]},
+        {"text": "millón", "hints": ["enorme", "millonario", "riqueza"]},
+        {"text": "cero", "hints": ["nulo", "vacío", "origen"]},
+        {"text": "par", "hints": ["divisible", "simétrico", "doble"]},
+        {"text": "impar", "hints": ["no divisible", "asimétrico", "singular"]}
+      ]
+    },
+    {
+      "name": "Estación",
+      "words": [
+        {"text": "primavera", "hints": ["cálido", "flores", "inicio"]},
+        {"text": "verano", "hints": ["calor", "vacaciones", "seco"]},
+        {"text": "otoño", "hints": ["templado", "hojas caídas", "cosecha"]},
+        {"text": "invierno", "hints": ["frío", "noche larga", "final"]},
+        {"text": "mañana", "hints": ["inicio", "fresco", "luminoso"]},
+        {"text": "tarde", "hints": ["intermedio", "cálido", "solar"]},
+        {"text": "noche", "hints": ["oscuro", "descanso", "tranquilo"]},
+        {"text": "medianoche", "hints": ["extremo", "nocturno", "silencio"]},
+        {"text": "amanecer", "hints": ["inicio", "luminoso", "fresco"]},
+        {"text": "atardecer", "hints": ["fin", "cálido", "colorido"]},
+        {"text": "alba", "hints": ["inicio", "claro", "primero"]},
+        {"text": "crepúsculo", "hints": ["transición", "oscuro", "colorido"]},
+        {"text": "día", "hints": ["luminoso", "activo", "solar"]},
+        {"text": "semana", "hints": ["siete", "período", "laboral"]},
+        {"text": "mes", "hints": ["treinta", "período", "lunar"]},
+        {"text": "año", "hints": ["doce meses", "período", "ciclo"]},
+        {"text": "hora", "hints": ["sesenta minutos", "reloj", "período"]},
+        {"text": "minuto", "hints": ["sesenta segundos", "breve", "reloj"]},
+        {"text": "segundo", "hints": ["mínimo", "instantáneo", "reloj"]},
+        {"text": "instante", "hints": ["brevísimo", "fugaz", "momento"]}
+      ]
+    }
+  ]
+}

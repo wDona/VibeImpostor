@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +13,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +56,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
     val language = state.value.settings.language
     val isHost = state.value.room?.hostId == state.value.yourPlayerId
     var showLeaveConfirm by remember { mutableStateOf(false) }
+    var kickTargetId by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -109,39 +113,75 @@ fun LobbyScreen(viewModel: GameViewModel) {
                         letterSpacing = 1.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            room.code.forEach { char ->
-                                Box(
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .background(
-                                            MaterialTheme.colorScheme.primaryContainer,
-                                            RoundedCornerShape(8.dp)
-                                        ),
-                                    contentAlignment = Alignment.Center
+                    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                        val isNarrow = maxWidth < 400.dp
+                        val clipboardManager = LocalClipboardManager.current
+                        if (isNarrow) {
+                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    room.code.forEach { char ->
+                                        Box(
+                                            modifier = Modifier
+                                                .size(36.dp)
+                                                .background(
+                                                    MaterialTheme.colorScheme.primaryContainer,
+                                                    RoundedCornerShape(8.dp)
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                char.toString(),
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Black,
+                                                fontFamily = FontFamily.Monospace,
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                            )
+                                        }
+                                    }
+                                }
+                                OutlinedButton(
+                                    onClick = { clipboardManager.setText(AnnotatedString(room.code)) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(10.dp)
                                 ) {
-                                    Text(
-                                        char.toString(),
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Black,
-                                        fontFamily = FontFamily.Monospace,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                                    )
+                                    Text(Strings.get("lobby_copy_code", language))
                                 }
                             }
-                        }
-                        val clipboardManager = LocalClipboardManager.current
-                        OutlinedButton(
-                            onClick = { clipboardManager.setText(AnnotatedString(room.code)) },
-                            modifier = Modifier.padding(start = 8.dp),
-                            shape = RoundedCornerShape(10.dp)
-                        ) {
-                            Text(Strings.get("lobby_copy_code", language))
+                        } else {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    room.code.forEach { char ->
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .background(
+                                                    MaterialTheme.colorScheme.primaryContainer,
+                                                    RoundedCornerShape(8.dp)
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                char.toString(),
+                                                fontSize = 20.sp,
+                                                fontWeight = FontWeight.Black,
+                                                fontFamily = FontFamily.Monospace,
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                            )
+                                        }
+                                    }
+                                }
+                                OutlinedButton(
+                                    onClick = { clipboardManager.setText(AnnotatedString(room.code)) },
+                                    modifier = Modifier.padding(start = 8.dp),
+                                    shape = RoundedCornerShape(10.dp)
+                                ) {
+                                    Text(Strings.get("lobby_copy_code", language))
+                                }
+                            }
                         }
                     }
                 }
@@ -225,6 +265,22 @@ fun LobbyScreen(viewModel: GameViewModel) {
                                             fontWeight = FontWeight.Bold,
                                             letterSpacing = 1.sp,
                                             color = ImpostorRed
+                                        )
+                                    }
+                                }
+                                if (isHost && !player.isHost) {
+                                    Button(
+                                        onClick = { kickTargetId = player.id },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = ImpostorRed.copy(alpha = 0.8f)
+                                        ),
+                                        modifier = Modifier.height(28.dp).padding(0.dp),
+                                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 0.dp)
+                                    ) {
+                                        Text(
+                                            Strings.get("kick_player", language),
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold
                                         )
                                     }
                                 }
@@ -312,6 +368,31 @@ fun LobbyScreen(viewModel: GameViewModel) {
             },
             dismissButton = {
                 TextButton(onClick = { showLeaveConfirm = false }) {
+                    Text(Strings.get("common_cancel", language))
+                }
+            }
+        )
+    }
+
+    kickTargetId?.let { targetId ->
+        val targetName = room.players.find { it.id == targetId }?.name ?: "?"
+        AlertDialog(
+            onDismissRequest = { kickTargetId = null },
+            title = { Text(Strings.get("kick_confirm_title", language).replace("{name}", targetName)) },
+            text = { Text(Strings.get("kick_confirm_text", language)) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.kickPlayer(targetId)
+                        kickTargetId = null
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = ImpostorRed)
+                ) {
+                    Text(Strings.get("kick_player", language))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { kickTargetId = null }) {
                     Text(Strings.get("common_cancel", language))
                 }
             }

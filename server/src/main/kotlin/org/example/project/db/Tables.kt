@@ -29,4 +29,5 @@ object Categories : IntIdTable("categories") {
 object Words : IntIdTable("words") {
     val categoryId = reference("category_id", Categories)
     val text = varchar("text", 64)
+    val hints = text("hints").nullable()
 }

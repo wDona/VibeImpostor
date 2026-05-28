@@ -1,0 +1,45 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Animales",
+      "words": [
+        {"text": "perro", "hints": ["doméstico", "vertebrado", "mamífero"]},
+        {"text": "gato", "hints": ["doméstico", "carnívoro", "felino"]},
+        {"text": "elefante", "hints": ["herbívoro", "africano", "mamífero"]},
+        {"text": "jirafa", "hints": ["herbívoro", "africano", "terrestre"]},
+        {"text": "león", "hints": ["carnívoro", "africano", "felino"]},
+        {"text": "tigre", "hints": ["carnívoro", "asiático", "felino"]},
+        {"text": "oso", "hints": ["omnívoro", "terrestre", "mamífero"]},
+        {"text": "caballo", "hints": ["doméstico", "herbívoro", "veloz"]},
+        {"text": "vaca", "hints": ["doméstico", "herbívoro", "rumiante"]},
+        {"text": "oveja", "hints": ["doméstico", "herbívoro", "rumiante"]},
+        {"text": "cerdo", "hints": ["doméstico", "omnívoro", "mamífero"]},
+        {"text": "pollo", "hints": ["doméstico", "ave", "terrestre"]},
+        {"text": "pato", "hints": ["acuático", "ave", "migrador"]},
+        {"text": "pingüino", "hints": ["acuático", "ave", "polar"]},
+        {"text": "cocodrilo", "hints": ["reptil", "acuático", "carnívoro"]},
+        {"text": "serpiente", "hints": ["reptil", "carnívoro", "terrestre"]},
+        {"text": "águila", "hints": ["rapaz", "ave", "carnívoro"]},
+        {"text": "pez", "hints": ["acuático", "vertebrado", "común"]},
+        {"text": "delfín", "hints": ["acuático", "mamífero", "marino"]},
+        {"text": "tiburón", "hints": ["marino", "carnívoro", "acuático"]},
+        {"text": "conejo", "hints": ["herbívoro", "doméstico", "mamífero"]},
+        {"text": "ratón", "hints": ["roedor", "doméstico", "pequeño"]},
+        {"text": "rana", "hints": ["anfibio", "acuático", "carnívoro"]},
+        {"text": "araña", "hints": ["artrópodo", "terrestre", "carnívoro"]},
+        {"text": "abeja", "hints": ["insecto", "social", "volador"]},
+        {"text": "mariposa", "hints": ["insecto", "volador", "metamorfosis"]},
+        {"text": "hormiga", "hints": ["insecto", "social", "terrestre"]},
+        {"text": "loro", "hints": ["ave", "tropical", "social"]},
+        {"text": "búho", "hints": ["nocturno", "rapaz", "ave"]},
+        {"text": "camello", "hints": ["mamífero", "desértico", "herbívoro"]},
+        {"text": "ballena", "hints": ["marino", "mamífero", "grande"]},
+        {"text": "pulpo", "hints": ["marino", "invertebrado", "inteligente"]},
+        {"text": "cangrejo", "hints": ["crustáceo", "marino", "acuático"]},
+        {"text": "papagayo", "hints": ["ave", "tropical", "social"]}
+      ]
+    }
+  ]
+}

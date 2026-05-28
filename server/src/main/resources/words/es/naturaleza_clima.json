@@ -1,0 +1,66 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Naturaleza",
+      "words": [
+        {"text": "árbol", "hints": ["vegetal", "leñoso", "perenne"]},
+        {"text": "flor", "hints": ["vegetal", "reproductivo", "colorido"]},
+        {"text": "rosa", "hints": ["flor", "aromático", "espinas"]},
+        {"text": "tulipán", "hints": ["flor", "primaveral", "bulbo"]},
+        {"text": "girasol", "hints": ["flor", "grande", "solar"]},
+        {"text": "hoja", "hints": ["vegetal", "verde", "fotosíntesis"]},
+        {"text": "rama", "hints": ["vegetal", "leñoso", "estructural"]},
+        {"text": "tronco", "hints": ["vegetal", "central", "leñoso"]},
+        {"text": "raíz", "hints": ["vegetal", "subterráneo", "anclaje"]},
+        {"text": "hierba", "hints": ["vegetal", "bajo", "verde"]},
+        {"text": "tierra", "hints": ["mineral", "suelo", "fértil"]},
+        {"text": "piedra", "hints": ["mineral", "sólido", "duro"]},
+        {"text": "roca", "hints": ["mineral", "grande", "sólido"]},
+        {"text": "montaña", "hints": ["relieve", "elevado", "natural"]},
+        {"text": "río", "hints": ["agua", "corriente", "natural"]},
+        {"text": "lago", "hints": ["agua", "quieto", "natural"]},
+        {"text": "océano", "hints": ["agua", "salado", "vasto"]},
+        {"text": "playa", "hints": ["costera", "arena", "marino"]},
+        {"text": "isla", "hints": ["tierra", "rodeada", "aislado"]},
+        {"text": "bosque", "hints": ["vegetal", "denso", "natural"]},
+        {"text": "desierto", "hints": ["árido", "cálido", "seco"]},
+        {"text": "volcán", "hints": ["geológico", "activo", "elevado"]},
+        {"text": "nube", "hints": ["atmósferico", "húmedo", "elevado"]},
+        {"text": "lluvia", "hints": ["atmósferico", "agua", "caída"]},
+        {"text": "nieve", "hints": ["atmósferico", "frío", "blanco"]},
+        {"text": "hielo", "hints": ["agua", "sólido", "frío"]},
+        {"text": "arco iris", "hints": ["óptico", "colorido", "atmosférico"]},
+        {"text": "sol", "hints": ["astro", "energía", "central"]},
+        {"text": "luna", "hints": ["astro", "nocturno", "satélite"]},
+        {"text": "estrella", "hints": ["astro", "luminoso", "lejano"]}
+      ]
+    },
+    {
+      "name": "Clima",
+      "words": [
+        {"text": "sol", "hints": ["calor", "radiante", "diurno"]},
+        {"text": "lluvia", "hints": ["agua", "caída", "húmedo"]},
+        {"text": "nieve", "hints": ["frío", "blanco", "sólido"]},
+        {"text": "nube", "hints": ["elevado", "húmedo", "gris"]},
+        {"text": "viento", "hints": ["movimiento", "aire", "invisible"]},
+        {"text": "tormenta", "hints": ["eléctrico", "intenso", "peligroso"]},
+        {"text": "relámpago", "hints": ["eléctrico", "instantáneo", "luminoso"]},
+        {"text": "trueno", "hints": ["sonido", "eléctrico", "potente"]},
+        {"text": "granizo", "hints": ["sólido", "caída", "helado"]},
+        {"text": "rocío", "hints": ["agua", "superficial", "matutino"]},
+        {"text": "hielo", "hints": ["frío", "sólido", "resbaladizo"]},
+        {"text": "arco iris", "hints": ["óptico", "colorido", "post-lluvia"]},
+        {"text": "neblina", "hints": ["húmedo", "bajo", "difuso"]},
+        {"text": "helada", "hints": ["frío", "nocturno", "dañino"]},
+        {"text": "calor", "hints": ["temperatura", "alta", "estival"]},
+        {"text": "frío", "hints": ["temperatura", "baja", "invernal"]},
+        {"text": "humedad", "hints": ["agua", "ambiente", "pegajoso"]},
+        {"text": "sequía", "hints": ["agua", "ausencia", "prolongado"]},
+        {"text": "borrasca", "hints": ["presión", "baja", "lluvioso"]},
+        {"text": "brisa", "hints": ["viento", "suave", "agradable"]}
+      ]
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import org.example.project.model.RoomState
 import org.example.project.model.MAX_PLAYERS
 import org.example.project.model.MIN_PLAYERS
 import org.example.project.protocol.BOTH_IMPOSTORS_ID
+import org.example.project.protocol.PUNISHMENT_PREFIX
 import org.example.project.protocol.ClientMessage
 import org.example.project.protocol.ProtocolJson
 import org.example.project.protocol.ServerMessage
@@ -164,7 +165,7 @@ fun Route.gameServer() {
                                 }
                                 // If null (wrong guess), vote is silently ignored — game continues
                             } else {
-                                GameEngine.castVote(room, player.id, message.targetPlayerId)
+                                GameEngine.castVote(room, player.id, message.targetPlayerId, message.voteIsHard)
                                 broadcastServerMessage(room, ServerMessage.VoteCast(player.id))
                                 val result = GameEngine.checkVotingEnd(room)
                                 if (result != null) {
@@ -281,6 +282,22 @@ fun Route.gameServer() {
                         val p = player
                         if (r != null && p != null) {
                             handleAnswerEndGame(r, p, message.agrees)
+                        }
+                    }
+
+                    is ClientMessage.KickPlayer -> {
+                        val r = room
+                        val p = player
+                        if (r != null && p != null && p.isHost) {
+                            val target = r.players.find { it.id == message.targetPlayerId }
+                            if (target != null && !target.isHost) {
+                                try {
+                                    target.session.sendServerMessage(
+                                        ServerMessage.RemovedFromRoom("Expulsado de la sala por el host")
+                                    )
+                                    target.session.close()
+                                } catch (_: Exception) {}
+                            }
                         }
                     }
 
@@ -437,7 +454,9 @@ private fun Room.getRoomSnapshot(): RoomSnapshot {
         impostorGuesses = this.impostorGuesses,
         pendingGuessImpostorId = this.pendingGuessImpostorId,
         lastWinners = this.lastWinners,
-        continueResponses = this.continueResponses
+        continueResponses = this.continueResponses,
+        isInPunishmentRound = this.isInPunishmentRound,
+        punishmentPlayerId = this.punishmentPlayerId
     )
 }
 
@@ -450,7 +469,10 @@ private suspend fun broadcastGameStarted(room: Room) {
             room.config.noCategory -> "-"
             else -> room.category!!
         }
-        val msg = ServerMessage.GameStarted(role, !isImpostor, content, room.getRoomSnapshot())
+        val hintList = if (isImpostor) {
+            if (room.config.progressiveHints) room.wordHints else room.wordHints.take(1)
+        } else emptyList()
+        val msg = ServerMessage.GameStarted(role, !isImpostor, content, room.getRoomSnapshot(), hintList)
         sendToPlayer(room, p.id, msg)
     }
     val current = room.currentTurnPlayer()
@@ -651,7 +673,18 @@ private suspend fun afterVotingResolved(room: Room, result: Pair<String?, Boolea
     room.voteTimerJob?.cancel()
     val (ejectedId, wasImpostor) = result
     println("[afterVotingResolved] ejected=$ejectedId wasImpostor=$wasImpostor state=${room.state} pending=${room.pendingGuessImpostorId} lastWinners=${room.lastWinners}")
-    broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot(), room.lastRoundVotes))
+
+    // Punishment vote: no tie and innocent → warning turn; wait for ContinueRound before starting
+    if (ejectedId != null && ejectedId.startsWith(PUNISHMENT_PREFIX)) {
+        val accusedId = ejectedId.removePrefix(PUNISHMENT_PREFIX)
+        val snap = room.getRoomSnapshot()
+        broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, false, snap, room.lastRoundVotes, room.voteTypes, accusedId))
+        GameEngine.startPunishmentRound(room, accusedId)
+        // Clients will ContinueRound; handler will then send RoundContinues + TurnChanged
+        return
+    }
+
+    broadcastServerMessage(room, ServerMessage.VotingResult(ejectedId, wasImpostor, room.getRoomSnapshot(), room.lastRoundVotes, room.voteTypes))
     when (room.state) {
         RoomState.FINISHED -> {
             broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, room.getRoomSnapshot()))

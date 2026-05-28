@@ -1,0 +1,64 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Fruta",
+      "words": [
+        {"text": "manzana", "hints": ["otoñal", "árbol", "templado"]},
+        {"text": "plátano", "hints": ["tropical", "racimo", "dulce"]},
+        {"text": "naranja", "hints": ["cítrico", "árbol", "zumo"]},
+        {"text": "fresa", "hints": ["estival", "suelo", "rojo"]},
+        {"text": "limón", "hints": ["cítrico", "árbol", "ácido"]},
+        {"text": "melocotón", "hints": ["estival", "árbol", "vello"]},
+        {"text": "pera", "hints": ["otoñal", "árbol", "suave"]},
+        {"text": "uva", "hints": ["otoñal", "enredadera", "racimo"]},
+        {"text": "piña", "hints": ["tropical", "espinoso", "corona"]},
+        {"text": "melón", "hints": ["estival", "suelo", "grande"]},
+        {"text": "sandía", "hints": ["estival", "suelo", "acuosa"]},
+        {"text": "cereza", "hints": ["primaveral", "árbol", "par"]},
+        {"text": "ciruela", "hints": ["estival", "árbol", "morada"]},
+        {"text": "kiwi", "hints": ["tropical", "piel marrón", "verde interior"]},
+        {"text": "mango", "hints": ["tropical", "árbol", "dulce"]},
+        {"text": "papaya", "hints": ["tropical", "árbol", "naranja"]},
+        {"text": "coco", "hints": ["tropical", "palmera", "duro"]},
+        {"text": "pomelo", "hints": ["cítrico", "árbol", "amargo"]},
+        {"text": "frambuesa", "hints": ["silvestre", "arbusto", "rojo"]},
+        {"text": "arándano", "hints": ["silvestre", "arbusto", "pequeño"]},
+        {"text": "higo", "hints": ["mediterráneo", "árbol", "dulce"]},
+        {"text": "dátil", "hints": ["desértico", "palmera", "dulce"]},
+        {"text": "tamarindo", "hints": ["tropical", "árbol", "ácido"]},
+        {"text": "maracuyá", "hints": ["tropical", "enredadera", "ácido"]}
+      ]
+    },
+    {
+      "name": "Verdura",
+      "words": [
+        {"text": "tomate", "hints": ["rojo", "planta", "ácido"]},
+        {"text": "lechuga", "hints": ["hoja", "crudo", "verde"]},
+        {"text": "cebolla", "hints": ["bulbo", "aromático", "capas"]},
+        {"text": "patata", "hints": ["tubérculo", "subterráneo", "fécula"]},
+        {"text": "zanahoria", "hints": ["raíz", "subterráneo", "naranja"]},
+        {"text": "brócoli", "hints": ["col", "verde", "árbol"]},
+        {"text": "coliflor", "hints": ["col", "blanco", "árbol"]},
+        {"text": "espinaca", "hints": ["hoja", "verde oscuro", "hierro"]},
+        {"text": "pepino", "hints": ["alargado", "verde", "acuoso"]},
+        {"text": "rábano", "hints": ["raíz", "picante", "pequeño"]},
+        {"text": "ajo", "hints": ["bulbo", "aromático", "medicinal"]},
+        {"text": "puerro", "hints": ["bulbo", "alargado", "aromático"]},
+        {"text": "apio", "hints": ["tallo", "verde", "crujiente"]},
+        {"text": "calabaza", "hints": ["grande", "naranja", "suelo"]},
+        {"text": "champiñón", "hints": ["hongo", "sombrero", "terrestre"]},
+        {"text": "pimiento", "hints": ["hueco", "colorido", "crujiente"]},
+        {"text": "berenjena", "hints": ["morado", "alargado", "suave"]},
+        {"text": "judía", "hints": ["vaina", "semilla", "alargada"]},
+        {"text": "maíz", "hints": ["cereal", "amarillo", "mazorca"]},
+        {"text": "guisante", "hints": ["semilla", "redondo", "verde"]},
+        {"text": "nabo", "hints": ["raíz", "blanco", "redondo"]},
+        {"text": "remolacha", "hints": ["raíz", "roja", "dulce"]},
+        {"text": "alcachofa", "hints": ["flor", "hojas", "mediterráneo"]},
+        {"text": "berza", "hints": ["col", "hoja", "grande"]}
+      ]
+    }
+  ]
+}

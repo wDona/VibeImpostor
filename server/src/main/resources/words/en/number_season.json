@@ -1,0 +1,63 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Number",
+      "words": [
+        {"text": "one", "hints": ["first", "unit", "solitary"]},
+        {"text": "two", "hints": ["even", "double", "second"]},
+        {"text": "three", "hints": ["odd", "third", "trio"]},
+        {"text": "four", "hints": ["even", "fourth", "square"]},
+        {"text": "five", "hints": ["odd", "fifth", "fingers"]},
+        {"text": "six", "hints": ["even", "sixth", "dice face"]},
+        {"text": "seven", "hints": ["odd", "seventh", "lucky"]},
+        {"text": "eight", "hints": ["even", "eighth", "symmetric"]},
+        {"text": "nine", "hints": ["odd", "ninth", "squared"]},
+        {"text": "ten", "hints": ["even", "tenth", "decimal base"]},
+        {"text": "eleven", "hints": ["odd", "eleventh", "team"]},
+        {"text": "twelve", "hints": ["even", "dozen", "hours"]},
+        {"text": "thirteen", "hints": ["odd", "thirteenth", "superstition"]},
+        {"text": "fourteen", "hints": ["even", "fourteenth", "day"]},
+        {"text": "fifteen", "hints": ["odd", "fifteenth", "lunar"]},
+        {"text": "twenty", "hints": ["even", "twentieth", "fingers"]},
+        {"text": "thirty", "hints": ["even", "thirtieth", "days"]},
+        {"text": "forty", "hints": ["even", "fortieth", "days"]},
+        {"text": "fifty", "hints": ["even", "fiftieth", "half"]},
+        {"text": "hundred", "hints": ["round", "centenary", "percentage"]},
+        {"text": "thousand", "hints": ["large", "millenary", "millennium"]},
+        {"text": "million", "hints": ["huge", "millionaire", "wealth"]},
+        {"text": "zero", "hints": ["null", "empty", "origin"]},
+        {"text": "even", "hints": ["divisible", "symmetric", "double"]},
+        {"text": "odd", "hints": ["not divisible", "asymmetric", "singular"]}
+      ]
+    },
+    {
+      "name": "Season",
+      "words": [
+        {"text": "spring", "hints": ["warm", "flowers", "start"]},
+        {"text": "summer", "hints": ["heat", "vacation", "dry"]},
+        {"text": "autumn", "hints": ["mild", "falling leaves", "harvest"]},
+        {"text": "winter", "hints": ["cold", "long night", "end"]},
+        {"text": "morning", "hints": ["start", "fresh", "luminous"]},
+        {"text": "afternoon", "hints": ["middle", "warm", "solar"]},
+        {"text": "evening", "hints": ["transition", "cool", "dim"]},
+        {"text": "night", "hints": ["dark", "rest", "quiet"]},
+        {"text": "midnight", "hints": ["extreme", "nocturnal", "silence"]},
+        {"text": "sunrise", "hints": ["start", "luminous", "fresh"]},
+        {"text": "sunset", "hints": ["end", "warm", "colorful"]},
+        {"text": "dawn", "hints": ["start", "clear", "first"]},
+        {"text": "dusk", "hints": ["transition", "dark", "colorful"]},
+        {"text": "day", "hints": ["luminous", "active", "solar"]},
+        {"text": "week", "hints": ["seven", "period", "working"]},
+        {"text": "month", "hints": ["thirty", "period", "lunar"]},
+        {"text": "year", "hints": ["twelve months", "period", "cycle"]},
+        {"text": "hour", "hints": ["sixty minutes", "clock", "period"]},
+        {"text": "minute", "hints": ["sixty seconds", "brief", "clock"]},
+        {"text": "second", "hints": ["minimal", "instant", "clock"]},
+        {"text": "moment", "hints": ["very brief", "fleeting", "instant"]},
+        {"text": "instant", "hints": ["briefest", "fugitive", "moment"]}
+      ]
+    }
+  ]
+}

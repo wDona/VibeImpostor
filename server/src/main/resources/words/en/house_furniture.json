@@ -1,0 +1,70 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "House",
+      "words": [
+        {"text": "door", "hints": ["access", "movable", "wood"]},
+        {"text": "window", "hints": ["opening", "glass", "light"]},
+        {"text": "wall", "hints": ["structure", "vertical", "fixed"]},
+        {"text": "ceiling", "hints": ["structure", "upper", "fixed"]},
+        {"text": "floor", "hints": ["structure", "lower", "horizontal"]},
+        {"text": "stairs", "hints": ["access", "vertical", "fixed"]},
+        {"text": "kitchen", "hints": ["room", "heat", "preparation"]},
+        {"text": "bedroom", "hints": ["room", "rest", "private"]},
+        {"text": "bathroom", "hints": ["room", "hygiene", "private"]},
+        {"text": "living room", "hints": ["room", "social", "common"]},
+        {"text": "table", "hints": ["furniture", "horizontal", "social"]},
+        {"text": "chair", "hints": ["furniture", "seat", "wood"]},
+        {"text": "bed", "hints": ["furniture", "rest", "bedroom"]},
+        {"text": "sofa", "hints": ["furniture", "seat", "comfortable"]},
+        {"text": "lamp", "hints": ["object", "light", "electric"]},
+        {"text": "picture", "hints": ["decoration", "wall", "art"]},
+        {"text": "curtain", "hints": ["decoration", "fabric", "window"]},
+        {"text": "carpet", "hints": ["decoration", "floor", "fabric"]},
+        {"text": "closet", "hints": ["furniture", "storage", "wood"]},
+        {"text": "mirror", "hints": ["object", "reflective", "glass"]},
+        {"text": "bathtub", "hints": ["sanitary", "bathroom", "water"]},
+        {"text": "shower", "hints": ["sanitary", "bathroom", "water"]},
+        {"text": "refrigerator", "hints": ["appliance", "cold", "kitchen"]},
+        {"text": "stove", "hints": ["heat", "kitchen", "gas"]},
+        {"text": "fireplace", "hints": ["heat", "fire", "decorative"]},
+        {"text": "balcony", "hints": ["exterior", "elevated", "dwelling"]},
+        {"text": "garden", "hints": ["exterior", "natural", "dwelling"]},
+        {"text": "garage", "hints": ["exterior", "vehicle", "storage"]},
+        {"text": "basement", "hints": ["underground", "storage", "dwelling"]},
+        {"text": "roof", "hints": ["exterior", "upper", "protection"]}
+      ]
+    },
+    {
+      "name": "Furniture",
+      "words": [
+        {"text": "table", "hints": ["horizontal", "wood", "social"]},
+        {"text": "chair", "hints": ["seat", "individual", "wood"]},
+        {"text": "bed", "hints": ["rest", "bedroom", "soft"]},
+        {"text": "sofa", "hints": ["seat", "comfortable", "living room"]},
+        {"text": "closet", "hints": ["storage", "wood", "vertical"]},
+        {"text": "shelf", "hints": ["storage", "books", "vertical"]},
+        {"text": "desk", "hints": ["work", "horizontal", "wood"]},
+        {"text": "lamp", "hints": ["light", "electric", "decorative"]},
+        {"text": "mirror", "hints": ["reflective", "glass", "decorative"]},
+        {"text": "carpet", "hints": ["floor", "fabric", "decorative"]},
+        {"text": "curtain", "hints": ["fabric", "window", "decorative"]},
+        {"text": "armchair", "hints": ["seat", "comfortable", "individual"]},
+        {"text": "bench", "hints": ["seat", "long", "outdoor"]},
+        {"text": "stool", "hints": ["seat", "tall", "no back"]},
+        {"text": "bathtub", "hints": ["bathroom", "water", "sanitary"]},
+        {"text": "shower", "hints": ["bathroom", "water", "sanitary"]},
+        {"text": "sink", "hints": ["bathroom", "water", "sanitary"]},
+        {"text": "toilet", "hints": ["bathroom", "sanitary", "hygiene"]},
+        {"text": "dresser", "hints": ["storage", "drawers", "bedroom"]},
+        {"text": "nightstand", "hints": ["small", "bedroom", "auxiliary"]},
+        {"text": "bookcase", "hints": ["storage", "horizontal", "mounted"]},
+        {"text": "counter", "hints": ["horizontal", "commercial", "tall"]},
+        {"text": "cabinet", "hints": ["glass", "display", "storage"]},
+        {"text": "bookshelf", "hints": ["horizontal", "decorative", "small"]}
+      ]
+    }
+  ]
+}

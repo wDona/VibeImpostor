@@ -1,0 +1,70 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Casa",
+      "words": [
+        {"text": "puerta", "hints": ["acceso", "móvil", "madera"]},
+        {"text": "ventana", "hints": ["apertura", "cristal", "luz"]},
+        {"text": "pared", "hints": ["estructura", "vertical", "fija"]},
+        {"text": "techo", "hints": ["estructura", "superior", "fijo"]},
+        {"text": "piso", "hints": ["estructura", "inferior", "horizontal"]},
+        {"text": "escalera", "hints": ["acceso", "vertical", "fijo"]},
+        {"text": "cocina", "hints": ["estancia", "calor", "elaboración"]},
+        {"text": "dormitorio", "hints": ["estancia", "descanso", "privado"]},
+        {"text": "baño", "hints": ["estancia", "higiene", "privado"]},
+        {"text": "sala", "hints": ["estancia", "social", "común"]},
+        {"text": "mesa", "hints": ["mueble", "horizontal", "social"]},
+        {"text": "silla", "hints": ["mueble", "asiento", "madera"]},
+        {"text": "cama", "hints": ["mueble", "descanso", "dormitorio"]},
+        {"text": "sofá", "hints": ["mueble", "asiento", "cómodo"]},
+        {"text": "lámpara", "hints": ["objeto", "luz", "eléctrico"]},
+        {"text": "cuadro", "hints": ["decoración", "pared", "arte"]},
+        {"text": "cortina", "hints": ["decoración", "tela", "ventana"]},
+        {"text": "alfombra", "hints": ["decoración", "suelo", "tela"]},
+        {"text": "armario", "hints": ["mueble", "almacén", "madera"]},
+        {"text": "espejo", "hints": ["objeto", "reflexivo", "cristal"]},
+        {"text": "bañera", "hints": ["sanitario", "baño", "agua"]},
+        {"text": "ducha", "hints": ["sanitario", "baño", "agua"]},
+        {"text": "nevera", "hints": ["electrodoméstico", "frío", "cocina"]},
+        {"text": "estufa", "hints": ["calor", "cocina", "gas"]},
+        {"text": "chimenea", "hints": ["calor", "fuego", "decorativo"]},
+        {"text": "balcón", "hints": ["exterior", "elevado", "vivienda"]},
+        {"text": "jardín", "hints": ["exterior", "natural", "vivienda"]},
+        {"text": "garaje", "hints": ["exterior", "vehículo", "almacén"]},
+        {"text": "sótano", "hints": ["subterráneo", "almacén", "vivienda"]},
+        {"text": "tejado", "hints": ["exterior", "superior", "protección"]}
+      ]
+    },
+    {
+      "name": "Mueble",
+      "words": [
+        {"text": "mesa", "hints": ["horizontal", "madera", "social"]},
+        {"text": "silla", "hints": ["asiento", "individual", "madera"]},
+        {"text": "cama", "hints": ["descanso", "dormitorio", "blando"]},
+        {"text": "sofá", "hints": ["asiento", "cómodo", "sala"]},
+        {"text": "armario", "hints": ["almacén", "madera", "vertical"]},
+        {"text": "estantería", "hints": ["almacén", "libros", "vertical"]},
+        {"text": "escritorio", "hints": ["trabajo", "horizontal", "madera"]},
+        {"text": "lámpara", "hints": ["luz", "eléctrico", "decorativo"]},
+        {"text": "espejo", "hints": ["reflexivo", "cristal", "decorativo"]},
+        {"text": "alfombra", "hints": ["suelo", "tela", "decorativo"]},
+        {"text": "cortina", "hints": ["tela", "ventana", "decorativo"]},
+        {"text": "sillón", "hints": ["asiento", "cómodo", "individual"]},
+        {"text": "banco", "hints": ["asiento", "largo", "exterior"]},
+        {"text": "taburete", "hints": ["asiento", "alto", "sin respaldo"]},
+        {"text": "bañera", "hints": ["baño", "agua", "sanitario"]},
+        {"text": "ducha", "hints": ["baño", "agua", "sanitario"]},
+        {"text": "lavabo", "hints": ["baño", "agua", "sanitario"]},
+        {"text": "inodoro", "hints": ["baño", "sanitario", "higiene"]},
+        {"text": "cómoda", "hints": ["almacén", "cajones", "dormitorio"]},
+        {"text": "mesita", "hints": ["pequeño", "dormitorio", "auxiliar"]},
+        {"text": "estante", "hints": ["almacén", "horizontal", "fijado"]},
+        {"text": "mostrador", "hints": ["horizontal", "comercial", "alto"]},
+        {"text": "vitrina", "hints": ["cristal", "exposición", "almacén"]},
+        {"text": "repisa", "hints": ["horizontal", "decorativo", "pequeño"]}
+      ]
+    }
+  ]
+}

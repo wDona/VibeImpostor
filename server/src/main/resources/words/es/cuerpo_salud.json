@@ -1,0 +1,70 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Cuerpo",
+      "words": [
+        {"text": "cabeza", "hints": ["superior", "central", "vital"]},
+        {"text": "cara", "hints": ["frontal", "expresivo", "identificador"]},
+        {"text": "ojo", "hints": ["sensorial", "par", "visual"]},
+        {"text": "nariz", "hints": ["sensorial", "central", "olfativo"]},
+        {"text": "boca", "hints": ["apertura", "comunicación", "digestivo"]},
+        {"text": "oído", "hints": ["sensorial", "par", "auditivo"]},
+        {"text": "diente", "hints": ["duro", "masticación", "blanco"]},
+        {"text": "mano", "hints": ["extremidad", "manual", "par"]},
+        {"text": "pie", "hints": ["extremidad", "inferior", "par"]},
+        {"text": "brazo", "hints": ["extremidad", "lateral", "par"]},
+        {"text": "pierna", "hints": ["extremidad", "inferior", "par"]},
+        {"text": "corazón", "hints": ["vital", "interno", "bombeo"]},
+        {"text": "pulmón", "hints": ["vital", "interno", "par"]},
+        {"text": "estómago", "hints": ["digestivo", "interno", "central"]},
+        {"text": "cerebro", "hints": ["vital", "interno", "control"]},
+        {"text": "sangre", "hints": ["líquido", "circulatorio", "vital"]},
+        {"text": "pelo", "hints": ["superficie", "queratina", "creciente"]},
+        {"text": "piel", "hints": ["superficie", "protector", "externo"]},
+        {"text": "uña", "hints": ["queratina", "extremidad", "duro"]},
+        {"text": "lengua", "hints": ["sensorial", "interno", "muscular"]},
+        {"text": "dedo", "hints": ["extremidad", "pequeño", "múltiple"]},
+        {"text": "codo", "hints": ["articulación", "brazo", "lateral"]},
+        {"text": "rodilla", "hints": ["articulación", "pierna", "central"]},
+        {"text": "espalda", "hints": ["posterior", "amplio", "soporte"]},
+        {"text": "pecho", "hints": ["frontal", "torso", "protector"]},
+        {"text": "hombro", "hints": ["articulación", "superior", "par"]},
+        {"text": "cadera", "hints": ["articulación", "central", "inferior"]},
+        {"text": "cuello", "hints": ["conector", "central", "vertical"]},
+        {"text": "talón", "hints": ["inferior", "pie", "soporte"]},
+        {"text": "mentón", "hints": ["frontal", "inferior", "saliente"]}
+      ]
+    },
+    {
+      "name": "Salud",
+      "words": [
+        {"text": "hospital", "hints": ["sanidad", "edificio", "urgencia"]},
+        {"text": "doctor", "hints": ["sanidad", "titulado", "diagnóstico"]},
+        {"text": "enfermera", "hints": ["sanidad", "asistencia", "cuidado"]},
+        {"text": "medicina", "hints": ["sanidad", "tratamiento", "químico"]},
+        {"text": "píldora", "hints": ["medicamento", "sólido", "oral"]},
+        {"text": "inyección", "hints": ["medicamento", "aguja", "líquido"]},
+        {"text": "vendaje", "hints": ["protección", "tela", "herida"]},
+        {"text": "cura", "hints": ["recuperación", "tratamiento", "positivo"]},
+        {"text": "operación", "hints": ["cirugía", "invasivo", "quirúrgico"]},
+        {"text": "cirugía", "hints": ["invasivo", "quirúrgico", "técnico"]},
+        {"text": "síntoma", "hints": ["indicador", "señal", "físico"]},
+        {"text": "enfermedad", "hints": ["alteración", "estado", "negativo"]},
+        {"text": "virus", "hints": ["microorganismo", "infeccioso", "pequeño"]},
+        {"text": "bacteria", "hints": ["microorganismo", "infeccioso", "unicelular"]},
+        {"text": "alergia", "hints": ["reacción", "inmune", "molestia"]},
+        {"text": "fiebre", "hints": ["temperatura", "síntoma", "elevado"]},
+        {"text": "tos", "hints": ["síntoma", "reflejo", "respiratorio"]},
+        {"text": "resfriado", "hints": ["viral", "común", "estacional"]},
+        {"text": "gripe", "hints": ["viral", "grave", "estacional"]},
+        {"text": "dolor", "hints": ["sensación", "negativo", "señal"]},
+        {"text": "herida", "hints": ["lesión", "externa", "sangrado"]},
+        {"text": "fractura", "hints": ["lesión", "hueso", "grave"]},
+        {"text": "quemadura", "hints": ["lesión", "calor", "externa"]},
+        {"text": "cicatriz", "hints": ["marca", "piel", "permanente"]}
+      ]
+    }
+  ]
+}

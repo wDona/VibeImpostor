@@ -1,0 +1,87 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Deportes",
+      "words": [
+        {"text": "fútbol", "hints": ["colectivo", "pelota", "popular"]},
+        {"text": "tenis", "hints": ["individual", "raqueta", "competitivo"]},
+        {"text": "baloncesto", "hints": ["colectivo", "canasta", "interior"]},
+        {"text": "béisbol", "hints": ["colectivo", "bate", "americano"]},
+        {"text": "voleibol", "hints": ["colectivo", "red", "pelota"]},
+        {"text": "natación", "hints": ["individual", "acuático", "resistencia"]},
+        {"text": "atletismo", "hints": ["individual", "pista", "velocidad"]},
+        {"text": "ciclismo", "hints": ["individual", "ruedas", "resistencia"]},
+        {"text": "esquí", "hints": ["invierno", "deslizante", "montaña"]},
+        {"text": "patinaje", "hints": ["deslizante", "suave", "artístico"]},
+        {"text": "boxeo", "hints": ["combate", "puños", "individual"]},
+        {"text": "golf", "hints": ["individual", "exterior", "tranquilo"]},
+        {"text": "ping pong", "hints": ["individual", "raqueta", "interior"]},
+        {"text": "rugby", "hints": ["colectivo", "contacto", "oval"]},
+        {"text": "hockey", "hints": ["colectivo", "palo", "puck"]},
+        {"text": "surf", "hints": ["acuático", "ola", "individual"]},
+        {"text": "buceo", "hints": ["acuático", "profundo", "individual"]},
+        {"text": "escalada", "hints": ["vertical", "resistencia", "individual"]},
+        {"text": "senderismo", "hints": ["terrestre", "montaña", "resistencia"]},
+        {"text": "equitación", "hints": ["animal", "exterior", "colectivo"]},
+        {"text": "gimnasia", "hints": ["artístico", "agilidad", "individual"]},
+        {"text": "lucha libre", "hints": ["combate", "contacto", "individual"]},
+        {"text": "badminton", "hints": ["raqueta", "volante", "individual"]}
+      ]
+    },
+    {
+      "name": "Instrumento",
+      "words": [
+        {"text": "guitarra", "hints": ["cuerda", "pulsado", "popular"]},
+        {"text": "piano", "hints": ["teclado", "percusión", "clásico"]},
+        {"text": "violín", "hints": ["cuerda", "frotado", "orquesta"]},
+        {"text": "flauta", "hints": ["viento", "madera", "soplo"]},
+        {"text": "tambor", "hints": ["percusión", "membrana", "ritmo"]},
+        {"text": "trompeta", "hints": ["viento", "metal", "brillante"]},
+        {"text": "saxofón", "hints": ["viento", "metal", "jazz"]},
+        {"text": "clarinete", "hints": ["viento", "madera", "orquesta"]},
+        {"text": "arpa", "hints": ["cuerda", "pulsado", "grande"]},
+        {"text": "acordeón", "hints": ["viento", "teclas", "folk"]},
+        {"text": "harmónica", "hints": ["viento", "soplo", "pequeño"]},
+        {"text": "xilófono", "hints": ["percusión", "madera", "melódico"]},
+        {"text": "violonchelo", "hints": ["cuerda", "frotado", "grande"]},
+        {"text": "mandolina", "hints": ["cuerda", "pulsado", "folk"]},
+        {"text": "ukelele", "hints": ["cuerda", "pequeño", "tropical"]},
+        {"text": "banjo", "hints": ["cuerda", "pulsado", "folk"]},
+        {"text": "órgano", "hints": ["teclado", "viento", "grande"]},
+        {"text": "pandereta", "hints": ["percusión", "manual", "folclórico"]},
+        {"text": "triángulo", "hints": ["percusión", "metal", "pequeño"]},
+        {"text": "campanas", "hints": ["percusión", "metal", "tonal"]},
+        {"text": "platillos", "hints": ["percusión", "metal", "choque"]},
+        {"text": "castañuela", "hints": ["percusión", "folclórico", "manual"]},
+        {"text": "timbal", "hints": ["percusión", "membrana", "orquesta"]}
+      ]
+    },
+    {
+      "name": "Deporte",
+      "words": [
+        {"text": "pelota", "hints": ["redondo", "juego", "rebote"]},
+        {"text": "raqueta", "hints": ["golpeo", "oval", "deportivo"]},
+        {"text": "red", "hints": ["división", "malla", "barrera"]},
+        {"text": "canasta", "hints": ["objetivo", "elevado", "circular"]},
+        {"text": "portería", "hints": ["objetivo", "rectangular", "defensa"]},
+        {"text": "piscina", "hints": ["acuático", "artificial", "rectangular"]},
+        {"text": "pista", "hints": ["superficie", "deportivo", "específico"]},
+        {"text": "estadio", "hints": ["recinto", "espectador", "grande"]},
+        {"text": "gimnasia", "hints": ["artístico", "agilidad", "colchoneta"]},
+        {"text": "boxeo", "hints": ["combate", "ring", "guantes"]},
+        {"text": "lucha", "hints": ["combate", "cuerpo", "contacto"]},
+        {"text": "salto", "hints": ["altura", "distancia", "impulso"]},
+        {"text": "lanzamiento", "hints": ["fuerza", "distancia", "proyectil"]},
+        {"text": "carrera", "hints": ["velocidad", "pista", "distancia"]},
+        {"text": "nado", "hints": ["acuático", "técnica", "brazada"]},
+        {"text": "patinaje", "hints": ["deslizante", "cuchillas", "suave"]},
+        {"text": "esquí", "hints": ["nieve", "deslizante", "montaña"]},
+        {"text": "escalada", "hints": ["vertical", "agarre", "esfuerzo"]},
+        {"text": "ciclismo", "hints": ["ruedas", "pedales", "resistencia"]},
+        {"text": "equitación", "hints": ["animal", "silla", "exterior"]}
+      ]
+    }
+  ]
+}

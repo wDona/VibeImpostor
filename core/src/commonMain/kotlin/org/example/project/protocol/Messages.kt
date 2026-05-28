@@ -47,7 +47,8 @@ sealed interface ClientMessage {
 
     @Serializable
     data class CastVote(
-        val targetPlayerId: String
+        val targetPlayerId: String,
+        val voteIsHard: Boolean = true
     ) : ClientMessage
 
     @Serializable
@@ -68,6 +69,9 @@ sealed interface ClientMessage {
 
     @Serializable
     data object ContinueRound : ClientMessage
+
+    @Serializable
+    data class KickPlayer(val targetPlayerId: String) : ClientMessage
 }
 
 @Serializable
@@ -88,7 +92,8 @@ sealed interface ServerMessage {
         val yourRole: Role,
         val contentIsWord: Boolean,
         val content: String,
-        val room: RoomSnapshot
+        val room: RoomSnapshot,
+        val hintList: List<String> = emptyList()
     ) : ServerMessage
 
     @Serializable
@@ -119,7 +124,9 @@ sealed interface ServerMessage {
         val ejectedPlayerId: String?,
         val wasImpostor: Boolean,
         val room: RoomSnapshot,
-        val votes: Map<String, String> = emptyMap()
+        val votes: Map<String, String> = emptyMap(),
+        val voteTypes: Map<String, Boolean> = emptyMap(),
+        val punishmentPlayerId: String? = null
     ) : ServerMessage
 
     @Serializable
@@ -175,6 +182,7 @@ sealed interface ServerMessage {
 const val NOBODY_VOTE_ID = "__nobody__"
 const val BOTH_IMPOSTORS_ID = "__both__"
 const val WRONG_CLAIM_PREFIX = "__wrongclaim__"
+const val PUNISHMENT_PREFIX = "__punishment__"
 
 object ProtocolJson {
     val json = Json {

@@ -1,0 +1,70 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Familia",
+      "words": [
+        {"text": "padre", "hints": ["masculino", "progenitor", "adulto"]},
+        {"text": "madre", "hints": ["femenino", "progenitor", "adulto"]},
+        {"text": "hijo", "hints": ["masculino", "descendiente", "joven"]},
+        {"text": "hija", "hints": ["femenino", "descendiente", "joven"]},
+        {"text": "hermano", "hints": ["masculino", "lateral", "mismo nivel"]},
+        {"text": "hermana", "hints": ["femenino", "lateral", "mismo nivel"]},
+        {"text": "abuelo", "hints": ["masculino", "ascendiente", "mayor"]},
+        {"text": "abuela", "hints": ["femenino", "ascendiente", "mayor"]},
+        {"text": "tío", "hints": ["masculino", "colateral", "familiar"]},
+        {"text": "tía", "hints": ["femenino", "colateral", "familiar"]},
+        {"text": "primo", "hints": ["masculino", "colateral", "lejano"]},
+        {"text": "prima", "hints": ["femenino", "colateral", "lejano"]},
+        {"text": "esposo", "hints": ["masculino", "pareja", "adulto"]},
+        {"text": "esposa", "hints": ["femenino", "pareja", "adulto"]},
+        {"text": "novio", "hints": ["masculino", "pareja", "informal"]},
+        {"text": "novia", "hints": ["femenino", "pareja", "informal"]},
+        {"text": "bebé", "hints": ["infante", "dependiente", "reciente"]},
+        {"text": "niño", "hints": ["joven", "dependiente", "creciendo"]},
+        {"text": "adolescente", "hints": ["joven", "intermedio", "creciendo"]},
+        {"text": "adulto", "hints": ["maduro", "independiente", "responsable"]},
+        {"text": "padrino", "hints": ["masculino", "simbólico", "referente"]},
+        {"text": "madrina", "hints": ["femenino", "simbólico", "referente"]},
+        {"text": "bisabuelo", "hints": ["masculino", "ascendiente", "lejano"]},
+        {"text": "bisabuela", "hints": ["femenino", "ascendiente", "lejano"]}
+      ]
+    },
+    {
+      "name": "Verbo",
+      "words": [
+        {"text": "correr", "hints": ["movimiento", "veloz", "físico"]},
+        {"text": "caminar", "hints": ["movimiento", "lento", "físico"]},
+        {"text": "saltar", "hints": ["movimiento", "vertical", "físico"]},
+        {"text": "nadar", "hints": ["movimiento", "acuático", "físico"]},
+        {"text": "volar", "hints": ["movimiento", "aéreo", "físico"]},
+        {"text": "bailar", "hints": ["movimiento", "rítmico", "artístico"]},
+        {"text": "cantar", "hints": ["vocal", "artístico", "sonoro"]},
+        {"text": "reír", "hints": ["emocional", "sonoro", "positivo"]},
+        {"text": "llorar", "hints": ["emocional", "líquido", "negativo"]},
+        {"text": "dormir", "hints": ["físico", "pasivo", "necesario"]},
+        {"text": "despertarse", "hints": ["físico", "activo", "inicio"]},
+        {"text": "comer", "hints": ["físico", "necesario", "oral"]},
+        {"text": "beber", "hints": ["físico", "necesario", "líquido"]},
+        {"text": "hablar", "hints": ["comunicación", "oral", "social"]},
+        {"text": "escuchar", "hints": ["sensorial", "auditivo", "pasivo"]},
+        {"text": "mirar", "hints": ["sensorial", "visual", "activo"]},
+        {"text": "ver", "hints": ["sensorial", "visual", "pasivo"]},
+        {"text": "oír", "hints": ["sensorial", "auditivo", "pasivo"]},
+        {"text": "oler", "hints": ["sensorial", "olfativo", "nariz"]},
+        {"text": "tocar", "hints": ["sensorial", "táctil", "manual"]},
+        {"text": "pensar", "hints": ["cognitivo", "interno", "mental"]},
+        {"text": "creer", "hints": ["cognitivo", "interno", "fe"]},
+        {"text": "saber", "hints": ["cognitivo", "almacenado", "certero"]},
+        {"text": "aprender", "hints": ["cognitivo", "progresivo", "activo"]},
+        {"text": "jugar", "hints": ["lúdico", "entretenimiento", "activo"]},
+        {"text": "trabajar", "hints": ["productivo", "esfuerzo", "responsable"]},
+        {"text": "descansar", "hints": ["físico", "pasivo", "recuperación"]},
+        {"text": "escribir", "hints": ["comunicación", "manual", "registro"]},
+        {"text": "leer", "hints": ["cognitivo", "visual", "texto"]},
+        {"text": "dibujar", "hints": ["artístico", "manual", "visual"]}
+      ]
+    }
+  ]
+}

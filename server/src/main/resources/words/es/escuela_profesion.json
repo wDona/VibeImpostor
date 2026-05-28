@@ -1,0 +1,66 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Escuela",
+      "words": [
+        {"text": "libro", "hints": ["papel", "escrito", "conocimiento"]},
+        {"text": "lápiz", "hints": ["escritura", "madera", "borrable"]},
+        {"text": "pluma", "hints": ["escritura", "tinta", "punta"]},
+        {"text": "cuaderno", "hints": ["papel", "escritura", "encuadernado"]},
+        {"text": "mochila", "hints": ["transporte", "espalda", "almacén"]},
+        {"text": "pizarra", "hints": ["escritura", "borrable", "vertical"]},
+        {"text": "mesa", "hints": ["mobiliario", "horizontal", "trabajo"]},
+        {"text": "silla", "hints": ["mobiliario", "asiento", "individual"]},
+        {"text": "profesor", "hints": ["persona", "enseñanza", "adulto"]},
+        {"text": "alumno", "hints": ["persona", "aprendiz", "joven"]},
+        {"text": "clase", "hints": ["estancia", "colectivo", "enseñanza"]},
+        {"text": "examen", "hints": ["evaluación", "escrito", "formal"]},
+        {"text": "tarea", "hints": ["trabajo", "individual", "casa"]},
+        {"text": "calificación", "hints": ["evaluación", "numérico", "resultado"]},
+        {"text": "biblioteca", "hints": ["libros", "silencio", "consulta"]},
+        {"text": "aula", "hints": ["estancia", "enseñanza", "colectivo"]},
+        {"text": "uniforme", "hints": ["ropa", "igual", "institución"]},
+        {"text": "escritorio", "hints": ["mobiliario", "trabajo", "madera"]},
+        {"text": "goma", "hints": ["corrección", "borrable", "pequeño"]},
+        {"text": "regla", "hints": ["medición", "recto", "plástico"]},
+        {"text": "bolígrafo", "hints": ["escritura", "tinta", "plástico"]},
+        {"text": "marcador", "hints": ["escritura", "color", "grueso"]},
+        {"text": "borrador", "hints": ["corrección", "borrable", "tela"]},
+        {"text": "cartera", "hints": ["transporte", "papel", "cuero"]},
+        {"text": "parque", "hints": ["exterior", "juego", "naturaleza"]}
+      ]
+    },
+    {
+      "name": "Profesión",
+      "words": [
+        {"text": "doctor", "hints": ["sanidad", "titulado", "servicio"]},
+        {"text": "enfermera", "hints": ["sanidad", "asistencia", "servicio"]},
+        {"text": "profesor", "hints": ["enseñanza", "titulado", "servicio"]},
+        {"text": "ingeniero", "hints": ["técnico", "titulado", "construcción"]},
+        {"text": "abogado", "hints": ["legal", "titulado", "servicio"]},
+        {"text": "arquitecto", "hints": ["diseño", "titulado", "construcción"]},
+        {"text": "cocinero", "hints": ["alimentación", "servicio", "manual"]},
+        {"text": "policía", "hints": ["seguridad", "uniforme", "servicio"]},
+        {"text": "bombero", "hints": ["emergencia", "uniforme", "servicio"]},
+        {"text": "piloto", "hints": ["transporte", "aéreo", "titulado"]},
+        {"text": "mecanicista", "hints": ["técnico", "manual", "reparación"]},
+        {"text": "electricista", "hints": ["técnico", "manual", "energía"]},
+        {"text": "plomero", "hints": ["técnico", "manual", "agua"]},
+        {"text": "carpintero", "hints": ["artesano", "madera", "manual"]},
+        {"text": "pintor", "hints": ["artesano", "color", "creativo"]},
+        {"text": "músico", "hints": ["artístico", "creativo", "sonido"]},
+        {"text": "actor", "hints": ["artístico", "representación", "creativo"]},
+        {"text": "periodista", "hints": ["comunicación", "escrito", "servicio"]},
+        {"text": "granjero", "hints": ["agrícola", "rural", "producción"]},
+        {"text": "vendedor", "hints": ["comercio", "servicio", "comunicación"]},
+        {"text": "secretario", "hints": ["administración", "organización", "oficina"]},
+        {"text": "contador", "hints": ["finanzas", "titulado", "oficina"]},
+        {"text": "jardinero", "hints": ["naturaleza", "manual", "exterior"]},
+        {"text": "sastre", "hints": ["artesano", "tela", "manual"]},
+        {"text": "zapatero", "hints": ["artesano", "calzado", "manual"]}
+      ]
+    }
+  ]
+}

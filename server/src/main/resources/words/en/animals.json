@@ -1,0 +1,44 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Animals",
+      "words": [
+        {"text": "dog", "hints": ["domestic", "mammal", "vertebrate"]},
+        {"text": "cat", "hints": ["domestic", "feline", "carnivore"]},
+        {"text": "elephant", "hints": ["herbivore", "african", "mammal"]},
+        {"text": "giraffe", "hints": ["herbivore", "african", "terrestrial"]},
+        {"text": "lion", "hints": ["carnivore", "african", "feline"]},
+        {"text": "tiger", "hints": ["carnivore", "asian", "feline"]},
+        {"text": "bear", "hints": ["omnivore", "terrestrial", "mammal"]},
+        {"text": "horse", "hints": ["domestic", "herbivore", "fast"]},
+        {"text": "cow", "hints": ["domestic", "herbivore", "ruminant"]},
+        {"text": "sheep", "hints": ["domestic", "herbivore", "ruminant"]},
+        {"text": "pig", "hints": ["domestic", "omnivore", "mammal"]},
+        {"text": "chicken", "hints": ["domestic", "bird", "terrestrial"]},
+        {"text": "duck", "hints": ["aquatic", "bird", "migratory"]},
+        {"text": "penguin", "hints": ["aquatic", "bird", "polar"]},
+        {"text": "crocodile", "hints": ["reptile", "aquatic", "carnivore"]},
+        {"text": "snake", "hints": ["reptile", "carnivore", "terrestrial"]},
+        {"text": "eagle", "hints": ["raptor", "bird", "carnivore"]},
+        {"text": "fish", "hints": ["aquatic", "vertebrate", "common"]},
+        {"text": "dolphin", "hints": ["aquatic", "mammal", "marine"]},
+        {"text": "shark", "hints": ["marine", "carnivore", "aquatic"]},
+        {"text": "rabbit", "hints": ["herbivore", "domestic", "mammal"]},
+        {"text": "mouse", "hints": ["rodent", "domestic", "small"]},
+        {"text": "frog", "hints": ["amphibian", "aquatic", "carnivore"]},
+        {"text": "spider", "hints": ["arthropod", "terrestrial", "carnivore"]},
+        {"text": "bee", "hints": ["insect", "social", "flying"]},
+        {"text": "butterfly", "hints": ["insect", "flying", "metamorphosis"]},
+        {"text": "ant", "hints": ["insect", "social", "terrestrial"]},
+        {"text": "parrot", "hints": ["bird", "tropical", "social"]},
+        {"text": "owl", "hints": ["nocturnal", "raptor", "bird"]},
+        {"text": "camel", "hints": ["mammal", "desert", "herbivore"]},
+        {"text": "whale", "hints": ["marine", "mammal", "large"]},
+        {"text": "octopus", "hints": ["marine", "invertebrate", "intelligent"]},
+        {"text": "crab", "hints": ["crustacean", "marine", "aquatic"]}
+      ]
+    }
+  ]
+}

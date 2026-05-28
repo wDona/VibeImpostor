@@ -1,6 +1,7 @@
 package org.example.project.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,6 +56,8 @@ fun VotingScreen(viewModel: GameViewModel) {
 
     val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
     val voted = remember { mutableStateOf(false) }
+    val selectedTarget = remember { mutableStateOf<String?>(null) }
+    val punishmentMode = room.config.punishmentVote
     val activePlayers = room.players.filter { !it.isSpectator }
     val votedPlayerIds = state.value.votedPlayerIds
     val votedCount = votedPlayerIds.size
@@ -214,14 +217,24 @@ fun VotingScreen(viewModel: GameViewModel) {
                 room.players
                     .filter { it.id != state.value.yourPlayerId && !it.isSpectator }
                     .forEach { player ->
+                        val isSelected = selectedTarget.value == player.id
                         Button(
                             onClick = {
-                                viewModel.castVote(player.id)
-                                voted.value = true
+                                if (punishmentMode) {
+                                    selectedTarget.value = if (isSelected) null else player.id
+                                } else {
+                                    viewModel.castVote(player.id)
+                                    voted.value = true
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(56.dp),
+                                .height(56.dp)
+                                .then(
+                                    if (isSelected)
+                                        Modifier.border(2.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
+                                    else Modifier
+                                ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Row(
@@ -237,6 +250,36 @@ fun VotingScreen(viewModel: GameViewModel) {
                             }
                         }
                     }
+
+                // Vote type buttons when player is selected in punishment mode
+                if (punishmentMode && selectedTarget.value != null && !voted.value) {
+                    val targetId = selectedTarget.value!!
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedButton(
+                            onClick = {
+                                viewModel.castVote(targetId, voteIsHard = false)
+                                voted.value = true
+                            },
+                            modifier = Modifier.weight(1f).height(52.dp),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text("🟡 ${Strings.get("vote_suspicious", language)}", fontSize = 14.sp)
+                        }
+                        Button(
+                            onClick = {
+                                viewModel.castVote(targetId, voteIsHard = true)
+                                voted.value = true
+                            },
+                            modifier = Modifier.weight(1f).height(52.dp),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text("🔴 ${Strings.get("vote_sure", language)}", fontSize = 14.sp)
+                        }
+                    }
+                }
 
                 if (room.config.numImpostors >= 2) {
                     HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))

@@ -151,7 +151,21 @@ object Strings {
             "voting_both_correct" to "¡Acertó! Los demás eran impostores.",
             "voting_both_wrong" to "Equivocado. Queda eliminado.",
             "voting_nobody_name" to "Nadie",
-            "voting_wrong_claim" to "¡{name} se creyó que era el único inocente!"
+            "voting_wrong_claim" to "¡{name} se creyó que era el único inocente!",
+            "lobby_progressive_hints" to "Pistas progresivas",
+            "lobby_progressive_hints_desc" to "El impostor recibe una pista nueva cada ronda",
+            "game_hint" to "Pista",
+            "lobby_punishment_vote" to "Voto de castigo",
+            "lobby_punishment_vote_desc" to "Sin empate: el más votado recibe un turno extra en vez de ser expulsado",
+            "vote_suspicious" to "Sospechoso",
+            "vote_sure" to "Seguro",
+            "punishment_warning_title" to "¡Turno de castigo!",
+            "punishment_warning_desc" to "Tiene un turno extra para hablar. Si vuelve a ser el más votado, es expulsado.",
+            "kick_player" to "Expulsar",
+            "kick_confirm_title" to "¿Expulsar a {name}?",
+            "kick_confirm_text" to "El jugador será expulsado de la sala.",
+            "game_kick_title" to "Expulsar jugador",
+            "game_kick_select" to "Selecciona el jugador a expulsar"
         ),
         "en" to mapOf(
             "home_title" to "Impostor",
@@ -298,7 +312,21 @@ object Strings {
             "voting_both_correct" to "Correct! All others were impostors.",
             "voting_both_wrong" to "Wrong. You are eliminated.",
             "voting_nobody_name" to "Nobody",
-            "voting_wrong_claim" to "{name} thought they were the last innocent!"
+            "voting_wrong_claim" to "{name} thought they were the last innocent!",
+            "lobby_progressive_hints" to "Progressive hints",
+            "lobby_progressive_hints_desc" to "Impostor gets a new hint each round",
+            "game_hint" to "Hint",
+            "lobby_punishment_vote" to "Punishment vote",
+            "lobby_punishment_vote_desc" to "No tie: most voted gets an extra turn instead of being ejected",
+            "vote_suspicious" to "Suspicious",
+            "vote_sure" to "Sure",
+            "punishment_warning_title" to "Punishment turn!",
+            "punishment_warning_desc" to "They get an extra turn to speak. If voted again, they are ejected.",
+            "kick_player" to "Kick",
+            "kick_confirm_title" to "Kick {name}?",
+            "kick_confirm_text" to "The player will be removed from the room.",
+            "game_kick_title" to "Kick player",
+            "game_kick_select" to "Select player to kick"
         )
     )
 }

@@ -1,0 +1,79 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Juego",
+      "words": [
+        {"text": "ajedrez", "hints": ["tablero", "estrategia", "piezas"]},
+        {"text": "damas", "hints": ["tablero", "fichas", "captura"]},
+        {"text": "póker", "hints": ["cartas", "apuesta", "farol"]},
+        {"text": "videojuego", "hints": ["digital", "pantalla", "interactivo"]},
+        {"text": "cartas", "hints": ["papel", "baraja", "azar"]},
+        {"text": "dados", "hints": ["azar", "cúbico", "números"]},
+        {"text": "dominó", "hints": ["fichas", "números", "encadenado"]},
+        {"text": "consola", "hints": ["digital", "entretenimiento", "electrónico"]},
+        {"text": "bingo", "hints": ["azar", "números", "colectivo"]},
+        {"text": "lotería", "hints": ["azar", "números", "premiado"]},
+        {"text": "crucigramas", "hints": ["palabras", "letras", "cuadrícula"]},
+        {"text": "puzzle", "hints": ["piezas", "imagen", "encaje"]},
+        {"text": "juego de mesa", "hints": ["tablero", "colectivo", "turno"]},
+        {"text": "carreras", "hints": ["velocidad", "competición", "turno"]},
+        {"text": "fútbol", "hints": ["colectivo", "exterior", "pelota"]},
+        {"text": "tenis", "hints": ["individual", "raqueta", "red"]},
+        {"text": "billar", "hints": ["mesa", "taco", "bolas"]},
+        {"text": "boliche", "hints": ["bolos", "carril", "impacto"]},
+        {"text": "dardos", "hints": ["puntería", "diana", "pared"]}
+      ]
+    },
+    {
+      "name": "Película",
+      "words": [
+        {"text": "comedia", "hints": ["risa", "ligero", "entretenimiento"]},
+        {"text": "drama", "hints": ["emocional", "intenso", "serio"]},
+        {"text": "acción", "hints": ["violento", "rápido", "persecuciones"]},
+        {"text": "terror", "hints": ["miedo", "oscuro", "susto"]},
+        {"text": "ciencia ficción", "hints": ["futuro", "tecnológico", "imaginario"]},
+        {"text": "fantasía", "hints": ["imaginario", "magia", "mundos"]},
+        {"text": "aventura", "hints": ["exploración", "viaje", "riesgo"]},
+        {"text": "romance", "hints": ["amor", "emocional", "pareja"]},
+        {"text": "thriller", "hints": ["tensión", "suspenso", "intriga"]},
+        {"text": "animación", "hints": ["dibujado", "digital", "colorido"]},
+        {"text": "documental", "hints": ["real", "informativo", "narrado"]},
+        {"text": "western", "hints": ["vaquero", "desierto", "americano"]},
+        {"text": "superhéroe", "hints": ["poderes", "ficticio", "popular"]},
+        {"text": "musical", "hints": ["canciones", "baile", "entretenimiento"]},
+        {"text": "infantil", "hints": ["niños", "colorido", "educativo"]},
+        {"text": "crimen", "hints": ["delito", "investigación", "oscuro"]},
+        {"text": "misterio", "hints": ["enigma", "investigación", "oculto"]},
+        {"text": "suspense", "hints": ["tensión", "incertidumbre", "giro"]},
+        {"text": "histórico", "hints": ["pasado", "real", "época"]}
+      ]
+    },
+    {
+      "name": "Arte",
+      "words": [
+        {"text": "pintura", "hints": ["color", "lienzo", "visual"]},
+        {"text": "escultura", "hints": ["tridimensional", "material", "táctil"]},
+        {"text": "fotografía", "hints": ["imagen", "luz", "instante"]},
+        {"text": "lienzo", "hints": ["soporte", "tela", "pintura"]},
+        {"text": "pincel", "hints": ["herramienta", "pelo", "pintura"]},
+        {"text": "paleta", "hints": ["mezcla", "color", "herramienta"]},
+        {"text": "estatua", "hints": ["tridimensional", "material", "figura"]},
+        {"text": "retrato", "hints": ["figurativo", "persona", "realista"]},
+        {"text": "paisaje", "hints": ["natural", "visual", "escena"]},
+        {"text": "mural", "hints": ["gran formato", "pared", "público"]},
+        {"text": "cerámica", "hints": ["arcilla", "horneado", "manual"]},
+        {"text": "esmalte", "hints": ["vidrio", "color", "cocido"]},
+        {"text": "vidrio", "hints": ["transparente", "frágil", "moldeado"]},
+        {"text": "mosaico", "hints": ["fragmentos", "colores", "decorativo"]},
+        {"text": "fresco", "hints": ["pared", "húmedo", "antiguo"]},
+        {"text": "caricatura", "hints": ["exagerado", "humorístico", "retrato"]},
+        {"text": "cómic", "hints": ["viñetas", "narración", "ilustrado"]},
+        {"text": "grabado", "hints": ["impresión", "plancha", "reproducible"]},
+        {"text": "litografía", "hints": ["impresión", "piedra", "reproducible"]},
+        {"text": "serigrafía", "hints": ["impresión", "pantalla", "repetible"]}
+      ]
+    }
+  ]
+}

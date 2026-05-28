@@ -24,5 +24,6 @@ fun initDatabase() {
 
     transaction {
         SchemaUtils.create(Users, Sessions, WordPacks, Categories, Words)
+        SchemaUtils.createMissingTablesAndColumns(Words)
     }
 }

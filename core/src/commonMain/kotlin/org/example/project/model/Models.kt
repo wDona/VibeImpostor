@@ -59,7 +59,9 @@ data class RoomConfig(
     val anonymousVotes: Boolean = false,
     val singleWordRound: Boolean = false,
     val noCategory: Boolean = false,
-    val hiddenRole: Boolean = false
+    val hiddenRole: Boolean = false,
+    val progressiveHints: Boolean = false,
+    val punishmentVote: Boolean = false
 )
 
 @Serializable
@@ -76,5 +78,7 @@ data class RoomSnapshot(
     val impostorGuesses: Map<String, Boolean> = emptyMap(),
     val pendingGuessImpostorId: String? = null,
     val lastWinners: List<String> = emptyList(),
-    val continueResponses: Set<String> = emptySet()
+    val continueResponses: Set<String> = emptySet(),
+    val isInPunishmentRound: Boolean = false,
+    val punishmentPlayerId: String? = null
 )

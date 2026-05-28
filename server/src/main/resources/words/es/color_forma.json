@@ -1,0 +1,58 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Color",
+      "words": [
+        {"text": "rojo", "hints": ["cálido", "primario", "intenso"]},
+        {"text": "azul", "hints": ["frío", "primario", "tranquilo"]},
+        {"text": "verde", "hints": ["natural", "primario", "fresco"]},
+        {"text": "amarillo", "hints": ["cálido", "primario", "luminoso"]},
+        {"text": "naranja", "hints": ["cálido", "secundario", "vivo"]},
+        {"text": "morado", "hints": ["frío", "secundario", "oscuro"]},
+        {"text": "rosa", "hints": ["suave", "cálido", "claro"]},
+        {"text": "negro", "hints": ["oscuro", "absorbe luz", "neutro"]},
+        {"text": "blanco", "hints": ["claro", "refleja luz", "neutro"]},
+        {"text": "gris", "hints": ["neutro", "intermedio", "apagado"]},
+        {"text": "marrón", "hints": ["terroso", "natural", "oscuro"]},
+        {"text": "dorado", "hints": ["metálico", "brillante", "cálido"]},
+        {"text": "plateado", "hints": ["metálico", "brillante", "frío"]},
+        {"text": "turquesa", "hints": ["frío", "azulado", "tropical"]},
+        {"text": "violeta", "hints": ["frío", "suave", "oscuro"]},
+        {"text": "índigo", "hints": ["frío", "profundo", "oscuro"]},
+        {"text": "cian", "hints": ["frío", "brillante", "secundario"]},
+        {"text": "beige", "hints": ["neutro", "claro", "cálido"]},
+        {"text": "magenta", "hints": ["vivo", "secundario", "rosado"]},
+        {"text": "escarlata", "hints": ["rojo intenso", "cálido", "brillante"]},
+        {"text": "carmesí", "hints": ["rojo oscuro", "intenso", "cálido"]},
+        {"text": "púrpura", "hints": ["oscuro", "frío", "realeza"]}
+      ]
+    },
+    {
+      "name": "Forma",
+      "words": [
+        {"text": "círculo", "hints": ["curvo", "simétrico", "sin ángulos"]},
+        {"text": "cuadrado", "hints": ["cuatro lados", "igual", "recto"]},
+        {"text": "rectángulo", "hints": ["cuatro lados", "alargado", "recto"]},
+        {"text": "triángulo", "hints": ["tres lados", "angular", "básico"]},
+        {"text": "óvalo", "hints": ["curvo", "alargado", "simétrico"]},
+        {"text": "rombo", "hints": ["cuatro lados", "inclinado", "angular"]},
+        {"text": "línea", "hints": ["simple", "alargado", "unidimensional"]},
+        {"text": "punto", "hints": ["mínimo", "central", "pequeño"]},
+        {"text": "rayo", "hints": ["lineal", "angular", "irregular"]},
+        {"text": "cubo", "hints": ["tridimensional", "seis caras", "regular"]},
+        {"text": "esfera", "hints": ["tridimensional", "curvo", "simétrico"]},
+        {"text": "cilindro", "hints": ["tridimensional", "circular", "regular"]},
+        {"text": "cono", "hints": ["tridimensional", "puntiagudo", "circular"]},
+        {"text": "pirámide", "hints": ["tridimensional", "angular", "puntiagudo"]},
+        {"text": "cruz", "hints": ["simétrico", "cuatro ramas", "sencillo"]},
+        {"text": "estrella", "hints": ["puntudo", "simétrico", "radiante"]},
+        {"text": "espiral", "hints": ["curvo", "continuo", "giratorio"]},
+        {"text": "zigzag", "hints": ["angular", "alternante", "irregular"]},
+        {"text": "onda", "hints": ["curvo", "continuo", "ondulante"]},
+        {"text": "corazón", "hints": ["curvo", "simétrico", "simbólico"]}
+      ]
+    }
+  ]
+}

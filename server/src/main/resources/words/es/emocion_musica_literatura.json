@@ -1,0 +1,89 @@
+{
+  "name": "Paquete base",
+  "language": "es",
+  "categories": [
+    {
+      "name": "Emoción",
+      "words": [
+        {"text": "alegría", "hints": ["positivo", "interno", "intenso"]},
+        {"text": "tristeza", "hints": ["negativo", "interno", "profundo"]},
+        {"text": "enojo", "hints": ["negativo", "reactivo", "intenso"]},
+        {"text": "miedo", "hints": ["negativo", "protector", "básico"]},
+        {"text": "sorpresa", "hints": ["neutro", "repentino", "breve"]},
+        {"text": "amor", "hints": ["positivo", "profundo", "vinculante"]},
+        {"text": "odio", "hints": ["negativo", "intenso", "profundo"]},
+        {"text": "esperanza", "hints": ["positivo", "futuro", "motivador"]},
+        {"text": "desesperación", "hints": ["negativo", "extremo", "paraliza"]},
+        {"text": "orgullo", "hints": ["positivo", "propio", "logro"]},
+        {"text": "vergüenza", "hints": ["negativo", "social", "intenso"]},
+        {"text": "curiosidad", "hints": ["neutro", "exploratorio", "activo"]},
+        {"text": "aburrimiento", "hints": ["negativo", "pasivo", "ausencia"]},
+        {"text": "entusiasmo", "hints": ["positivo", "energético", "motivador"]},
+        {"text": "ansiedad", "hints": ["negativo", "futuro", "tenso"]},
+        {"text": "tranquilidad", "hints": ["positivo", "pasivo", "interior"]},
+        {"text": "euforia", "hints": ["positivo", "extremo", "temporal"]},
+        {"text": "melancolía", "hints": ["negativo", "pasado", "suave"]},
+        {"text": "rabia", "hints": ["negativo", "intenso", "reactivo"]},
+        {"text": "confianza", "hints": ["positivo", "relacional", "estable"]},
+        {"text": "confusión", "hints": ["negativo", "cognitivo", "temporal"]},
+        {"text": "arrepentimiento", "hints": ["negativo", "pasado", "moral"]}
+      ]
+    },
+    {
+      "name": "Música",
+      "words": [
+        {"text": "canción", "hints": ["vocal", "breve", "popular"]},
+        {"text": "nota", "hints": ["básico", "sonido", "musical"]},
+        {"text": "ritmo", "hints": ["patrón", "temporal", "percusivo"]},
+        {"text": "melodía", "hints": ["lineal", "vocal", "reconocible"]},
+        {"text": "armonía", "hints": ["simultáneo", "acorde", "agradable"]},
+        {"text": "acordé", "hints": ["simultáneo", "notas", "tonal"]},
+        {"text": "tempo", "hints": ["velocidad", "medición", "ritmo"]},
+        {"text": "volumen", "hints": ["intensidad", "sonido", "ajustable"]},
+        {"text": "tono", "hints": ["altura", "sonido", "medible"]},
+        {"text": "escala", "hints": ["secuencia", "notas", "patrón"]},
+        {"text": "sinfonía", "hints": ["orquesta", "larga", "clásico"]},
+        {"text": "concierto", "hints": ["actuación", "público", "directo"]},
+        {"text": "ópera", "hints": ["vocal", "teatro", "clásico"]},
+        {"text": "rock", "hints": ["eléctrico", "batería", "guitarras"]},
+        {"text": "pop", "hints": ["comercial", "bailable", "popular"]},
+        {"text": "jazz", "hints": ["improvisación", "americano", "sofisticado"]},
+        {"text": "clásica", "hints": ["orquesta", "antigua", "formal"]},
+        {"text": "folk", "hints": ["tradicional", "acústico", "popular"]},
+        {"text": "reggae", "hints": ["jamaicano", "sincopado", "relajado"]},
+        {"text": "hip-hop", "hints": ["urbano", "rapeo", "beatbox"]},
+        {"text": "electrónica", "hints": ["digital", "sintetizador", "moderno"]},
+        {"text": "samba", "hints": ["brasileño", "bailable", "percusión"]},
+        {"text": "tango", "hints": ["argentino", "pareja", "pasional"]},
+        {"text": "blues", "hints": ["americano", "melancólico", "guitarra"]}
+      ]
+    },
+    {
+      "name": "Literatura",
+      "words": [
+        {"text": "novela", "hints": ["largo", "ficción", "prosa"]},
+        {"text": "cuento", "hints": ["breve", "ficción", "prosa"]},
+        {"text": "poema", "hints": ["verso", "rítmico", "lírico"]},
+        {"text": "poesía", "hints": ["verso", "emocional", "lírico"]},
+        {"text": "drama", "hints": ["teatro", "conflicto", "diálogo"]},
+        {"text": "comedia", "hints": ["teatro", "humor", "ligero"]},
+        {"text": "tragedia", "hints": ["teatro", "dolor", "fatal"]},
+        {"text": "ensayo", "hints": ["reflexión", "opinión", "prosa"]},
+        {"text": "fábula", "hints": ["animales", "moraleja", "breve"]},
+        {"text": "leyenda", "hints": ["oral", "local", "semireal"]},
+        {"text": "mito", "hints": ["antiguo", "explicativo", "sagrado"]},
+        {"text": "biografía", "hints": ["real", "persona", "vida"]},
+        {"text": "autobiografía", "hints": ["real", "propio", "vida"]},
+        {"text": "diario", "hints": ["personal", "privado", "cotidiano"]},
+        {"text": "artículo", "hints": ["periodístico", "breve", "informativo"]},
+        {"text": "prólogo", "hints": ["inicio", "presentación", "prefacio"]},
+        {"text": "epílogo", "hints": ["final", "conclusión", "cierre"]},
+        {"text": "capítulo", "hints": ["división", "secuencial", "interno"]},
+        {"text": "acto", "hints": ["teatro", "división", "escena"]},
+        {"text": "escena", "hints": ["división", "momento", "específico"]},
+        {"text": "diálogo", "hints": ["conversación", "intercambio", "personajes"]},
+        {"text": "acento", "hints": ["entonación", "énfasis", "silábico"]}
+      ]
+    }
+  ]
+}

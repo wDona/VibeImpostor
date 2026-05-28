@@ -1,0 +1,36 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Building",
+      "words": [
+        {"text": "wall", "hints": ["vertical", "separator", "solid"]},
+        {"text": "floor", "hints": ["horizontal", "lower", "base"]},
+        {"text": "ceiling", "hints": ["horizontal", "upper", "protective"]},
+        {"text": "door", "hints": ["access", "movable", "wood"]},
+        {"text": "window", "hints": ["opening", "glass", "light"]},
+        {"text": "stairs", "hints": ["vertical", "access", "stepped"]},
+        {"text": "balcony", "hints": ["exterior", "elevated", "protruding"]},
+        {"text": "terrace", "hints": ["exterior", "flat", "elevated"]},
+        {"text": "fireplace", "hints": ["smoke", "vertical", "heat"]},
+        {"text": "roof", "hints": ["sloped", "upper", "protective"]},
+        {"text": "foundation", "hints": ["underground", "base", "support"]},
+        {"text": "brick", "hints": ["ceramic", "rectangular", "stackable"]},
+        {"text": "cement", "hints": ["powder", "binding", "grey"]},
+        {"text": "steel", "hints": ["metal", "resistant", "structural"]},
+        {"text": "wood", "hints": ["natural", "organic", "structural"]},
+        {"text": "glass", "hints": ["transparent", "fragile", "mineral"]},
+        {"text": "pipe", "hints": ["hollow", "cylindrical", "conductor"]},
+        {"text": "step", "hints": ["horizontal", "access", "individual"]},
+        {"text": "railing", "hints": ["protection", "lateral", "vertical"]},
+        {"text": "column", "hints": ["vertical", "support", "cylindrical"]},
+        {"text": "beam", "hints": ["horizontal", "support", "resistant"]},
+        {"text": "frame", "hints": ["support", "skeleton", "base"]},
+        {"text": "scaffold", "hints": ["temporary", "exterior", "elevated"]},
+        {"text": "crane", "hints": ["lifting", "mechanical", "large"]},
+        {"text": "construction", "hints": ["process", "temporary", "building"]}
+      ]
+    }
+  ]
+}

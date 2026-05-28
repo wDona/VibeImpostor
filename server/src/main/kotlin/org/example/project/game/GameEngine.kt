@@ -6,6 +6,7 @@ import org.example.project.model.RoomState
 import org.example.project.model.MIN_PLAYERS
 import org.example.project.protocol.BOTH_IMPOSTORS_ID
 import org.example.project.protocol.NOBODY_VOTE_ID
+import org.example.project.protocol.PUNISHMENT_PREFIX
 import org.example.project.protocol.WRONG_CLAIM_PREFIX
 import kotlin.random.Random
 
@@ -30,6 +31,7 @@ object GameEngine {
 
             room.word = word.first
             room.category = word.second
+            room.wordHints = word.third.shuffled(Random.Default)
 
             val active = room.activePlayers()
             val configured = room.config.numImpostors
@@ -68,7 +70,7 @@ object GameEngine {
             room.playedThisRound = room.playedThisRound + playerId
 
             if (room.roundIsComplete()) {
-                if (room.config.singleWordRound) {
+                if (room.config.singleWordRound || room.isInPunishmentRound) {
                     room.state = RoomState.VOTING
                     room.votes = emptyMap()
                     return RoomState.VOTING
@@ -170,13 +172,29 @@ object GameEngine {
         }
     }
 
-    suspend fun castVote(room: Room, voterId: String, targetId: String) {
+    suspend fun castVote(room: Room, voterId: String, targetId: String, voteIsHard: Boolean = true) {
         room.mutex.lock()
         try {
             room.votes = room.votes + (voterId to targetId)
+            room.voteTypes = room.voteTypes + (voterId to voteIsHard)
         } finally {
             room.mutex.unlock()
         }
+    }
+
+    fun startPunishmentRound(room: Room, accusedId: String) {
+        room.isInPunishmentRound = true
+        room.punishmentPlayerId = accusedId
+        room.votes = emptyMap()
+        room.voteTypes = emptyMap()
+        room.wantVoteResponses = emptyMap()
+        room.continueResponses = emptySet()
+        room.playedThisRound = room.activePlayers().map { it.id }.filter { it != accusedId }.toSet()
+        val accused = room.players.find { it.id == accusedId }
+        val others = room.activePlayers().filter { it.id != accusedId }.map { it.id }
+        room.turnOrder = listOfNotNull(accusedId.takeIf { accused != null }) + others
+        room.currentTurnIndex = 0
+        room.state = RoomState.IN_GAME
     }
 
     suspend fun checkVotingEnd(room: Room, force: Boolean = false): Pair<String?, Boolean>? {
@@ -188,6 +206,7 @@ object GameEngine {
             if (!force && voted.size < active.size) return null
             if (force && voted.isEmpty() && active.isNotEmpty()) {
                 room.lastRoundVotes = emptyMap()
+                room.voteTypes = emptyMap()
                 room.resetForNewRound()
                 val newActive = room.activePlayers()
                 room.state = when {
@@ -228,6 +247,22 @@ object GameEngine {
 
             if (ejected != null) {
                 val wasImpostor = ejected in room.impostorIds
+
+                // Punishment vote: if no tie and not already in punishment round → warning turn
+                if (room.config.punishmentVote && !room.isInPunishmentRound && !wasImpostor) {
+                    room.lastRoundVotes = room.votes.toMap()
+                    // Don't eject: give them a punishment turn
+                    room.state = RoomState.IN_GAME
+                    return Pair(PUNISHMENT_PREFIX + ejected, false)
+                }
+
+                // Punishment round: accused gets voted again → immediate ejection, no more mercy
+                val wasAlreadyPunished = room.isInPunishmentRound && ejected == room.punishmentPlayerId
+                if (!wasAlreadyPunished) {
+                    // Clear punishment round if different player or no punishment round
+                    room.isInPunishmentRound = false
+                    room.punishmentPlayerId = null
+                }
 
                 val ejectedPlayer = room.players.find { it.id == ejected }
                 if (ejectedPlayer != null) ejectedPlayer.isSpectator = true
@@ -381,7 +416,7 @@ object GameEngine {
                 return RoomState.FINISHED
             }
             if (room.roundIsComplete()) {
-                if (room.config.singleWordRound) {
+                if (room.config.singleWordRound || room.isInPunishmentRound) {
                     room.state = RoomState.VOTING
                     room.votes = emptyMap()
                     return RoomState.VOTING

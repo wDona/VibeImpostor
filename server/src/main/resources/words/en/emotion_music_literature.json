@@ -1,0 +1,89 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Emotion",
+      "words": [
+        {"text": "happiness", "hints": ["positive", "internal", "intense"]},
+        {"text": "sadness", "hints": ["negative", "internal", "deep"]},
+        {"text": "anger", "hints": ["negative", "reactive", "intense"]},
+        {"text": "fear", "hints": ["negative", "protective", "basic"]},
+        {"text": "surprise", "hints": ["neutral", "sudden", "brief"]},
+        {"text": "love", "hints": ["positive", "deep", "bonding"]},
+        {"text": "hate", "hints": ["negative", "intense", "deep"]},
+        {"text": "hope", "hints": ["positive", "future", "motivating"]},
+        {"text": "despair", "hints": ["negative", "extreme", "paralyzing"]},
+        {"text": "pride", "hints": ["positive", "personal", "achievement"]},
+        {"text": "shame", "hints": ["negative", "social", "intense"]},
+        {"text": "curiosity", "hints": ["neutral", "exploratory", "active"]},
+        {"text": "boredom", "hints": ["negative", "passive", "absence"]},
+        {"text": "enthusiasm", "hints": ["positive", "energetic", "motivating"]},
+        {"text": "anxiety", "hints": ["negative", "future", "tense"]},
+        {"text": "calmness", "hints": ["positive", "passive", "interior"]},
+        {"text": "euphoria", "hints": ["positive", "extreme", "temporary"]},
+        {"text": "melancholy", "hints": ["negative", "past", "gentle"]},
+        {"text": "rage", "hints": ["negative", "intense", "reactive"]},
+        {"text": "trust", "hints": ["positive", "relational", "stable"]},
+        {"text": "confusion", "hints": ["negative", "cognitive", "temporary"]},
+        {"text": "regret", "hints": ["negative", "past", "moral"]}
+      ]
+    },
+    {
+      "name": "Music",
+      "words": [
+        {"text": "song", "hints": ["vocal", "brief", "popular"]},
+        {"text": "note", "hints": ["basic", "sound", "musical"]},
+        {"text": "rhythm", "hints": ["pattern", "temporal", "percussive"]},
+        {"text": "melody", "hints": ["linear", "vocal", "recognizable"]},
+        {"text": "harmony", "hints": ["simultaneous", "chord", "pleasant"]},
+        {"text": "chord", "hints": ["simultaneous", "notes", "tonal"]},
+        {"text": "tempo", "hints": ["speed", "measurement", "rhythm"]},
+        {"text": "volume", "hints": ["intensity", "sound", "adjustable"]},
+        {"text": "tone", "hints": ["height", "sound", "measurable"]},
+        {"text": "scale", "hints": ["sequence", "notes", "pattern"]},
+        {"text": "symphony", "hints": ["orchestra", "long", "classical"]},
+        {"text": "concert", "hints": ["performance", "audience", "live"]},
+        {"text": "opera", "hints": ["vocal", "theatre", "classical"]},
+        {"text": "rock", "hints": ["electric", "drums", "guitars"]},
+        {"text": "pop", "hints": ["commercial", "danceable", "popular"]},
+        {"text": "jazz", "hints": ["improvisation", "american", "sophisticated"]},
+        {"text": "classical", "hints": ["orchestra", "ancient", "formal"]},
+        {"text": "folk", "hints": ["traditional", "acoustic", "popular"]},
+        {"text": "reggae", "hints": ["jamaican", "syncopated", "relaxed"]},
+        {"text": "hip hop", "hints": ["urban", "rap", "beatbox"]},
+        {"text": "electronic", "hints": ["digital", "synthesizer", "modern"]},
+        {"text": "samba", "hints": ["brazilian", "danceable", "percussion"]},
+        {"text": "tango", "hints": ["argentinian", "couple", "passionate"]},
+        {"text": "blues", "hints": ["american", "melancholic", "guitar"]}
+      ]
+    },
+    {
+      "name": "Literature",
+      "words": [
+        {"text": "novel", "hints": ["long", "fiction", "prose"]},
+        {"text": "story", "hints": ["brief", "fiction", "prose"]},
+        {"text": "poem", "hints": ["verse", "rhythmic", "lyric"]},
+        {"text": "poetry", "hints": ["verse", "emotional", "lyric"]},
+        {"text": "drama", "hints": ["theatre", "conflict", "dialogue"]},
+        {"text": "comedy", "hints": ["theatre", "humor", "light"]},
+        {"text": "tragedy", "hints": ["theatre", "pain", "fatal"]},
+        {"text": "essay", "hints": ["reflection", "opinion", "prose"]},
+        {"text": "fable", "hints": ["animals", "moral", "brief"]},
+        {"text": "legend", "hints": ["oral", "local", "semi-real"]},
+        {"text": "myth", "hints": ["ancient", "explanatory", "sacred"]},
+        {"text": "biography", "hints": ["real", "person", "life"]},
+        {"text": "autobiography", "hints": ["real", "personal", "life"]},
+        {"text": "diary", "hints": ["personal", "private", "daily"]},
+        {"text": "article", "hints": ["journalistic", "brief", "informative"]},
+        {"text": "prologue", "hints": ["start", "presentation", "preface"]},
+        {"text": "epilogue", "hints": ["end", "conclusion", "closing"]},
+        {"text": "chapter", "hints": ["division", "sequential", "internal"]},
+        {"text": "act", "hints": ["theatre", "division", "scene"]},
+        {"text": "scene", "hints": ["division", "moment", "specific"]},
+        {"text": "dialogue", "hints": ["conversation", "exchange", "characters"]},
+        {"text": "accent", "hints": ["intonation", "emphasis", "syllabic"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "name": "Base pack",
+  "language": "en",
+  "categories": [
+    {
+      "name": "Body",
+      "words": [
+        {"text": "head", "hints": ["upper", "central", "vital"]},
+        {"text": "face", "hints": ["frontal", "expressive", "identifier"]},
+        {"text": "eye", "hints": ["sensory", "pair", "visual"]},
+        {"text": "nose", "hints": ["sensory", "central", "olfactory"]},
+        {"text": "mouth", "hints": ["opening", "communication", "digestive"]},
+        {"text": "ear", "hints": ["sensory", "pair", "auditory"]},
+        {"text": "tooth", "hints": ["hard", "chewing", "white"]},
+        {"text": "hand", "hints": ["limb", "manual", "pair"]},
+        {"text": "foot", "hints": ["limb", "lower", "pair"]},
+        {"text": "arm", "hints": ["limb", "lateral", "pair"]},
+        {"text": "leg", "hints": ["limb", "lower", "pair"]},
+        {"text": "heart", "hints": ["vital", "internal", "pumping"]},
+        {"text": "lung", "hints": ["vital", "internal", "pair"]},
+        {"text": "stomach", "hints": ["digestive", "internal", "central"]},
+        {"text": "brain", "hints": ["vital", "internal", "control"]},
+        {"text": "blood", "hints": ["liquid", "circulatory", "vital"]},
+        {"text": "hair", "hints": ["surface", "keratin", "growing"]},
+        {"text": "skin", "hints": ["surface", "protective", "external"]},
+        {"text": "nail", "hints": ["keratin", "limb", "hard"]},
+        {"text": "tongue", "hints": ["sensory", "internal", "muscular"]},
+        {"text": "finger", "hints": ["limb", "small", "multiple"]},
+        {"text": "elbow", "hints": ["joint", "arm", "lateral"]},
+        {"text": "knee", "hints": ["joint", "leg", "central"]},
+        {"text": "back", "hints": ["posterior", "wide", "support"]},
+        {"text": "chest", "hints": ["frontal", "torso", "protective"]},
+        {"text": "shoulder", "hints": ["joint", "upper", "pair"]},
+        {"text": "hip", "hints": ["joint", "central", "lower"]},
+        {"text": "neck", "hints": ["connector", "central", "vertical"]},
+        {"text": "heel", "hints": ["lower", "foot", "support"]},
+        {"text": "chin", "hints": ["frontal", "lower", "prominent"]}
+      ]
+    },
+    {
+      "name": "Health",
+      "words": [
+        {"text": "hospital", "hints": ["health", "building", "emergency"]},
+        {"text": "doctor", "hints": ["health", "graduate", "diagnosis"]},
+        {"text": "nurse", "hints": ["health", "care", "assistance"]},
+        {"text": "medicine", "hints": ["health", "treatment", "chemical"]},
+        {"text": "pill", "hints": ["medication", "solid", "oral"]},
+        {"text": "injection", "hints": ["medication", "needle", "liquid"]},
+        {"text": "bandage", "hints": ["protection", "fabric", "wound"]},
+        {"text": "cure", "hints": ["recovery", "treatment", "positive"]},
+        {"text": "surgery", "hints": ["invasive", "surgical", "technical"]},
+        {"text": "operation", "hints": ["surgical", "invasive", "precise"]},
+        {"text": "symptom", "hints": ["indicator", "signal", "physical"]},
+        {"text": "disease", "hints": ["alteration", "state", "negative"]},
+        {"text": "virus", "hints": ["microorganism", "infectious", "small"]},
+        {"text": "bacteria", "hints": ["microorganism", "infectious", "unicellular"]},
+        {"text": "allergy", "hints": ["reaction", "immune", "discomfort"]},
+        {"text": "fever", "hints": ["temperature", "symptom", "elevated"]},
+        {"text": "cough", "hints": ["symptom", "reflex", "respiratory"]},
+        {"text": "cold", "hints": ["viral", "common", "seasonal"]},
+        {"text": "flu", "hints": ["viral", "serious", "seasonal"]},
+        {"text": "pain", "hints": ["sensation", "negative", "signal"]},
+        {"text": "wound", "hints": ["injury", "external", "bleeding"]},
+        {"text": "fracture", "hints": ["injury", "bone", "serious"]},
+        {"text": "burn", "hints": ["injury", "heat", "external"]},
+        {"text": "scar", "hints": ["mark", "skin", "permanent"]}
+      ]
+    }
+  ]
+}

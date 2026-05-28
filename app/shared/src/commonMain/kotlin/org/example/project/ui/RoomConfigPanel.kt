@@ -2,6 +2,7 @@ package org.example.project.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,122 +67,33 @@ fun RoomConfigPanel(
         Text("Solo una ronda de palabras: ${boolLabel(config.singleWordRound)}")
         Text("Sin categoria: ${boolLabel(config.noCategory)}")
         Text("Rol oculto: ${boolLabel(config.hiddenRole)}")
+        Text("${Strings.get("lobby_progressive_hints", language)}: ${boolLabel(config.progressiveHints)}")
+        Text("${Strings.get("lobby_punishment_vote", language)}: ${boolLabel(config.punishmentVote)}")
 
         Text(Strings.get("lobby_only_host", language), fontWeight = FontWeight.Bold)
         return
     }
 
-    fun apply(newConfig: RoomConfig) {
-        viewModel.updateConfig(newConfig)
-    }
+    val updateConfig: (RoomConfig) -> Unit = { newConfig -> viewModel.updateConfig(newConfig) }
 
     val maxImpostors = room.players.size
 
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            ConfigSection(
-                title = Strings.get("lobby_game_mode", language),
-                content = {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        ChoiceButton(
-                            text = Strings.get("lobby_voice", language),
-                            selected = config.gameMode == GameMode.VOICE,
-                            onClick = { apply(config.copy(gameMode = GameMode.VOICE)) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        ChoiceButton(
-                            text = Strings.get("lobby_text", language),
-                            selected = config.gameMode == GameMode.TEXT,
-                            onClick = { apply(config.copy(gameMode = GameMode.TEXT)) },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val isNarrow = maxWidth < 420.dp
+        if (isNarrow) {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ConfigSectionsColumn1(config, language, maxImpostors, updateConfig)
+                ConfigSectionsColumn2(config, language, maxImpostors, updateConfig)
+            }
+        } else {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ConfigSectionsColumn1(config, language, maxImpostors, updateConfig)
                 }
-            )
-
-            ConfigSection(
-                title = Strings.get("lobby_max_impostors", language),
-                content = {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(config.numImpostors.toString(), fontWeight = FontWeight.Bold)
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            val impostorLocked = config.winOnFirstEjection || config.singleWordRound
-                            Button(
-                                onClick = {
-                                    if (!impostorLocked && config.numImpostors > 1)
-                                        apply(config.copy(numImpostors = config.numImpostors - 1))
-                                },
-                                enabled = !impostorLocked && config.numImpostors > 1,
-                                modifier = Modifier.weight(1f)
-                            ) { Text("-") }
-                            Button(
-                                onClick = {
-                                    if (!impostorLocked && config.numImpostors < maxImpostors)
-                                        apply(config.copy(numImpostors = config.numImpostors + 1))
-                                },
-                                enabled = !impostorLocked && config.numImpostors < maxImpostors,
-                                modifier = Modifier.weight(1f)
-                            ) { Text("+") }
-                        }
-                        if (config.numImpostors >= 2) {
-                            Text(
-                                text = Strings.get("lobby_impostor_no_chance", language),
-                                fontSize = 11.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ConfigSectionsColumn2(config, language, maxImpostors, updateConfig)
                 }
-            )
-        }
-
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            ConfigSection(
-                title = Strings.get("lobby_word_language", language),
-                content = {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        ChoiceButton(
-                            text = Strings.get("settings_spanish", language),
-                            selected = config.language == "es",
-                            onClick = { apply(config.copy(language = "es")) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        ChoiceButton(
-                            text = Strings.get("settings_english", language),
-                            selected = config.language == "en",
-                            onClick = { apply(config.copy(language = "en")) },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-            )
-
-            ConfigSection(
-                title = Strings.get("lobby_vote_time", language),
-                content = {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("${config.voteTimeLimitSeconds}s", fontWeight = FontWeight.Bold)
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(
-                                onClick = {
-                                    if (config.voteTimeLimitSeconds > 15)
-                                        apply(config.copy(voteTimeLimitSeconds = config.voteTimeLimitSeconds - 15))
-                                },
-                                enabled = config.voteTimeLimitSeconds > 15,
-                                modifier = Modifier.weight(1f)
-                            ) { Text("-") }
-                            Button(
-                                onClick = {
-                                    if (config.voteTimeLimitSeconds < 180)
-                                        apply(config.copy(voteTimeLimitSeconds = config.voteTimeLimitSeconds + 15))
-                                },
-                                enabled = config.voteTimeLimitSeconds < 180,
-                                modifier = Modifier.weight(1f)
-                            ) { Text("+") }
-                        }
-                    }
-                }
-            )
+            }
         }
     }
 
@@ -226,7 +138,7 @@ fun RoomConfigPanel(
                             } else {
                                 config.selectedCategoryIds + filteredCategories.map { it.id }
                             }
-                            apply(config.copy(selectedCategoryIds = newIds))
+                            updateConfig(config.copy(selectedCategoryIds = newIds))
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -252,7 +164,7 @@ fun RoomConfigPanel(
                                     } else {
                                         config.selectedCategoryIds - category.id
                                     }
-                                    apply(config.copy(selectedCategoryIds = newIds))
+                                    updateConfig(config.copy(selectedCategoryIds = newIds))
                                 }
                             )
                             Text(category.name)
@@ -275,9 +187,9 @@ fun RoomConfigPanel(
             .clickable {
                 val newValue = !config.winOnFirstEjection
                 if (newValue) {
-                    apply(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                    updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
                 } else {
-                    apply(config.copy(winOnFirstEjection = false))
+                    updateConfig(config.copy(winOnFirstEjection = false))
                 }
             },
         verticalAlignment = Alignment.CenterVertically,
@@ -288,9 +200,9 @@ fun RoomConfigPanel(
             checked = config.winOnFirstEjection,
             onCheckedChange = { checked ->
                 if (checked) {
-                    apply(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                    updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
                 } else {
-                    apply(config.copy(winOnFirstEjection = false))
+                    updateConfig(config.copy(winOnFirstEjection = false))
                 }
             }
         )
@@ -300,7 +212,7 @@ fun RoomConfigPanel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { apply(config.copy(anonymousVotes = !config.anonymousVotes)) },
+            .clickable { updateConfig(config.copy(anonymousVotes = !config.anonymousVotes)) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -308,7 +220,7 @@ fun RoomConfigPanel(
         Checkbox(
             checked = config.anonymousVotes,
             onCheckedChange = { checked ->
-                apply(config.copy(anonymousVotes = checked))
+                updateConfig(config.copy(anonymousVotes = checked))
             }
         )
     }
@@ -320,9 +232,9 @@ fun RoomConfigPanel(
             .clickable {
                 val newVal = !config.singleWordRound
                 if (newVal) {
-                    apply(config.copy(singleWordRound = true, numImpostors = 1))
+                    updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
                 } else {
-                    apply(config.copy(singleWordRound = false))
+                    updateConfig(config.copy(singleWordRound = false))
                 }
             },
         verticalAlignment = Alignment.CenterVertically,
@@ -333,9 +245,9 @@ fun RoomConfigPanel(
             checked = config.singleWordRound,
             onCheckedChange = { checked ->
                 if (checked) {
-                    apply(config.copy(singleWordRound = true, numImpostors = 1))
+                    updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
                 } else {
-                    apply(config.copy(singleWordRound = false))
+                    updateConfig(config.copy(singleWordRound = false))
                 }
             }
         )
@@ -345,14 +257,14 @@ fun RoomConfigPanel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { apply(config.copy(noCategory = !config.noCategory)) },
+            .clickable { updateConfig(config.copy(noCategory = !config.noCategory)) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text("Sin categoria")
         Checkbox(
             checked = config.noCategory,
-            onCheckedChange = { checked -> apply(config.copy(noCategory = checked)) }
+            onCheckedChange = { checked -> updateConfig(config.copy(noCategory = checked)) }
         )
     }
 
@@ -360,16 +272,178 @@ fun RoomConfigPanel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { apply(config.copy(hiddenRole = !config.hiddenRole)) },
+            .clickable { updateConfig(config.copy(hiddenRole = !config.hiddenRole)) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text("Rol oculto")
         Checkbox(
             checked = config.hiddenRole,
-            onCheckedChange = { checked -> apply(config.copy(hiddenRole = checked)) }
+            onCheckedChange = { checked -> updateConfig(config.copy(hiddenRole = checked)) }
         )
     }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { updateConfig(config.copy(progressiveHints = !config.progressiveHints)) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(Strings.get("lobby_progressive_hints", language))
+            Text(
+                Strings.get("lobby_progressive_hints_desc", language),
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Checkbox(
+            checked = config.progressiveHints,
+            onCheckedChange = { checked -> updateConfig(config.copy(progressiveHints = checked)) }
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { updateConfig(config.copy(punishmentVote = !config.punishmentVote)) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(Strings.get("lobby_punishment_vote", language))
+            Text(
+                Strings.get("lobby_punishment_vote_desc", language),
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Checkbox(
+            checked = config.punishmentVote,
+            onCheckedChange = { checked -> updateConfig(config.copy(punishmentVote = checked)) }
+        )
+    }
+}
+
+@Composable
+private fun ConfigSectionsColumn1(
+    config: RoomConfig,
+    language: String,
+    maxImpostors: Int,
+    updateConfig: (RoomConfig) -> Unit
+) {
+    ConfigSection(
+        title = Strings.get("lobby_game_mode", language),
+        content = {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                ChoiceButton(
+                    text = Strings.get("lobby_voice", language),
+                    selected = config.gameMode == GameMode.VOICE,
+                    onClick = { updateConfig(config.copy(gameMode = GameMode.VOICE)) },
+                    modifier = Modifier.weight(1f)
+                )
+                ChoiceButton(
+                    text = Strings.get("lobby_text", language),
+                    selected = config.gameMode == GameMode.TEXT,
+                    onClick = { updateConfig(config.copy(gameMode = GameMode.TEXT)) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    )
+
+    ConfigSection(
+        title = Strings.get("lobby_max_impostors", language),
+        content = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(config.numImpostors.toString(), fontWeight = FontWeight.Bold)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val impostorLocked = config.winOnFirstEjection || config.singleWordRound
+                    Button(
+                        onClick = {
+                            if (!impostorLocked && config.numImpostors > 1)
+                                updateConfig(config.copy(numImpostors = config.numImpostors - 1))
+                        },
+                        enabled = !impostorLocked && config.numImpostors > 1,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("-") }
+                    Button(
+                        onClick = {
+                            if (!impostorLocked && config.numImpostors < maxImpostors)
+                                updateConfig(config.copy(numImpostors = config.numImpostors + 1))
+                        },
+                        enabled = !impostorLocked && config.numImpostors < maxImpostors,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("+") }
+                }
+                if (config.numImpostors >= 2) {
+                    Text(
+                        text = Strings.get("lobby_impostor_no_chance", language),
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun ConfigSectionsColumn2(
+    config: RoomConfig,
+    language: String,
+    maxImpostors: Int,
+    updateConfig: (RoomConfig) -> Unit
+) {
+    ConfigSection(
+        title = Strings.get("lobby_word_language", language),
+        content = {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                ChoiceButton(
+                    text = Strings.get("settings_spanish", language),
+                    selected = config.language == "es",
+                    onClick = { updateConfig(config.copy(language = "es")) },
+                    modifier = Modifier.weight(1f)
+                )
+                ChoiceButton(
+                    text = Strings.get("settings_english", language),
+                    selected = config.language == "en",
+                    onClick = { updateConfig(config.copy(language = "en")) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    )
+
+    ConfigSection(
+        title = Strings.get("lobby_vote_time", language),
+        content = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("${config.voteTimeLimitSeconds}s", fontWeight = FontWeight.Bold)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = {
+                            if (config.voteTimeLimitSeconds > 15)
+                                updateConfig(config.copy(voteTimeLimitSeconds = config.voteTimeLimitSeconds - 15))
+                        },
+                        enabled = config.voteTimeLimitSeconds > 15,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("-") }
+                    Button(
+                        onClick = {
+                            if (config.voteTimeLimitSeconds < 180)
+                                updateConfig(config.copy(voteTimeLimitSeconds = config.voteTimeLimitSeconds + 15))
+                        },
+                        enabled = config.voteTimeLimitSeconds < 180,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("+") }
+                }
+            }
+        }
+    )
 }
 
 @Composable
@@ -377,7 +451,7 @@ private fun ConfigSection(
     title: String,
     content: @Composable () -> Unit
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(title, fontSize = 13.sp, fontWeight = FontWeight.Medium)
         content()
     }

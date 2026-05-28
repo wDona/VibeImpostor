@@ -12,3 +12,5 @@ class JsPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = JsPlatform()
+
+actual fun currentTimeMillis(): Long = js("Date.now()").unsafeCast<Double>().toLong()

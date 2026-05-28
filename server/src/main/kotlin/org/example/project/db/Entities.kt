@@ -41,4 +41,5 @@ class WordEntity(id: EntityID<Int>) : IntEntity(id) {
 
     var categoryId by Words.categoryId
     var text by Words.text
+    var hints by Words.hints
 }
