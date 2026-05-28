@@ -272,14 +272,25 @@ fun RoomConfigPanel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { updateConfig(config.copy(hiddenRole = !config.hiddenRole)) },
+            .clickable { 
+                val newHidden = !config.hiddenRole
+                updateConfig(config.copy(
+                    hiddenRole = newHidden,
+                    progressiveHints = if (newHidden) false else config.progressiveHints
+                ))
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text("Rol oculto")
         Checkbox(
             checked = config.hiddenRole,
-            onCheckedChange = { checked -> updateConfig(config.copy(hiddenRole = checked)) }
+            onCheckedChange = { checked -> 
+                updateConfig(config.copy(
+                    hiddenRole = checked,
+                    progressiveHints = if (checked) false else config.progressiveHints
+                ))
+            }
         )
     }
 
@@ -287,7 +298,11 @@ fun RoomConfigPanel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { updateConfig(config.copy(progressiveHints = !config.progressiveHints)) },
+            .clickable(enabled = !config.hiddenRole) { 
+                if (!config.hiddenRole) {
+                    updateConfig(config.copy(progressiveHints = !config.progressiveHints)) 
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -296,12 +311,17 @@ fun RoomConfigPanel(
             Text(
                 Strings.get("lobby_progressive_hints_desc", language),
                 fontSize = 11.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (config.hiddenRole) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         Checkbox(
             checked = config.progressiveHints,
-            onCheckedChange = { checked -> updateConfig(config.copy(progressiveHints = checked)) }
+            onCheckedChange = { checked -> 
+                if (!config.hiddenRole) {
+                    updateConfig(config.copy(progressiveHints = checked)) 
+                }
+            },
+            enabled = !config.hiddenRole
         )
     }
 

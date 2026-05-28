@@ -164,7 +164,7 @@ fun GameScreen(viewModel: GameViewModel) {
                         )
                     }
                     Text(
-                        text = state.value.yourContent ?: "",
+                        text = (state.value.yourContent ?: "").lowercase(),
                         fontSize = 34.sp,
                         fontWeight = FontWeight.Black,
                         textAlign = TextAlign.Center,
@@ -181,22 +181,14 @@ fun GameScreen(viewModel: GameViewModel) {
                             letterSpacing = 1.sp
                         )
                     }
+
                     // Hints for impostors
-                    if (isImpostor && !state.value.contentIsWord && state.value.yourHintList.isNotEmpty()) {
+                    if (isImpostor && !state.value.contentIsWord && room.config.progressiveHints && state.value.yourHintList.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(8.dp))
-                        if (room.config.progressiveHints) {
-                            val visibleHints = state.value.yourHintList.take(room.roundNumber)
-                            visibleHints.forEachIndexed { idx, hint ->
-                                Text(
-                                    text = "${Strings.get("game_hint", language)} ${idx + 1}: $hint",
-                                    fontSize = 13.sp,
-                                    color = contentColor.copy(alpha = 0.85f),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        } else {
+                        val visibleHints = state.value.yourHintList.take(room.roundNumber)
+                        visibleHints.forEachIndexed { idx, hint ->
                             Text(
-                                text = "${Strings.get("game_hint", language)}: ${state.value.yourHintList[0]}",
+                                text = "${Strings.get("game_hint", language)} ${idx + 1}: ${hint.lowercase()}",
                                 fontSize = 13.sp,
                                 color = contentColor.copy(alpha = 0.85f),
                                 textAlign = TextAlign.Center

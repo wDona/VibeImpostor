@@ -29,9 +29,9 @@ object GameEngine {
             val word = WordRepository.randomWordFrom(room.config.selectedCategoryIds, room.config.language)
                 ?: return "No hay palabras disponibles"
 
-            room.word = word.first
-            room.category = word.second
-            room.wordHints = word.third.shuffled(Random.Default)
+            room.word = word.first.lowercase()
+            room.category = word.second.lowercase()
+            room.wordHints = word.third.map { it.lowercase() }.shuffled(Random.Default)
 
             val active = room.activePlayers()
             val configured = room.config.numImpostors
