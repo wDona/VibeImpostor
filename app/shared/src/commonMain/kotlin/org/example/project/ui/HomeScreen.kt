@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,8 +36,10 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.example.project.GameViewModel
 import org.example.project.i18n.Strings
+import org.example.project.readClipboard
 
 @Composable
 fun HomeScreen(viewModel: GameViewModel) {
@@ -44,6 +47,7 @@ fun HomeScreen(viewModel: GameViewModel) {
     val playerName = remember { mutableStateOf(viewModel.state.value.settings.lastPlayerName) }
     val roomCode = remember { mutableStateOf(viewModel.state.value.settings.lastRoomCode) }
     val language = state.value.settings.language
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -190,10 +194,11 @@ fun HomeScreen(viewModel: GameViewModel) {
                         trailingIcon = {
                             TextButton(
                                 onClick = {
-                                    val clipboard = clipboardManager.getText()
-                                    if (clipboard != null) {
-                                        val pasted = clipboard.text.uppercase().filter { it.isLetterOrDigit() }.take(6)
-                                        roomCode.value = pasted
+                                    scope.launch {
+                                        val text = readClipboard()
+                                            ?: clipboardManager.getText()?.text
+                                            ?: return@launch
+                                        roomCode.value = text.uppercase().filter { it.isLetterOrDigit() }.take(6)
                                     }
                                 },
                                 modifier = Modifier.width(80.dp)

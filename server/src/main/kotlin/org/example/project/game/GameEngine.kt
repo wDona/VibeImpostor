@@ -265,12 +265,17 @@ object GameEngine {
             if (ejected != null) {
                 val wasImpostor = ejected in room.impostorIds
 
-                // Punishment vote: if no tie and not already in punishment round → warning turn
+                // Punishment vote: soft majority → warning turn; hard majority → eject directly
                 if (room.config.punishmentVote && !room.isInPunishmentRound && !wasImpostor) {
-                    room.lastRoundVotes = room.votes.toMap()
-                    // Don't eject: give them a punishment turn
-                    room.state = RoomState.IN_GAME
-                    return Pair(PUNISHMENT_PREFIX + ejected, false)
+                    val votesForEjected = room.voteTypes.entries.filter { room.votes[it.key] == ejected }
+                    val hardCount = votesForEjected.count { it.value }
+                    val softCount = votesForEjected.count { !it.value }
+                    if (softCount >= hardCount) {
+                        room.lastRoundVotes = room.votes.toMap()
+                        room.state = RoomState.IN_GAME
+                        return Pair(PUNISHMENT_PREFIX + ejected, false)
+                    }
+                    // hard majority → fall through to direct ejection
                 }
 
                 // Punishment round: accused gets voted again → immediate ejection, no more mercy

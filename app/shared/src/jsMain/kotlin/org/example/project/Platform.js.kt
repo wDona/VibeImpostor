@@ -1,5 +1,6 @@
 package org.example.project
 
+import web.clipboard.readText
 import web.navigator.navigator
 
 class JsPlatform: Platform {
@@ -14,3 +15,9 @@ class JsPlatform: Platform {
 actual fun getPlatform(): Platform = JsPlatform()
 
 actual fun currentTimeMillis(): Long = js("Date.now()").unsafeCast<Double>().toLong()
+
+actual suspend fun readClipboard(): String? = try {
+    navigator.clipboard.readText()
+} catch (e: Throwable) {
+    null
+}

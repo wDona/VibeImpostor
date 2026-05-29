@@ -7,3 +7,5 @@ interface Platform {
 expect fun getPlatform(): Platform
 
 expect fun currentTimeMillis(): Long
+
+expect suspend fun readClipboard(): String?
