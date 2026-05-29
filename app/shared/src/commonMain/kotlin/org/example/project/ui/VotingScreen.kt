@@ -1,7 +1,6 @@
 package org.example.project.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -31,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -56,7 +52,6 @@ fun VotingScreen(viewModel: GameViewModel) {
 
     val amSpectator = room.players.find { it.id == state.value.yourPlayerId }?.isSpectator == true
     val voted = remember { mutableStateOf(false) }
-    val selectedTarget = remember { mutableStateOf<String?>(null) }
     val punishmentMode = room.config.punishmentVote
     val activePlayers = room.players.filter { !it.isSpectator }
     val votedPlayerIds = state.value.votedPlayerIds
@@ -126,7 +121,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                         Row(
                             modifier = Modifier
                                 .background(
-                                    if (hasVoted) playerColor(player.id).copy(alpha = 0.18f)
+                                    if (hasVoted) playerColor(player.colorIndex).copy(alpha = 0.18f)
                                     else MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
                                     RoundedCornerShape(8.dp)
                                 )
@@ -134,12 +129,12 @@ fun VotingScreen(viewModel: GameViewModel) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(5.dp)
                         ) {
-                            PlayerDot(player.id)
+                            PlayerDot(player.colorIndex)
                             Text(
                                 text = player.name,
                                 fontSize = 12.sp,
                                 fontWeight = if (hasVoted) FontWeight.Bold else FontWeight.Normal,
-                                color = if (hasVoted) playerColor(player.id)
+                                color = if (hasVoted) playerColor(player.colorIndex)
                                 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                             )
                         }
@@ -217,69 +212,78 @@ fun VotingScreen(viewModel: GameViewModel) {
                 room.players
                     .filter { it.id != state.value.yourPlayerId && !it.isSpectator }
                     .forEach { player ->
-                        val isSelected = selectedTarget.value == player.id
-                        Button(
-                            onClick = {
-                                if (punishmentMode) {
-                                    selectedTarget.value = if (isSelected) null else player.id
-                                } else {
+                        if (punishmentMode) {
+                            GameCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        PlayerDot(player.colorIndex)
+                                        Text(
+                                            player.name,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        OutlinedButton(
+                                            onClick = {
+                                                viewModel.castVote(player.id, voteIsHard = false)
+                                                voted.value = true
+                                            },
+                                            modifier = Modifier.weight(1f).height(44.dp),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Text("🟡 ${Strings.get("vote_suspicious", language)}", fontSize = 13.sp)
+                                        }
+                                        Button(
+                                            onClick = {
+                                                viewModel.castVote(player.id, voteIsHard = true)
+                                                voted.value = true
+                                            },
+                                            modifier = Modifier.weight(1f).height(44.dp),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Text("🔴 ${Strings.get("vote_sure", language)}", fontSize = 13.sp)
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            Button(
+                                onClick = {
                                     viewModel.castVote(player.id)
                                     voted.value = true
-                                }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                                .then(
-                                    if (isSelected)
-                                        Modifier.border(2.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
-                                    else Modifier
-                                ),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(56.dp),
+                                shape = RoundedCornerShape(12.dp)
                             ) {
-                                PlayerDot(player.id)
-                                Text(
-                                    player.name,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    PlayerDot(player.colorIndex)
+                                    Text(
+                                        player.name,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
                             }
                         }
                     }
-
-                // Vote type buttons when player is selected in punishment mode
-                if (punishmentMode && selectedTarget.value != null && !voted.value) {
-                    val targetId = selectedTarget.value!!
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.castVote(targetId, voteIsHard = false)
-                                voted.value = true
-                            },
-                            modifier = Modifier.weight(1f).height(52.dp),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("🟡 ${Strings.get("vote_suspicious", language)}", fontSize = 14.sp)
-                        }
-                        Button(
-                            onClick = {
-                                viewModel.castVote(targetId, voteIsHard = true)
-                                voted.value = true
-                            },
-                            modifier = Modifier.weight(1f).height(52.dp),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("🔴 ${Strings.get("vote_sure", language)}", fontSize = 14.sp)
-                        }
-                    }
-                }
 
                 if (room.config.numImpostors >= 2) {
                     HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))

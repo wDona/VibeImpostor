@@ -43,7 +43,8 @@ fun Route.gameServer() {
                         val config = RoomConfig()
                         val newRoom = RoomManager.createRoom(playerId, config)
                         room = newRoom
-                        player = Player(playerId, message.playerName, this, isHost = true)
+                        val colorIndex = newRoom.getNextColorIndex()
+                        player = Player(playerId, message.playerName, this, isHost = true, colorIndex = colorIndex)
                         room.players.add(player)
 
                         val snapshot = room.getRoomSnapshot()
@@ -63,7 +64,8 @@ fun Route.gameServer() {
                         try {
                             if (!isFull) {
                                 val isSpectator = targetRoom.isGameRunning()
-                                player = Player(playerId, message.playerName, this, isSpectator = isSpectator)
+                                val colorIndex = targetRoom.getNextColorIndex()
+                                player = Player(playerId, message.playerName, this, isSpectator = isSpectator, colorIndex = colorIndex)
                                 targetRoom.players.add(player)
                             }
                         } finally {
@@ -456,23 +458,27 @@ private fun Room.getRoomSnapshot(): RoomSnapshot {
         lastWinners = this.lastWinners,
         continueResponses = this.continueResponses,
         isInPunishmentRound = this.isInPunishmentRound,
-        punishmentPlayerId = this.punishmentPlayerId
+        punishmentPlayerId = this.punishmentPlayerId,
+        chosenVariant = this.chosenVariant
     )
 }
 
 private suspend fun broadcastGameStarted(room: Room) {
     room.players.forEach { p ->
         val isImpostor = p.id in room.impostorIds
-        val role = if (isImpostor) Role.IMPOSTOR else Role.INNOCENT
+        val hiddenImpostor = room.config.hiddenImpostor && isImpostor
+        val role = if (hiddenImpostor) Role.INNOCENT else if (isImpostor) Role.IMPOSTOR else Role.INNOCENT
         val content = when {
+            hiddenImpostor -> room.wordHints.firstOrNull() ?: room.category ?: "-"
             !isImpostor -> room.word!!
             room.config.noCategory -> "-"
             else -> room.category!!
         }
-        val hintList = if (isImpostor) {
+        val contentIsWord = !isImpostor || hiddenImpostor
+        val hintList = if (isImpostor && !hiddenImpostor) {
             if (room.config.progressiveHints) room.wordHints else room.wordHints.take(1)
         } else emptyList()
-        val msg = ServerMessage.GameStarted(role, !isImpostor, content, room.getRoomSnapshot(), hintList)
+        val msg = ServerMessage.GameStarted(role, contentIsWord, content, room.getRoomSnapshot(), hintList)
         sendToPlayer(room, p.id, msg)
     }
     val current = room.currentTurnPlayer()

@@ -17,5 +17,6 @@ data class Player(
     var word: String? = null,
     var category: String? = null,
     var lastWord: String? = null,
-    var wantsRematch: Boolean = false
+    var wantsRematch: Boolean = false,
+    val colorIndex: Int = 0
 )

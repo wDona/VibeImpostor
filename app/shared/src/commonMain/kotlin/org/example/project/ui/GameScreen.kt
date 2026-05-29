@@ -120,6 +120,38 @@ fun GameScreen(viewModel: GameViewModel) {
             )
         }
 
+        if (room.config.randomVariant && room.chosenVariant != null) {
+            val variantLabelKey = when (room.chosenVariant) {
+                "noCategory"       -> "lobby_variant_no_category"
+                "hiddenRole"       -> "lobby_variant_hidden_role"
+                "progressiveHints" -> "lobby_progressive_hints"
+                "hiddenImpostor"   -> "lobby_hidden_impostor"
+                else               -> "lobby_variant_normal"
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 2.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                androidx.compose.foundation.layout.Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.secondaryContainer,
+                            RoundedCornerShape(20.dp)
+                        )
+                        .padding(horizontal = 14.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = "${Strings.get("lobby_variant_random", language)}: ${Strings.get(variantLabelKey, language)}",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         // Players list
@@ -129,7 +161,8 @@ fun GameScreen(viewModel: GameViewModel) {
             currentTurnId = room.currentTurnPlayerId,
             lastWordsPlayed = state.value.lastWordsPlayed,
             eliminationVotes = state.value.eliminationVotes,
-            anonymousVotes = room.config.anonymousVotes
+            anonymousVotes = room.config.anonymousVotes,
+            language = language
         )
 
         Spacer(modifier = Modifier.height(8.dp))

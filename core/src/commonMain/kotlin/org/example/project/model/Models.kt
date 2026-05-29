@@ -43,7 +43,8 @@ data class PublicPlayer(
     val isHost: Boolean,
     val waitingNextGame: Boolean,
     val isSpectator: Boolean,
-    val wantsRematch: Boolean = false
+    val wantsRematch: Boolean = false,
+    val colorIndex: Int = 0
 )
 
 @Serializable
@@ -61,7 +62,9 @@ data class RoomConfig(
     val noCategory: Boolean = false,
     val hiddenRole: Boolean = false,
     val progressiveHints: Boolean = false,
-    val punishmentVote: Boolean = false
+    val punishmentVote: Boolean = false,
+    val hiddenImpostor: Boolean = false,
+    val randomVariant: Boolean = false
 )
 
 @Serializable
@@ -80,5 +83,6 @@ data class RoomSnapshot(
     val lastWinners: List<String> = emptyList(),
     val continueResponses: Set<String> = emptySet(),
     val isInPunishmentRound: Boolean = false,
-    val punishmentPlayerId: String? = null
+    val punishmentPlayerId: String? = null,
+    val chosenVariant: String? = null
 )

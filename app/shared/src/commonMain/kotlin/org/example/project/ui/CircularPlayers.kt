@@ -57,7 +57,7 @@ fun CircularPlayers(
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                 ),
                 border = if (!player.isSpectator)
-                    BorderStroke(1.5.dp, playerColor(player.id).copy(alpha = if (isCurrent) 0.95f else 0.5f))
+                    BorderStroke(1.5.dp, playerColor(player.colorIndex).copy(alpha = if (isCurrent) 0.95f else 0.5f))
                 else null
             ) {
                 Column(

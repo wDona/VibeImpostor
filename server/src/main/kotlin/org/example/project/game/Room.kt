@@ -38,6 +38,12 @@ class Room(
     var isInPunishmentRound: Boolean = false
     var punishmentPlayerId: String? = null
     var voteTypes: Map<String, Boolean> = emptyMap()
+    var chosenVariant: String? = null
+
+    fun getNextColorIndex(): Int {
+        val usedIndices = players.map { it.colorIndex }.toSet()
+        return (0..7).firstOrNull { it !in usedIndices } ?: usedIndices.size
+    }
 
     fun getPublicPlayers() = players.map {
         org.example.project.model.PublicPlayer(
@@ -48,7 +54,8 @@ class Room(
             isHost = it.isHost,
             waitingNextGame = it.waitingNextGame,
             isSpectator = it.isSpectator,
-            wantsRematch = it.wantsRematch
+            wantsRematch = it.wantsRematch,
+            colorIndex = it.colorIndex
         )
     }
 

@@ -199,7 +199,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                         fontSize = 16.sp
                     )
                     room.players.forEach { player ->
-                        val badgeColor = playerColor(player.id)
+                        val badgeColor = playerColor(player.colorIndex)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

@@ -220,8 +220,8 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                             modifier = Modifier
                                 .size(8.dp)
                                 .background(
-                                    if (hasContinued) playerColor(player.id)
-                                    else playerColor(player.id).copy(alpha = 0.25f),
+                                    if (hasContinued) playerColor(player.colorIndex)
+                                    else playerColor(player.colorIndex).copy(alpha = 0.25f),
                                     CircleShape
                                 )
                         )

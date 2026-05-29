@@ -188,7 +188,7 @@ fun ResultScreen(viewModel: GameViewModel) {
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
-                                .background(playerColor(player.id), CircleShape)
+                                .background(playerColor(player.colorIndex), CircleShape)
                         )
                         Column {
                             Row(

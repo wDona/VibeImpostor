@@ -85,7 +85,13 @@ private fun seedBasePackFromFiles(packName: String, lang: String, files: List<St
     transaction {
         WordPackEntity.find {
             (WordPacks.isBuiltIn eq true) and (WordPacks.language eq lang)
-        }.firstOrNull()?.delete()
+        }.firstOrNull()?.let { oldPack ->
+            CategoryEntity.find { Categories.packId eq oldPack.id }.forEach { cat ->
+                WordEntity.find { Words.categoryId eq cat.id }.forEach { it.delete() }
+                cat.delete()
+            }
+            oldPack.delete()
+        }
 
         val pack = WordPackEntity.new {
             name = packName

@@ -1,5 +1,7 @@
 package org.example.project.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -9,13 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +37,26 @@ import org.example.project.i18n.Strings
 import org.example.project.model.GameMode
 import org.example.project.model.RoomConfig
 import org.example.project.model.RoomSnapshot
+
+private data class SpecialModeOption(val key: String, val labelKey: String, val descKey: String)
+
+private val SPECIAL_MODE_OPTIONS = listOf(
+    SpecialModeOption("normal",           "lobby_variant_normal",       "lobby_variant_normal_desc"),
+    SpecialModeOption("noCategory",       "lobby_variant_no_category",  "lobby_variant_no_category_desc"),
+    SpecialModeOption("hiddenRole",       "lobby_variant_hidden_role",  "lobby_variant_hidden_role_desc"),
+    SpecialModeOption("progressiveHints", "lobby_progressive_hints",    "lobby_progressive_hints_desc"),
+    SpecialModeOption("hiddenImpostor",   "lobby_hidden_impostor",      "lobby_hidden_impostor_desc"),
+    SpecialModeOption("random",           "lobby_variant_random",       "lobby_variant_random_desc")
+)
+
+private fun activeSpecialMode(config: RoomConfig) = when {
+    config.randomVariant    -> "random"
+    config.hiddenImpostor   -> "hiddenImpostor"
+    config.progressiveHints -> "progressiveHints"
+    config.hiddenRole       -> "hiddenRole"
+    config.noCategory       -> "noCategory"
+    else                    -> "normal"
+}
 
 @Composable
 fun RoomConfigPanel(
@@ -62,12 +87,18 @@ fun RoomConfigPanel(
         fun boolLabel(value: Boolean) =
             if (value) Strings.get("lobby_enabled", language) else Strings.get("lobby_disabled", language)
 
+        val activeMode = SPECIAL_MODE_OPTIONS.first { it.key == activeSpecialMode(config) }
+        Text("${Strings.get("lobby_game_variant", language)}: ${Strings.get(activeMode.labelKey, language)}")
+        if (activeMode.key != "normal" && activeMode.key != "random") {
+            Text(
+                Strings.get(activeMode.descKey, language),
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
         Text("${Strings.get("lobby_win_first_ejection", language)}: ${boolLabel(config.winOnFirstEjection)}")
         Text("${Strings.get("lobby_anonymous_votes", language)}: ${boolLabel(config.anonymousVotes)}")
-        Text("Solo una ronda de palabras: ${boolLabel(config.singleWordRound)}")
-        Text("Sin categoria: ${boolLabel(config.noCategory)}")
-        Text("Rol oculto: ${boolLabel(config.hiddenRole)}")
-        Text("${Strings.get("lobby_progressive_hints", language)}: ${boolLabel(config.progressiveHints)}")
+        Text("${Strings.get("lobby_single_word_round", language)}: ${boolLabel(config.singleWordRound)}")
         Text("${Strings.get("lobby_punishment_vote", language)}: ${boolLabel(config.punishmentVote)}")
 
         Text(Strings.get("lobby_only_host", language), fontWeight = FontWeight.Bold)
@@ -180,6 +211,9 @@ fun RoomConfigPanel(
         )
     }
 
+    // --- Special game variant selector ---
+    SpecialModeSection(config, language, updateConfig)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -240,7 +274,7 @@ fun RoomConfigPanel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Solo una ronda de palabras")
+        Text(Strings.get("lobby_single_word_round", language))
         Checkbox(
             checked = config.singleWordRound,
             onCheckedChange = { checked ->
@@ -250,78 +284,6 @@ fun RoomConfigPanel(
                     updateConfig(config.copy(singleWordRound = false))
                 }
             }
-        )
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { updateConfig(config.copy(noCategory = !config.noCategory)) },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text("Sin categoria")
-        Checkbox(
-            checked = config.noCategory,
-            onCheckedChange = { checked -> updateConfig(config.copy(noCategory = checked)) }
-        )
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { 
-                val newHidden = !config.hiddenRole
-                updateConfig(config.copy(
-                    hiddenRole = newHidden,
-                    progressiveHints = if (newHidden) false else config.progressiveHints
-                ))
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text("Rol oculto")
-        Checkbox(
-            checked = config.hiddenRole,
-            onCheckedChange = { checked -> 
-                updateConfig(config.copy(
-                    hiddenRole = checked,
-                    progressiveHints = if (checked) false else config.progressiveHints
-                ))
-            }
-        )
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable(enabled = !config.hiddenRole) { 
-                if (!config.hiddenRole) {
-                    updateConfig(config.copy(progressiveHints = !config.progressiveHints)) 
-                }
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(Strings.get("lobby_progressive_hints", language))
-            Text(
-                Strings.get("lobby_progressive_hints_desc", language),
-                fontSize = 11.sp,
-                color = if (config.hiddenRole) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Checkbox(
-            checked = config.progressiveHints,
-            onCheckedChange = { checked -> 
-                if (!config.hiddenRole) {
-                    updateConfig(config.copy(progressiveHints = checked)) 
-                }
-            },
-            enabled = !config.hiddenRole
         )
     }
 
@@ -346,6 +308,82 @@ fun RoomConfigPanel(
             onCheckedChange = { checked -> updateConfig(config.copy(punishmentVote = checked)) }
         )
     }
+}
+
+@Composable
+private fun SpecialModeSection(
+    config: RoomConfig,
+    language: String,
+    updateConfig: (RoomConfig) -> Unit
+) {
+    val activeKey = activeSpecialMode(config)
+
+    ConfigSection(
+        title = Strings.get("lobby_game_variant", language),
+        content = {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                SPECIAL_MODE_OPTIONS.forEach { option ->
+                    val isSelected = activeKey == option.key
+                    val shape = RoundedCornerShape(12.dp)
+                    val borderColor = if (isSelected)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)
+                    val bgColor = if (isSelected)
+                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.28f)
+                    else
+                        Color.Transparent
+                    val titleColor = if (isSelected)
+                        MaterialTheme.colorScheme.onSurface
+                    else
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
+                    val descAlpha = if (isSelected) 1f else 0.5f
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape)
+                            .border(
+                                width = if (isSelected) 2.dp else 1.dp,
+                                color = borderColor,
+                                shape = shape
+                            )
+                            .background(bgColor)
+                            .clickable {
+                                updateConfig(
+                                    config.copy(
+                                        randomVariant    = option.key == "random",
+                                        noCategory       = option.key == "noCategory",
+                                        hiddenRole       = option.key == "hiddenRole",
+                                        progressiveHints = option.key == "progressiveHints",
+                                        hiddenImpostor   = option.key == "hiddenImpostor",
+                                        numImpostors     = if (option.key == "hiddenImpostor") 1 else config.numImpostors
+                                    )
+                                )
+                            }
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        RadioButton(selected = isSelected, onClick = null)
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                Strings.get(option.labelKey, language),
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                fontSize = 14.sp,
+                                color = titleColor
+                            )
+                            Text(
+                                Strings.get(option.descKey, language),
+                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = descAlpha)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
 }
 
 @Composable
@@ -381,7 +419,7 @@ private fun ConfigSectionsColumn1(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(config.numImpostors.toString(), fontWeight = FontWeight.Bold)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    val impostorLocked = config.winOnFirstEjection || config.singleWordRound
+                    val impostorLocked = config.winOnFirstEjection || config.singleWordRound || config.hiddenImpostor
                     Button(
                         onClick = {
                             if (!impostorLocked && config.numImpostors > 1)

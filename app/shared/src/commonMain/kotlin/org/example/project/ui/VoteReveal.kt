@@ -69,7 +69,7 @@ fun VoteReveal(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            if (targetIsPlayer) PlayerDot(targetId)
+                            if (targetIsPlayer) PlayerDot(room.players.find { it.id == targetId }?.colorIndex ?: 0)
                             Text(
                                 text = nameOf(targetId),
                                 fontWeight = FontWeight.Bold,
@@ -85,14 +85,15 @@ fun VoteReveal(
                     }
                     if (!anonymousVotes) {
                         voters.forEach { voterId ->
-                            val voterIsPlayer = room.players.any { it.id == voterId }
+                            val voter = room.players.find { it.id == voterId }
+                            val voterIsPlayer = voter != null
                             val isHard = voteTypes[voterId] ?: true
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 modifier = Modifier.padding(top = 2.dp)
                             ) {
-                                if (voterIsPlayer) PlayerDot(voterId)
+                                if (voterIsPlayer) PlayerDot(voter?.colorIndex ?: 0)
                                 Text(
                                     nameOf(voterId),
                                     fontSize = 12.sp,

@@ -15,9 +15,12 @@ val playerBadgeColors = listOf(
     Color(0xFFF97316),
 )
 
-fun playerColor(playerId: String): Color {
-    val hash = playerId.fold(0) { acc, c -> acc * 31 + c.code }
-    return playerBadgeColors[(hash and Int.MAX_VALUE) % playerBadgeColors.size]
+fun playerColor(colorIndex: Int): Color {
+    return playerBadgeColors[colorIndex % playerBadgeColors.size]
+}
+
+fun playerColorIndex(playerId: String, players: List<org.example.project.model.PublicPlayer>): Int {
+    return players.find { it.id == playerId }?.colorIndex ?: 0
 }
 
 val ImpostorRed = Color(0xFFEF4444)

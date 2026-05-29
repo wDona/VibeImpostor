@@ -31,14 +31,15 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.project.i18n.Strings
 import org.example.project.model.PublicPlayer
 
 @Composable
-fun PlayerDot(playerId: String, modifier: Modifier = Modifier) {
+fun PlayerDot(colorIndex: Int, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .size(8.dp)
-            .background(playerColor(playerId), CircleShape)
+            .background(playerColor(colorIndex), CircleShape)
     )
 }
 
@@ -49,7 +50,8 @@ fun PlayersList(
     currentTurnId: String?,
     lastWordsPlayed: Map<String, String> = emptyMap(),
     eliminationVotes: Map<String, Map<String, String>> = emptyMap(),
-    anonymousVotes: Boolean = false
+    anonymousVotes: Boolean = false,
+    language: String = "es"
 ) {
     val activePlayers = players.filter { !it.isSpectator }.sortedBy { p ->
         turnOrder.indexOf(p.id)
@@ -72,7 +74,8 @@ fun PlayersList(
                     PlayerCard(
                         player = player,
                         isCurrent = player.id == currentTurnId,
-                        lastWord = lastWordsPlayed[player.id]
+                        lastWord = lastWordsPlayed[player.id],
+                        language = language
                     )
                 }
             }
@@ -80,7 +83,7 @@ fun PlayersList(
 
         if (eliminatedPlayers.isNotEmpty()) {
             Text(
-                "Eliminados",
+                Strings.get("game_eliminated", language),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
                 letterSpacing = 1.sp,
@@ -98,7 +101,8 @@ fun PlayersList(
                         player = player,
                         isCurrent = false,
                         lastWord = lastWordsPlayed[player.id],
-                        onClick = if (hasVotes) ({ selectedEliminatedId = player.id }) else null
+                        onClick = if (hasVotes) ({ selectedEliminatedId = player.id }) else null,
+                        language = language
                     )
                 }
             }
@@ -117,7 +121,7 @@ fun PlayersList(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    PlayerDot(ejectedId)
+                    PlayerDot(ejectedPlayer?.colorIndex ?: 0)
                     Text(
                         ejectedPlayer?.name ?: "?",
                         fontWeight = FontWeight.Bold
@@ -127,19 +131,20 @@ fun PlayersList(
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        "Recibio ${voterIds.size} voto${if (voterIds.size != 1) "s" else ""}",
+                        Strings.get("game_votes_received", language).replace("{n}", voterIds.size.toString()),
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                     if (!anonymousVotes && voterIds.isNotEmpty()) {
                         voterIds.forEach { voterId ->
-                            val voterName = players.find { it.id == voterId }?.name ?: "?"
+                            val voter = players.find { it.id == voterId }
+                            val voterName = voter?.name ?: "?"
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 modifier = Modifier.padding(top = 2.dp)
                             ) {
-                                PlayerDot(voterId)
+                                PlayerDot(voter?.colorIndex ?: 0)
                                 Text(voterName, fontSize = 14.sp)
                             }
                         }
@@ -148,7 +153,7 @@ fun PlayersList(
             },
             confirmButton = {
                 TextButton(onClick = { selectedEliminatedId = null }) {
-                    Text("Cerrar")
+                    Text(Strings.get("common_close", language))
                 }
             }
         )
@@ -160,7 +165,8 @@ fun PlayerCard(
     player: PublicPlayer,
     isCurrent: Boolean,
     lastWord: String?,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    language: String = "es"
 ) {
     val containerColor = when {
         player.isSpectator -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
@@ -182,9 +188,9 @@ fun PlayerCard(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
         border = if (!player.isSpectator)
-            BorderStroke(1.5.dp, playerColor(player.id).copy(alpha = if (isCurrent) 0.9f else 0.45f))
+            BorderStroke(1.5.dp, playerColor(player.colorIndex).copy(alpha = if (isCurrent) 0.9f else 0.45f))
         else if (onClick != null)
-            BorderStroke(1.dp, playerColor(player.id).copy(alpha = 0.35f))
+            BorderStroke(1.dp, playerColor(player.colorIndex).copy(alpha = 0.35f))
         else null,
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isCurrent) 6.dp else 1.dp
@@ -198,7 +204,7 @@ fun PlayerCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                PlayerDot(player.id)
+                PlayerDot(player.colorIndex)
                 Text(
                     text = player.name,
                     fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,
@@ -225,7 +231,7 @@ fun PlayerCard(
             }
             if (onClick != null) {
                 Text(
-                    text = "Ver votos",
+                    text = Strings.get("game_view_votes", language),
                     fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                     letterSpacing = 0.3.sp
