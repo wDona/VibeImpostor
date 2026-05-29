@@ -214,32 +214,34 @@ fun RoomConfigPanel(
     // --- Special game variant selector ---
     SpecialModeSection(config, language, updateConfig)
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable {
-                val newValue = !config.winOnFirstEjection
-                if (newValue) {
-                    updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
-                } else {
-                    updateConfig(config.copy(winOnFirstEjection = false))
+    if (!config.progressiveHints) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable {
+                    val newValue = !config.winOnFirstEjection
+                    if (newValue) {
+                        updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                    } else {
+                        updateConfig(config.copy(winOnFirstEjection = false))
+                    }
+                },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(Strings.get("lobby_win_first_ejection", language))
+            Checkbox(
+                checked = config.winOnFirstEjection,
+                onCheckedChange = { checked ->
+                    if (checked) {
+                        updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                    } else {
+                        updateConfig(config.copy(winOnFirstEjection = false))
+                    }
                 }
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(Strings.get("lobby_win_first_ejection", language))
-        Checkbox(
-            checked = config.winOnFirstEjection,
-            onCheckedChange = { checked ->
-                if (checked) {
-                    updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
-                } else {
-                    updateConfig(config.copy(winOnFirstEjection = false))
-                }
-            }
-        )
+            )
+        }
     }
 
     Row(
@@ -259,32 +261,34 @@ fun RoomConfigPanel(
         )
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable {
-                val newVal = !config.singleWordRound
-                if (newVal) {
-                    updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
-                } else {
-                    updateConfig(config.copy(singleWordRound = false))
+    if (!config.progressiveHints) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable {
+                    val newVal = !config.singleWordRound
+                    if (newVal) {
+                        updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
+                    } else {
+                        updateConfig(config.copy(singleWordRound = false))
+                    }
+                },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(Strings.get("lobby_single_word_round", language))
+            Checkbox(
+                checked = config.singleWordRound,
+                onCheckedChange = { checked ->
+                    if (checked) {
+                        updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
+                    } else {
+                        updateConfig(config.copy(singleWordRound = false))
+                    }
                 }
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(Strings.get("lobby_single_word_round", language))
-        Checkbox(
-            checked = config.singleWordRound,
-            onCheckedChange = { checked ->
-                if (checked) {
-                    updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
-                } else {
-                    updateConfig(config.copy(singleWordRound = false))
-                }
-            }
-        )
+            )
+        }
     }
 
     Row(

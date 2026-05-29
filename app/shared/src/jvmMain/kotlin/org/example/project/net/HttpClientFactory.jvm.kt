@@ -10,7 +10,7 @@ actual fun createHttpClient(): HttpClient = HttpClient(CIO) {
     install(HttpTimeout) {
         requestTimeoutMillis = 10_000
         connectTimeoutMillis = 5_000
-        socketTimeoutMillis = 10_000
+        socketTimeoutMillis = 0  // No timeout para WebSocket
     }
 }
 
