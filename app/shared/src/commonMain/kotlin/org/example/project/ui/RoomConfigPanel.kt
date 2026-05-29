@@ -277,7 +277,14 @@ fun RoomConfigPanel(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(Strings.get("lobby_single_word_round", language))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(Strings.get("lobby_single_word_round", language))
+                Text(
+                    Strings.get("lobby_single_word_round_desc", language),
+                    fontSize = 11.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Checkbox(
                 checked = config.singleWordRound,
                 onCheckedChange = { checked ->
@@ -337,11 +344,19 @@ private fun SpecialModeSection(
                         MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.28f)
                     else
                         Color.Transparent
-                    val titleColor = if (isSelected)
-                        MaterialTheme.colorScheme.onSurface
-                    else
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
-                    val descAlpha = if (isSelected) 1f else 0.5f
+                    val isProgressiveHintDisabled = config.randomVariant && (config.winOnFirstEjection || config.singleWordRound)
+                    val isClickableEnabled = !(option.key == "progressiveHints" && isProgressiveHintDisabled)
+
+                    val titleColor = when {
+                        option.key == "progressiveHints" && isProgressiveHintDisabled -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+                        isSelected -> MaterialTheme.colorScheme.onSurface
+                        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
+                    }
+                    val descAlpha = when {
+                        option.key == "progressiveHints" && isProgressiveHintDisabled -> 0.25f
+                        isSelected -> 1f
+                        else -> 0.5f
+                    }
 
                     Row(
                         modifier = Modifier
@@ -353,7 +368,7 @@ private fun SpecialModeSection(
                                 shape = shape
                             )
                             .background(bgColor)
-                            .clickable {
+                            .clickable(enabled = isClickableEnabled) {
                                 updateConfig(
                                     config.copy(
                                         randomVariant    = option.key == "random",

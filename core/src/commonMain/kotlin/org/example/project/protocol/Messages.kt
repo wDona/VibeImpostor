@@ -72,6 +72,9 @@ sealed interface ClientMessage {
 
     @Serializable
     data class KickPlayer(val targetPlayerId: String) : ClientMessage
+
+    @Serializable
+    data class EjectPlayer(val targetPlayerId: String) : ClientMessage
 }
 
 @Serializable

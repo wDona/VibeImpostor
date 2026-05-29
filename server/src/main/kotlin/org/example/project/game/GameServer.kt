@@ -303,6 +303,30 @@ fun Route.gameServer() {
                         }
                     }
 
+                    is ClientMessage.EjectPlayer -> {
+                        val r = room
+                        val p = player
+                        if (r != null && p != null && p.isHost && r.isGameRunning()) {
+                            val target = r.players.find { it.id == message.targetPlayerId }
+                            if (target != null && !target.isHost) {
+                                target.isSpectator = true
+                                val wasImpostor = target.id in r.impostorIds
+
+                                if (r.config.winOnFirstEjection && wasImpostor) {
+                                    r.pendingGuessImpostorId = target.id
+                                    r.impostorGuesses = emptyMap()
+                                    r.state = RoomState.IMPOSTORS_GUESSING
+                                } else if (r.config.singleWordRound) {
+                                    r.state = RoomState.VOTING
+                                } else {
+                                    r.state = RoomState.IN_GAME
+                                }
+
+                                broadcastRoomUpdate(r)
+                            }
+                        }
+                    }
+
                     else -> {}
                 }
             }
