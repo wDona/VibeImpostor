@@ -371,12 +371,14 @@ private fun SpecialModeSection(
                             .clickable(enabled = isClickableEnabled) {
                                 updateConfig(
                                     config.copy(
-                                        randomVariant    = option.key == "random",
-                                        noCategory       = option.key == "noCategory",
-                                        hiddenRole       = option.key == "hiddenRole",
-                                        progressiveHints = option.key == "progressiveHints",
-                                        hiddenImpostor   = option.key == "hiddenImpostor",
-                                        numImpostors     = if (option.key == "hiddenImpostor") 1 else config.numImpostors
+                                        randomVariant      = option.key == "random",
+                                        noCategory         = option.key == "noCategory",
+                                        hiddenRole         = option.key == "hiddenRole",
+                                        progressiveHints   = option.key == "progressiveHints",
+                                        hiddenImpostor     = option.key == "hiddenImpostor",
+                                        numImpostors       = if (option.key == "hiddenImpostor" || option.key == "random") 1 else config.numImpostors,
+                                        winOnFirstEjection = if (option.key == "progressiveHints" || option.key == "random") false else config.winOnFirstEjection,
+                                        singleWordRound    = if (option.key == "progressiveHints" || option.key == "random") false else config.singleWordRound,
                                     )
                                 )
                             }
