@@ -126,7 +126,7 @@ fun HomeScreen(viewModel: GameViewModel) {
         // Form content - centered with max width
         Column(
             modifier = Modifier
-                .widthIn(max = 500.dp)
+                .widthIn(max = ContentMaxWidth)
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -137,7 +137,7 @@ fun HomeScreen(viewModel: GameViewModel) {
                 label = { Text(Strings.get("home_player_name", language)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(Radii.md)
             )
 
             GameCard(modifier = Modifier.fillMaxWidth()) {
@@ -159,7 +159,7 @@ fun HomeScreen(viewModel: GameViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Radii.md)
                     ) {
                         Text(
                             if (state.value.connecting) Strings.get("home_connecting", language)
@@ -207,7 +207,7 @@ fun HomeScreen(viewModel: GameViewModel) {
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Radii.md)
                     )
                     FilledTonalButton(
                         onClick = {
@@ -220,7 +220,7 @@ fun HomeScreen(viewModel: GameViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Radii.md)
                     ) {
                         Text(
                             if (state.value.connecting) Strings.get("home_connecting", language)

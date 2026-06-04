@@ -84,7 +84,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
             if (room.state != RoomState.LOBBY) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(Radii.md),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFFF59E0B).copy(alpha = 0.1f)
                     ),
@@ -125,7 +125,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                                                 .size(36.dp)
                                                 .background(
                                                     MaterialTheme.colorScheme.primaryContainer,
-                                                    RoundedCornerShape(8.dp)
+                                                    RoundedCornerShape(Radii.sm)
                                                 ),
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -160,7 +160,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                                                 .size(40.dp)
                                                 .background(
                                                     MaterialTheme.colorScheme.primaryContainer,
-                                                    RoundedCornerShape(8.dp)
+                                                    RoundedCornerShape(Radii.sm)
                                                 ),
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -205,7 +205,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                                 .fillMaxWidth()
                                 .background(
                                     MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                                    RoundedCornerShape(12.dp)
+                                    RoundedCornerShape(Radii.md)
                                 )
                                 .padding(horizontal = 12.dp, vertical = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -215,23 +215,12 @@ fun LobbyScreen(viewModel: GameViewModel) {
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(36.dp)
-                                        .background(
-                                            if (player.isSpectator) badgeColor.copy(alpha = 0.3f)
-                                            else badgeColor,
-                                            CircleShape
-                                        ),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        player.name.take(1).uppercase(),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 15.sp,
-                                        color = Color.White
-                                    )
-                                }
+                                PlayerAvatar(
+                                    name = player.name,
+                                    colorIndex = player.colorIndex,
+                                    size = 36.dp,
+                                    dimmed = player.isSpectator
+                                )
                                 Text(
                                     player.name,
                                     fontWeight = FontWeight.Medium,
@@ -331,7 +320,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(Radii.md)
                 ) {
                     Text(
                         Strings.get("lobby_start_game", language),
@@ -346,7 +335,7 @@ fun LobbyScreen(viewModel: GameViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(Radii.md)
             ) {
                 Text(Strings.get("lobby_leave", language))
             }

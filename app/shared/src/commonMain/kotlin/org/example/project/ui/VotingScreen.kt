@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -84,7 +85,7 @@ fun VotingScreen(viewModel: GameViewModel) {
             )
             Box(
                 modifier = Modifier
-                    .background(timerColor.copy(alpha = 0.15f), RoundedCornerShape(12.dp))
+                    .background(timerColor.copy(alpha = 0.15f), RoundedCornerShape(Radii.md))
                     .padding(horizontal = 20.dp, vertical = 10.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -112,9 +113,10 @@ fun VotingScreen(viewModel: GameViewModel) {
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
-                Row(
+                FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     activePlayers.forEach { player ->
                         val hasVoted = player.id in votedPlayerIds
@@ -123,7 +125,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                                 .background(
                                     if (hasVoted) playerColor(player.colorIndex).copy(alpha = 0.18f)
                                     else MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                                    RoundedCornerShape(8.dp)
+                                    RoundedCornerShape(Radii.sm)
                                 )
                                 .padding(horizontal = 8.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -215,7 +217,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                         if (punishmentMode) {
                             GameCard(
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(Radii.md)
                             ) {
                                 Column(
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
@@ -225,7 +227,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        PlayerDot(player.colorIndex)
+                                        PlayerAvatar(name = player.name, colorIndex = player.colorIndex, size = 28.dp)
                                         Text(
                                             player.name,
                                             fontSize = 16.sp,
@@ -268,7 +270,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(56.dp),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(Radii.md)
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -295,7 +297,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Radii.md)
                     ) {
                         Text(Strings.get("voting_nobody", language), fontSize = 15.sp)
                     }
@@ -307,7 +309,7 @@ fun VotingScreen(viewModel: GameViewModel) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(Radii.md)
                         ) {
                             Text(Strings.get("voting_both_impostors", language), fontSize = 15.sp)
                         }

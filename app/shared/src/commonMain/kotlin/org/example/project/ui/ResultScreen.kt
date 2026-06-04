@@ -156,7 +156,7 @@ fun ResultScreen(viewModel: GameViewModel) {
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(Radii.md),
                 colors = CardDefaults.cardColors(
                     containerColor = when {
                         isWinner -> WinnerGreen.copy(alpha = 0.12f)
@@ -185,10 +185,11 @@ fun ResultScreen(viewModel: GameViewModel) {
                             else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                             modifier = Modifier.padding(end = 4.dp)
                         )
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .background(playerColor(player.colorIndex), CircleShape)
+                        PlayerAvatar(
+                            name = player.name,
+                            colorIndex = player.colorIndex,
+                            size = 28.dp,
+                            dimmed = player.isSpectator
                         )
                         Column {
                             Row(
@@ -239,7 +240,7 @@ fun ResultScreen(viewModel: GameViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(Radii.md)
         ) {
             Text(
                 Strings.get("result_play_again", language),
@@ -253,7 +254,7 @@ fun ResultScreen(viewModel: GameViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(Radii.md)
         ) {
             Text(Strings.get("result_back_to_lobby", language))
         }

@@ -98,7 +98,7 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(Radii.md)
             ) {
                 Text(
                     text = Strings.get("common_yes", language),
@@ -112,7 +112,7 @@ fun AskVoteScreen(viewModel: GameViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(Radii.md)
             ) {
                 Text(
                     text = Strings.get("common_no", language),

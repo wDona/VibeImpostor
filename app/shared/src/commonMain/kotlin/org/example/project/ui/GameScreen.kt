@@ -139,7 +139,7 @@ fun GameScreen(viewModel: GameViewModel) {
         // Role card - dramatic gradient
         GameCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(Radii.lg)
         ) {
             Box(
                 modifier = Modifier
@@ -225,7 +225,7 @@ fun GameScreen(viewModel: GameViewModel) {
 
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(Radii.md),
                         colors = CardDefaults.cardColors(
                             containerColor = if (isCurrentTurn)
                                 MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)
@@ -236,21 +236,33 @@ fun GameScreen(viewModel: GameViewModel) {
                             defaultElevation = if (isCurrentTurn) 4.dp else 1.dp
                         )
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                text = player.name,
-                                fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isCurrentTurn)
-                                    MaterialTheme.colorScheme.tertiary
-                                else
-                                    MaterialTheme.colorScheme.onSurface
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            PlayerAvatar(
+                                name = player.name,
+                                colorIndex = player.colorIndex,
+                                size = 26.dp,
+                                highlight = isCurrentTurn
                             )
-                            if (lastWord != null) {
+                            Column {
                                 Text(
-                                    text = "\"$lastWord\"",
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    text = player.name,
+                                    fontWeight = if (isCurrentTurn) FontWeight.Bold else FontWeight.Normal,
+                                    color = if (isCurrentTurn)
+                                        MaterialTheme.colorScheme.tertiary
+                                    else
+                                        MaterialTheme.colorScheme.onSurface
                                 )
+                                if (lastWord != null) {
+                                    Text(
+                                        text = "\"$lastWord\"",
+                                        fontSize = 12.sp,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    )
+                                }
                             }
                         }
                     }

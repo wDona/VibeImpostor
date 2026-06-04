@@ -98,7 +98,7 @@ fun ImpostorGuessingResultScreen(viewModel: GameViewModel) {
                             modifier = Modifier
                                 .background(
                                     Color.White.copy(alpha = 0.15f),
-                                    RoundedCornerShape(8.dp)
+                                    RoundedCornerShape(Radii.sm)
                                 )
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
@@ -121,7 +121,7 @@ fun ImpostorGuessingResultScreen(viewModel: GameViewModel) {
                 .fillMaxWidth()
                 .height(52.dp)
                 .padding(top = 8.dp),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(Radii.md)
         ) {
             Text(
                 Strings.get("result_back_to_lobby", language),

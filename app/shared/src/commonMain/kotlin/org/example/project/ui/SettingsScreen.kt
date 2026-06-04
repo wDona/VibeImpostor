@@ -235,7 +235,7 @@ fun SettingsScreen(viewModel: GameViewModel) {
                 .fillMaxWidth()
                 .height(52.dp)
                 .padding(top = 8.dp),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(Radii.md)
         ) {
             Text(
                 Strings.get("settings_back", language),

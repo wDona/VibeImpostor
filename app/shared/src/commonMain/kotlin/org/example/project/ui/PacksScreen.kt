@@ -192,7 +192,7 @@ fun PacksScreen(viewModel: GameViewModel) {
                                                 else Strings.get("packs_fail", language)
                                         }
                                     },
-                                    shape = RoundedCornerShape(8.dp)
+                                    shape = RoundedCornerShape(Radii.sm)
                                 ) {
                                     Text(Strings.get("packs_delete", language))
                                 }

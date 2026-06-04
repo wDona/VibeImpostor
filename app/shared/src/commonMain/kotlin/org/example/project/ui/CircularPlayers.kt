@@ -64,6 +64,13 @@ fun CircularPlayers(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    PlayerAvatar(
+                        name = player.name,
+                        colorIndex = player.colorIndex,
+                        size = 24.dp,
+                        highlight = isCurrent,
+                        dimmed = player.isSpectator
+                    )
                     Text(
                         text = player.name,
                         fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,

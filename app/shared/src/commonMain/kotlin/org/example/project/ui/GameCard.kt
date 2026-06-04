@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun GameCard(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(16.dp),
+    shape: Shape = RoundedCornerShape(Radii.lg),
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(

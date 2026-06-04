@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,50 +61,60 @@ fun PlayersList(
 
     var selectedEliminatedId by remember { mutableStateOf<String?>(null) }
 
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        if (activePlayers.isNotEmpty()) {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                activePlayers.forEach { player ->
-                    PlayerCard(
-                        player = player,
-                        isCurrent = player.id == currentTurnId,
-                        lastWord = lastWordsPlayed[player.id],
-                        language = language
-                    )
-                }
-            }
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val cardFraction = when {
+            maxWidth < 360.dp -> 1f
+            maxWidth < 600.dp -> 0.48f
+            else -> 0.31f
         }
 
-        if (eliminatedPlayers.isNotEmpty()) {
-            Text(
-                Strings.get("game_eliminated", language),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 11.sp,
-                letterSpacing = 1.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                eliminatedPlayers.forEach { player ->
-                    val hasVotes = player.id in eliminationVotes
-                    PlayerCard(
-                        player = player,
-                        isCurrent = false,
-                        lastWord = lastWordsPlayed[player.id],
-                        onClick = if (hasVotes) ({ selectedEliminatedId = player.id }) else null,
-                        language = language
-                    )
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            if (activePlayers.isNotEmpty()) {
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    activePlayers.forEach { player ->
+                        PlayerCard(
+                            player = player,
+                            isCurrent = player.id == currentTurnId,
+                            lastWord = lastWordsPlayed[player.id],
+                            language = language,
+                            cardFraction = cardFraction
+                        )
+                    }
+                }
+            }
+
+            if (eliminatedPlayers.isNotEmpty()) {
+                Text(
+                    Strings.get("game_eliminated", language),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 11.sp,
+                    letterSpacing = 1.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    eliminatedPlayers.forEach { player ->
+                        val hasVotes = player.id in eliminationVotes
+                        PlayerCard(
+                            player = player,
+                            isCurrent = false,
+                            lastWord = lastWordsPlayed[player.id],
+                            onClick = if (hasVotes) ({ selectedEliminatedId = player.id }) else null,
+                            language = language,
+                            cardFraction = cardFraction
+                        )
+                    }
                 }
             }
         }
@@ -166,7 +177,8 @@ fun PlayerCard(
     isCurrent: Boolean,
     lastWord: String?,
     onClick: (() -> Unit)? = null,
-    language: String = "es"
+    language: String = "es",
+    cardFraction: Float = 0.45f
 ) {
     val containerColor = when {
         player.isSpectator -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
@@ -174,7 +186,7 @@ fun PlayerCard(
         else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
     }
 
-    val baseModifier = Modifier.fillMaxWidth(0.45f)
+    val baseModifier = Modifier.fillMaxWidth(cardFraction)
     val cardModifier = if (onClick != null) {
         baseModifier
             .pointerHoverIcon(PointerIcon.Hand)
@@ -204,7 +216,13 @@ fun PlayerCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                PlayerDot(player.colorIndex)
+                PlayerAvatar(
+                    name = player.name,
+                    colorIndex = player.colorIndex,
+                    size = 22.dp,
+                    dimmed = player.isSpectator,
+                    highlight = isCurrent
+                )
                 Text(
                     text = player.name,
                     fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,

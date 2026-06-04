@@ -71,3 +71,9 @@ val AppDarkColors = darkColorScheme(
     outline = Color(0xFF7A7589),
     error = Color(0xFFF87171)
 )
+
+fun roleColor(role: org.example.project.model.Role?): Color = when (role) {
+    org.example.project.model.Role.IMPOSTOR -> ImpostorRed
+    org.example.project.model.Role.INNOCENT -> InnocentBlue
+    null -> Color(0xFF9CA3AF)
+}

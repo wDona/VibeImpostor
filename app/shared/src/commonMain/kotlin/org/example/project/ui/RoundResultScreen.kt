@@ -216,14 +216,11 @@ fun RoundResultScreen(viewModel: GameViewModel) {
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .background(
-                                    if (hasContinued) playerColor(player.colorIndex)
-                                    else playerColor(player.colorIndex).copy(alpha = 0.25f),
-                                    CircleShape
-                                )
+                        PlayerAvatar(
+                            name = player.name,
+                            colorIndex = player.colorIndex,
+                            size = 24.dp,
+                            dimmed = !hasContinued
                         )
                         Text(
                             text = player.name,

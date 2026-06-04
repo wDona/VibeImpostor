@@ -120,7 +120,7 @@ fun ImpostorGuessingScreen(viewModel: GameViewModel) {
                         onValueChange = { guessInput.value = it },
                         label = { Text(Strings.get("impostor_guessing_input", language)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Radii.md)
                     )
 
                     Button(
@@ -132,7 +132,7 @@ fun ImpostorGuessingScreen(viewModel: GameViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Radii.md)
                     ) {
                         Text(
                             Strings.get("common_submit", language),

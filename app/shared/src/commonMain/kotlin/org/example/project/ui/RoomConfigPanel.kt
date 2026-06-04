@@ -335,7 +335,7 @@ private fun SpecialModeSection(
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 SPECIAL_MODE_OPTIONS.forEach { option ->
                     val isSelected = activeKey == option.key
-                    val shape = RoundedCornerShape(12.dp)
+                    val shape = RoundedCornerShape(Radii.md)
                     val borderColor = if (isSelected)
                         MaterialTheme.colorScheme.primary
                     else
