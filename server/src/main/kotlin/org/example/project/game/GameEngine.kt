@@ -239,12 +239,10 @@ object GameEngine {
             val finalVotes = room.votes.toMutableMap()
 
             val voteCountByTarget = finalVotes.values.groupingBy { it }.eachCount()
-            val totalVotes = finalVotes.size
-            val requiredVotes = kotlin.math.ceil(totalVotes * 0.66).toInt()
 
-            val majorityTarget = voteCountByTarget.entries.firstOrNull { it.value >= requiredVotes }?.key
-
-            val ejected = majorityTarget
+            val maxVotes = voteCountByTarget.values.maxOrNull() ?: 0
+            val topTargets = voteCountByTarget.filterValues { it == maxVotes }.keys
+            val ejected = if (topTargets.size == 1) topTargets.first() else null
 
             room.lastRoundVotes = room.votes.toMap()
 

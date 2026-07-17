@@ -221,31 +221,8 @@ fun Route.gameServer() {
                                 if (!allContinued) {
                                     broadcastServerMessage(room, ServerMessage.RoomUpdated(room.getRoomSnapshot()))
                                 } else {
-                                    GameEngine.resetContinueResponses(room)
-                                    val snap = room.getRoomSnapshot()
-                                    println("[ContinueRound] BROADCAST allContinued state=${snap.state} pending=${snap.pendingGuessImpostorId}")
-                                    when {
-                                        snap.state == RoomState.FINISHED -> {
-                                            broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, snap))
-                                        }
-                                        snap.pendingGuessImpostorId != null -> {
-                                            broadcastServerMessage(room, ServerMessage.ProceedToGuessing(snap))
-                                        }
-                                        snap.state == RoomState.VOTING -> {
-                                            broadcastServerMessage(room, ServerMessage.RoomUpdated(snap))
-                                            startVotingRound(room)
-                                        }
-                                        snap.state == RoomState.IN_GAME -> {
-                                            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, snap))
-                                            val current = room.currentTurnPlayer()
-                                            if (current != null) {
-                                                broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
-                                            }
-                                        }
-                                        else -> {
-                                            broadcastServerMessage(room, ServerMessage.RoomUpdated(snap))
-                                        }
-                                    }
+                                    room.continueTimerJob?.cancel()
+                                    advanceAfterContinue(room)
                                 }
                             }
                         }
@@ -256,7 +233,9 @@ fun Route.gameServer() {
                         if (r != null && player != null) {
                             r.mutex.lock()
                             try {
-                                if (r.state == RoomState.FINISHED) {
+                                if (r.state == RoomState.FINISHED || r.state == RoomState.REMATCH) {
+                                    r.rematchJob?.cancel()
+                                    r.rematchJob = null
                                     r.state = RoomState.LOBBY
                                     r.players.forEach {
                                         it.isSpectator = false
@@ -624,6 +603,7 @@ private suspend fun handleAnswerEndGame(room: Room, player: Player, agrees: Bool
             val activeIds = room.activePlayers().map { it.id }
             if (activeIds.isNotEmpty() && activeIds.all { room.endGameResponses[it] == true }) {
                 room.voteTimerJob?.cancel()
+                room.continueTimerJob?.cancel()
                 room.state = RoomState.FINISHED
                 room.players.forEach { it.isSpectator = false }
                 room.roundNumber = 1
@@ -721,9 +701,54 @@ private suspend fun afterVotingResolved(room: Room, result: Pair<String?, Boolea
         }
         RoomState.IMPOSTORS_GUESSING -> {
             // Espera ContinueRound de todos. Avance via ProceedToGuessing.
+            startContinueTimer(room)
         }
         else -> {
             // Espera ContinueRound de todos. Avance via RoundContinues.
+            startContinueTimer(room)
+        }
+    }
+}
+
+private const val CONTINUE_TIMEOUT_MS = 30_000L
+
+// Todo el mundo debe pulsar "Continuar" tras ver el resultado de la votación antes de
+// pasar a la siguiente ronda — si alguien nunca lo hace (pestaña en segundo plano,
+// timer de cliente que no dispara, etc.) la partida se quedaría esperando para siempre
+// sin este respaldo del servidor.
+private suspend fun startContinueTimer(room: Room) {
+    room.continueTimerJob?.cancel()
+    room.continueTimerJob = RoomManager.scope.launch {
+        delay(CONTINUE_TIMEOUT_MS)
+        room.continueTimerJob = null
+        advanceAfterContinue(room)
+    }
+}
+
+private suspend fun advanceAfterContinue(room: Room) {
+    GameEngine.resetContinueResponses(room)
+    val snap = room.getRoomSnapshot()
+    println("[ContinueRound] ADVANCE state=${snap.state} pending=${snap.pendingGuessImpostorId}")
+    when {
+        snap.state == RoomState.FINISHED -> {
+            broadcastServerMessage(room, ServerMessage.GameEnded(room.lastWinners, snap))
+        }
+        snap.pendingGuessImpostorId != null -> {
+            broadcastServerMessage(room, ServerMessage.ProceedToGuessing(snap))
+        }
+        snap.state == RoomState.VOTING -> {
+            broadcastServerMessage(room, ServerMessage.RoomUpdated(snap))
+            startVotingRound(room)
+        }
+        snap.state == RoomState.IN_GAME -> {
+            broadcastServerMessage(room, ServerMessage.RoundContinues(room.roundNumber, snap))
+            val current = room.currentTurnPlayer()
+            if (current != null) {
+                broadcastServerMessage(room, ServerMessage.TurnChanged(current.id, room.roundNumber))
+            }
+        }
+        else -> {
+            broadcastServerMessage(room, ServerMessage.RoomUpdated(snap))
         }
     }
 }

@@ -35,6 +35,7 @@ class Room(
     var lastWinners: List<String> = emptyList()
     var rematchJob: Job? = null
     var voteTimerJob: Job? = null
+    var continueTimerJob: Job? = null
     var isInPunishmentRound: Boolean = false
     var punishmentPlayerId: String? = null
     var voteTypes: Map<String, Boolean> = emptyMap()
