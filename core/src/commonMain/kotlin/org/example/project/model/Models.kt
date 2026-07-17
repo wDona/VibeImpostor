@@ -51,6 +51,7 @@ data class PublicPlayer(
 data class RoomConfig(
     val gameMode: GameMode = GameMode.VOICE,
     val numImpostors: Int = 1,
+    val minImpostors: Int = 1,
     val impostorMode: ImpostorMode = ImpostorMode.FIXED,
     val allCanBeImpostor: Boolean = false,
     val voteTimeLimitSeconds: Int = 60,

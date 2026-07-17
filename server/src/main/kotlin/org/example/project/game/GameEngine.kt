@@ -50,12 +50,17 @@ object GameEngine {
 
             val active = room.activePlayers()
             val configured = room.config.numImpostors
+            val minImpostors = room.config.minImpostors.coerceIn(0, configured)
             val rawImpostors = when {
                 configured == 1 -> 1
-                configured >= 2 && Random.nextDouble() < 0.05 -> 0
-                else -> Random.nextInt(1, minOf(configured + 1, active.size))
+                configured >= 2 && minImpostors == 0 && Random.nextDouble() < 0.05 -> 0
+                else -> {
+                    val lo = maxOf(1, minImpostors)
+                    val hi = minOf(configured + 1, active.size)
+                    if (lo >= hi) lo else Random.nextInt(lo, hi)
+                }
             }
-            val numImpostors = rawImpostors.coerceIn(0, maxOf(1, active.size - 1))
+            val numImpostors = rawImpostors.coerceIn(minImpostors, maxOf(minImpostors, active.size - 1))
 
             room.impostorIds = active.shuffled(Random.Default).take(numImpostors).map { it.id }.toSet()
             val ids = active.map { it.id }.toMutableList()

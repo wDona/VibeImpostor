@@ -74,7 +74,7 @@ fun RoomConfigPanel(
             Strings.get("lobby_voice", language) else Strings.get("lobby_text", language)
         val langLabel = if (config.language == "en")
             Strings.get("settings_english", language) else Strings.get("settings_spanish", language)
-        val impostersLabel = if (config.numImpostors == 1) "1" else "0-${config.numImpostors}"
+        val impostersLabel = if (config.numImpostors == 1) "1" else "${config.minImpostors}-${config.numImpostors}"
         val packsLabel = if (config.selectedCategoryIds.isEmpty())
             Strings.get("lobby_word_packs_all", language) else config.selectedCategoryIds.size.toString()
 
@@ -222,7 +222,7 @@ fun RoomConfigPanel(
                 .clickable {
                     val newValue = !config.winOnFirstEjection
                     if (newValue) {
-                        updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                        updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1, minImpostors = 1))
                     } else {
                         updateConfig(config.copy(winOnFirstEjection = false))
                     }
@@ -235,7 +235,7 @@ fun RoomConfigPanel(
                 checked = config.winOnFirstEjection,
                 onCheckedChange = { checked ->
                     if (checked) {
-                        updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1))
+                        updateConfig(config.copy(winOnFirstEjection = true, numImpostors = 1, minImpostors = 1))
                     } else {
                         updateConfig(config.copy(winOnFirstEjection = false))
                     }
@@ -269,7 +269,7 @@ fun RoomConfigPanel(
                 .clickable {
                     val newVal = !config.singleWordRound
                     if (newVal) {
-                        updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
+                        updateConfig(config.copy(singleWordRound = true, numImpostors = 1, minImpostors = 1))
                     } else {
                         updateConfig(config.copy(singleWordRound = false))
                     }
@@ -289,7 +289,7 @@ fun RoomConfigPanel(
                 checked = config.singleWordRound,
                 onCheckedChange = { checked ->
                     if (checked) {
-                        updateConfig(config.copy(singleWordRound = true, numImpostors = 1))
+                        updateConfig(config.copy(singleWordRound = true, numImpostors = 1, minImpostors = 1))
                     } else {
                         updateConfig(config.copy(singleWordRound = false))
                     }
@@ -377,6 +377,7 @@ private fun SpecialModeSection(
                                         progressiveHints   = option.key == "progressiveHints",
                                         hiddenImpostor     = option.key == "hiddenImpostor",
                                         numImpostors       = if (option.key == "hiddenImpostor" || option.key == "random") 1 else config.numImpostors,
+                                        minImpostors       = if (option.key == "hiddenImpostor" || option.key == "random") 1 else config.minImpostors,
                                         winOnFirstEjection = if (option.key == "progressiveHints" || option.key == "random") false else config.winOnFirstEjection,
                                         singleWordRound    = if (option.key == "progressiveHints" || option.key == "random") false else config.singleWordRound,
                                     )
@@ -443,10 +444,10 @@ private fun ConfigSectionsColumn1(
                     val impostorLocked = config.winOnFirstEjection || config.singleWordRound || config.hiddenImpostor
                     Button(
                         onClick = {
-                            if (!impostorLocked && config.numImpostors > 1)
+                            if (!impostorLocked && config.numImpostors > maxOf(1, config.minImpostors))
                                 updateConfig(config.copy(numImpostors = config.numImpostors - 1))
                         },
-                        enabled = !impostorLocked && config.numImpostors > 1,
+                        enabled = !impostorLocked && config.numImpostors > maxOf(1, config.minImpostors),
                         modifier = Modifier.weight(1f)
                     ) { Text("-") }
                     Button(
@@ -458,7 +459,35 @@ private fun ConfigSectionsColumn1(
                         modifier = Modifier.weight(1f)
                     ) { Text("+") }
                 }
-                if (config.numImpostors >= 2) {
+            }
+        }
+    )
+
+    ConfigSection(
+        title = Strings.get("lobby_min_impostors", language),
+        content = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(config.minImpostors.toString(), fontWeight = FontWeight.Bold)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val impostorLocked = config.winOnFirstEjection || config.singleWordRound || config.hiddenImpostor
+                    Button(
+                        onClick = {
+                            if (!impostorLocked && config.minImpostors > 0)
+                                updateConfig(config.copy(minImpostors = config.minImpostors - 1))
+                        },
+                        enabled = !impostorLocked && config.minImpostors > 0,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("-") }
+                    Button(
+                        onClick = {
+                            if (!impostorLocked && config.minImpostors < config.numImpostors)
+                                updateConfig(config.copy(minImpostors = config.minImpostors + 1))
+                        },
+                        enabled = !impostorLocked && config.minImpostors < config.numImpostors,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("+") }
+                }
+                if (config.minImpostors == 0 && config.numImpostors >= 2) {
                     Text(
                         text = Strings.get("lobby_impostor_no_chance", language),
                         fontSize = 11.sp,
