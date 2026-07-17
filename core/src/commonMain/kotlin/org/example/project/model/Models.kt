@@ -61,7 +61,6 @@ data class RoomConfig(
     val anonymousVotes: Boolean = false,
     val singleWordRound: Boolean = false,
     val noCategory: Boolean = false,
-    val hiddenRole: Boolean = false,
     val progressiveHints: Boolean = false,
     val punishmentVote: Boolean = false,
     val hiddenImpostor: Boolean = false,

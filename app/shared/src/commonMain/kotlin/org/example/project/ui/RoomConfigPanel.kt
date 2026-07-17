@@ -43,7 +43,6 @@ private data class SpecialModeOption(val key: String, val labelKey: String, val 
 private val SPECIAL_MODE_OPTIONS = listOf(
     SpecialModeOption("normal",           "lobby_variant_normal",       "lobby_variant_normal_desc"),
     SpecialModeOption("noCategory",       "lobby_variant_no_category",  "lobby_variant_no_category_desc"),
-    SpecialModeOption("hiddenRole",       "lobby_variant_hidden_role",  "lobby_variant_hidden_role_desc"),
     SpecialModeOption("progressiveHints", "lobby_progressive_hints",    "lobby_progressive_hints_desc"),
     SpecialModeOption("hiddenImpostor",   "lobby_hidden_impostor",      "lobby_hidden_impostor_desc"),
     SpecialModeOption("random",           "lobby_variant_random",       "lobby_variant_random_desc")
@@ -53,7 +52,6 @@ private fun activeSpecialMode(config: RoomConfig) = when {
     config.randomVariant    -> "random"
     config.hiddenImpostor   -> "hiddenImpostor"
     config.progressiveHints -> "progressiveHints"
-    config.hiddenRole       -> "hiddenRole"
     config.noCategory       -> "noCategory"
     else                    -> "normal"
 }
@@ -373,7 +371,6 @@ private fun SpecialModeSection(
                                     config.copy(
                                         randomVariant      = option.key == "random",
                                         noCategory         = option.key == "noCategory",
-                                        hiddenRole         = option.key == "hiddenRole",
                                         progressiveHints   = option.key == "progressiveHints",
                                         hiddenImpostor     = option.key == "hiddenImpostor",
                                         numImpostors       = if (option.key == "hiddenImpostor" || option.key == "random") 1 else config.numImpostors,

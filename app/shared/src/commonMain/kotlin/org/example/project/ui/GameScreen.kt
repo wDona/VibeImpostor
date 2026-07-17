@@ -65,19 +65,16 @@ fun GameScreen(viewModel: GameViewModel) {
             delay(1000)
         }
     }
-    val hiddenRole = room.config.hiddenRole
     val isImpostor = state.value.yourRole == Role.IMPOSTOR
     val roleCardGradient = when {
-        hiddenRole -> Brush.linearGradient(listOf(Color(0xFF2D3748), Color(0xFF4A5568)))
         isImpostor -> Brush.linearGradient(listOf(Color(0xFF7F1D1D), Color(0xFFD32F2F)))
         else -> Brush.linearGradient(listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.tertiaryContainer))
     }
     val roleTextColor = when {
-        hiddenRole -> Color(0xFF9CA3AF)
         isImpostor -> Color(0xFFFECACA)
         else -> MaterialTheme.colorScheme.onPrimaryContainer
     }
-    val contentColor = if (hiddenRole || isImpostor) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+    val contentColor = if (isImpostor) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
 
     Column(
         modifier = Modifier
@@ -152,7 +149,6 @@ fun GameScreen(viewModel: GameViewModel) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if (!hiddenRole) {
                         Text(
                             text = when (state.value.yourRole) {
                                 Role.IMPOSTOR -> Strings.get("role_impostor", language)
@@ -164,7 +160,6 @@ fun GameScreen(viewModel: GameViewModel) {
                             letterSpacing = 2.sp,
                             color = roleTextColor
                         )
-                    }
                     Text(
                         text = (state.value.yourContent ?: "").lowercase(),
                         fontSize = 34.sp,
@@ -172,7 +167,6 @@ fun GameScreen(viewModel: GameViewModel) {
                         textAlign = TextAlign.Center,
                         color = contentColor
                     )
-                    if (!hiddenRole) {
                         Text(
                             text = if (state.value.contentIsWord)
                                 Strings.get("game_word", language)
@@ -182,7 +176,6 @@ fun GameScreen(viewModel: GameViewModel) {
                             color = contentColor.copy(alpha = 0.7f),
                             letterSpacing = 1.sp
                         )
-                    }
 
                     // Hints for impostors
                     if (isImpostor && !state.value.contentIsWord && room.config.progressiveHints && state.value.yourHintList.isNotEmpty()) {

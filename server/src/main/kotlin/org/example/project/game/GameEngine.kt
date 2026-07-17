@@ -34,12 +34,11 @@ object GameEngine {
             room.wordHints = word.third.map { it.lowercase() }.shuffled(Random.Default)
 
             if (room.config.randomVariant) {
-                val variants = listOf("normal", "noCategory", "hiddenRole", "progressiveHints", "hiddenImpostor")
+                val variants = listOf("normal", "noCategory", "progressiveHints", "hiddenImpostor")
                 val chosen = variants.random(Random.Default)
                 room.chosenVariant = chosen
                 room.config = room.config.copy(
                     noCategory       = chosen == "noCategory",
-                    hiddenRole       = chosen == "hiddenRole",
                     progressiveHints = chosen == "progressiveHints",
                     hiddenImpostor   = chosen == "hiddenImpostor",
                     numImpostors     = if (chosen == "hiddenImpostor") 1 else room.config.numImpostors
