@@ -17,3 +17,12 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+
+# BD H2 de desarrollo local. En produccion vive en el disco de Pterodactyl y el
+# deploy solo sube el jar, asi que el fichero del repo solo servia para ensuciar
+# el working tree cada vez que se arranca el server en local.
+server/data/
+
+# Salida de build y herramientas locales
+server/bin/
+.codegraph/
