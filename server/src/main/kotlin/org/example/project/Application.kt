@@ -82,6 +82,14 @@ fun Application.module() {
             call.respondText("OK")
         }
 
+        // Los deadlines de turno y votación viajan como epoch absoluto de este
+        // reloj. Un cliente con la hora desajustada (móvil, portátil suspendido,
+        // NTP apagado) calcularía mal el tiempo restante, así que puede pedir
+        // nuestra hora y corregir el desfase.
+        get("/time") {
+            call.respondText(System.currentTimeMillis().toString())
+        }
+
         authRoutes()
         packRoutes()
         gameServer()
