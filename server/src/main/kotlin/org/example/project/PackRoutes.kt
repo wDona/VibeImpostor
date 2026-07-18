@@ -7,6 +7,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
+import io.ktor.server.routing.put
 import kotlinx.serialization.Serializable
 import org.example.project.db.WordRepository
 
@@ -88,6 +89,61 @@ fun Route.packRoutes() {
         try {
             val packId = WordRepository.importPack(userId, request.json)
             call.respond(ImportPackResponse(packId))
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Invalid pack format: ${e.message}"))
+        }
+    }
+
+    get("/packs/{id}") {
+        val token = call.request.headers["Authorization"]
+            ?.removePrefix("Bearer ")
+            .orEmpty()
+
+        val userId = if (token.isNotEmpty()) AuthService.userIdForToken(token) else null
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, mapOf("error" to "Unauthorized"))
+            return@get
+        }
+
+        val packId = call.parameters["id"]?.toIntOrNull()
+        if (packId == null) {
+            call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Invalid pack id"))
+            return@get
+        }
+
+        val content = WordRepository.getPackContent(userId, packId)
+        if (content == null) {
+            call.respond(HttpStatusCode.Forbidden, mapOf("error" to "Cannot read pack"))
+        } else {
+            call.respond(content)
+        }
+    }
+
+    put("/packs/{id}") {
+        val token = call.request.headers["Authorization"]
+            ?.removePrefix("Bearer ")
+            .orEmpty()
+
+        val userId = if (token.isNotEmpty()) AuthService.userIdForToken(token) else null
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, mapOf("error" to "Unauthorized"))
+            return@put
+        }
+
+        val packId = call.parameters["id"]?.toIntOrNull()
+        if (packId == null) {
+            call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Invalid pack id"))
+            return@put
+        }
+
+        val request = call.receive<ImportPackRequest>()
+
+        try {
+            if (WordRepository.replacePackContent(userId, packId, request.json)) {
+                call.respond(mapOf("success" to true))
+            } else {
+                call.respond(HttpStatusCode.Forbidden, mapOf("error" to "Cannot edit pack"))
+            }
         } catch (e: Exception) {
             call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Invalid pack format: ${e.message}"))
         }

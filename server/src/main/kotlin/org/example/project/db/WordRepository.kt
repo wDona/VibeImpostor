@@ -1,7 +1,13 @@
 package org.example.project.db
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 
 data class CategoryDto(
@@ -95,6 +101,80 @@ object WordRepository {
         }
 
         pack.id.value
+    }
+
+    // Contenido completo de un pack propio, en el mismo formato que acepta importPack,
+    // para poder rellenar el editor de la UI.
+    fun getPackContent(ownerUserId: Int, packId: Int): WordPackJson? = transaction {
+        val pack = ownedPack(ownerUserId, packId) ?: return@transaction null
+
+        val categories = CategoryEntity.find { Categories.packId eq pack.id }.map { cat ->
+            val words = WordEntity.find { Words.categoryId eq cat.id }.map { word ->
+                val hints = word.hints?.split("||")?.filter { it.isNotBlank() }.orEmpty()
+                if (hints.isEmpty()) {
+                    JsonPrimitive(word.text)
+                } else {
+                    buildJsonObject {
+                        put("text", JsonPrimitive(word.text))
+                        put("hints", JsonArray(hints.map { JsonPrimitive(it) }))
+                    }
+                }
+            }
+            CategoryJson(cat.name, words)
+        }
+
+        WordPackJson(pack.name, pack.language, categories)
+    }
+
+    // Sustituye el contenido de un pack propio por el del JSON. Las categorías se
+    // emparejan por nombre en vez de borrarse y recrearse: las salas guardan
+    // selectedCategoryIds, y unos ids nuevos las dejarían apuntando a categorías muertas.
+    fun replacePackContent(ownerUserId: Int, packId: Int, jsonString: String): Boolean = transaction {
+        val pack = ownedPack(ownerUserId, packId) ?: return@transaction false
+
+        val json = Json { ignoreUnknownKeys = true }
+        val packJson = json.decodeFromString<WordPackJson>(jsonString)
+
+        pack.name = packJson.name
+        pack.language = packJson.language
+
+        val existing = CategoryEntity.find { Categories.packId eq pack.id }.associateBy { it.name }
+        val keptNames = mutableSetOf<String>()
+
+        for (catJson in packJson.categories) {
+            if (catJson.name.isBlank()) continue
+            keptNames += catJson.name
+
+            val cat = existing[catJson.name] ?: CategoryEntity.new {
+                this.packId = pack.id
+                name = catJson.name
+            }
+
+            Words.deleteWhere { categoryId eq cat.id }
+            for (wordElement in catJson.words) {
+                val parsed = wordElement.toWord()
+                if (parsed.text.isBlank()) continue
+                WordEntity.new {
+                    categoryId = cat.id
+                    text = parsed.text
+                    hints = if (parsed.hints.isEmpty()) null else parsed.hints.joinToString("||")
+                }
+            }
+        }
+
+        for ((name, cat) in existing) {
+            if (name in keptNames) continue
+            Words.deleteWhere { categoryId eq cat.id }
+            cat.delete()
+        }
+
+        true
+    }
+
+    private fun ownedPack(ownerUserId: Int, packId: Int): WordPackEntity? {
+        val pack = WordPackEntity.findById(packId) ?: return null
+        if (pack.isBuiltIn || pack.ownerUserId?.value != ownerUserId) return null
+        return pack
     }
 
     fun deletePack(ownerUserId: Int, packId: Int): Boolean = transaction {
