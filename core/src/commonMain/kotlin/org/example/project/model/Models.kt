@@ -64,7 +64,8 @@ data class RoomConfig(
     val progressiveHints: Boolean = false,
     val punishmentVote: Boolean = false,
     val hiddenImpostor: Boolean = false,
-    val randomVariant: Boolean = false
+    val randomVariant: Boolean = false,
+    val disconnectTimeoutSeconds: Int = 120
 )
 
 @Serializable

@@ -25,6 +25,12 @@ sealed interface ClientMessage {
     data object LeaveRoom : ClientMessage
 
     @Serializable
+    data class RejoinRoom(
+        val roomCode: String,
+        val playerId: String
+    ) : ClientMessage
+
+    @Serializable
     data class UpdateConfig(
         val config: RoomConfig
     ) : ClientMessage

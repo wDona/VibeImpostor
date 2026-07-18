@@ -94,6 +94,30 @@ fun Route.gameServer() {
                         close()
                     }
 
+                    is ClientMessage.RejoinRoom -> {
+                        val targetRoom = RoomManager.findRoom(message.roomCode)
+                        val target = targetRoom?.players?.find { it.id == message.playerId }
+                        if (targetRoom == null || target == null) {
+                            sendServerMessage(ServerMessage.ErrorMessage("No se pudo reconectar a la sala"))
+                            continue
+                        }
+
+                        targetRoom.mutex.lock()
+                        try {
+                            target.disconnectJob?.cancel()
+                            target.disconnectJob = null
+                            target.session = this
+                            target.connected = true
+                        } finally {
+                            targetRoom.mutex.unlock()
+                        }
+
+                        room = targetRoom
+                        player = target
+                        sendServerMessage(ServerMessage.Joined(target.id, targetRoom.getRoomSnapshot()))
+                        broadcastRoomUpdate(targetRoom)
+                    }
+
                     is ClientMessage.UpdateConfig -> {
                         if (room != null && player?.isHost == true && room.state == RoomState.LOBBY) {
                             room.config = message.config
@@ -313,7 +337,7 @@ fun Route.gameServer() {
             e.printStackTrace()
         } finally {
             if (room != null && player != null) {
-                leaveRoom(room, player)
+                onPlayerDisconnected(room, player)
             }
         }
     }
@@ -374,6 +398,36 @@ private suspend fun leaveRoom(room: Room, player: Player) {
 
     handleGameProgressAfterLeave(room)
     broadcastRoomUpdate(room)
+}
+
+private const val MIN_DISCONNECT_TIMEOUT_S = 120
+private const val MAX_DISCONNECT_TIMEOUT_S = 600
+
+// El WS puede caerse sin que el jugador se haya ido de verdad (pestaña en segundo
+// plano, red inestable, teléfono bloqueado) — en vez de expulsarlo al instante lo
+// marcamos desconectado y le damos un periodo de gracia (config.disconnectTimeoutSeconds)
+// para reconectar via RejoinRoom antes de expulsarlo del todo (leaveRoom).
+private suspend fun onPlayerDisconnected(room: Room, player: Player) {
+    room.mutex.lock()
+    try {
+        if (!room.players.contains(player)) return
+        player.connected = false
+    } finally {
+        room.mutex.unlock()
+    }
+
+    handleGameProgressAfterLeave(room)
+    broadcastRoomUpdate(room)
+
+    val timeoutMs = room.config.disconnectTimeoutSeconds
+        .coerceIn(MIN_DISCONNECT_TIMEOUT_S, MAX_DISCONNECT_TIMEOUT_S) * 1000L
+    player.disconnectJob = RoomManager.scope.launch {
+        delay(timeoutMs)
+        player.disconnectJob = null
+        if (!player.connected) {
+            leaveRoom(room, player)
+        }
+    }
 }
 
 private suspend fun handleGameProgressAfterLeave(room: Room) {

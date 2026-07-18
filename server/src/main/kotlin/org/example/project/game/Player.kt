@@ -1,12 +1,13 @@
 package org.example.project.game
 
 import io.ktor.websocket.WebSocketSession
+import kotlinx.coroutines.Job
 import org.example.project.model.Role
 
 data class Player(
     val id: String,
     val name: String,
-    val session: WebSocketSession,
+    var session: WebSocketSession,
     val userId: Int? = null,
     var score: Int = 0,
     var connected: Boolean = true,
@@ -18,5 +19,6 @@ data class Player(
     var category: String? = null,
     var lastWord: String? = null,
     var wantsRematch: Boolean = false,
-    val colorIndex: Int = 0
+    val colorIndex: Int = 0,
+    var disconnectJob: Job? = null
 )
