@@ -437,6 +437,7 @@ private suspend fun handleGameProgressAfterLeave(room: Room) {
             if (newState == RoomState.ASK_VOTE) {
                 val deadline = System.currentTimeMillis() + ASK_VOTE_TIMEOUT_MS
                 broadcastToActivePlayers(room, ServerMessage.AskWantVote(deadline))
+                startVoteTimer(room)
             } else if (newState == RoomState.VOTING) {
                 startVotingRound(room)
             } else {
